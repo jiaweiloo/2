@@ -1,0 +1,75 @@
+<resources>
+    <string name="app_name">MobileCashService</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="action_changeUser">Change User</string>
+    <string name="action_checkDatabase">Check Database</string>
+    <string name="action_checkWithdraw">Check Withdrawal Record</string>
+
+    <string name="action_logout">Log Out</string>
+    <!-- Nan Fung's strings-->
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="error_name">Please enter name</string>
+    <string name="error_phone">Please enter phone</string>
+    <string name="error_email">Please enter email</string>
+    <string name="error_pass">Please enter password</string>
+    <string name="error_conpass">Please enter confirmpassword</string>
+    <string name="error_ic">Please enter ic</string>
+    <string name="error_invalid_email">Please enter a valid email</string>
+    <!-- End of Nan Fung's strings-->
+
+    <!-- Jia Wei's strings-->
+    <string name="title_menu">Enter amount to be deposit</string>
+    <string name="title_area">Select area of transaction</string>
+    <string name="title_activity_maps">Map</string>
+
+    <!-- Kah Hou's strings
+    <string name="app_name">Cash Request</string>-->
+    <string name="cashWant">Cash （RM）</string>
+    <string name="waitingTime">Wait Period (min)</string>
+    <string name="meetingLocation">Meeting Location</string>
+    <string-array name="cashOptions">
+        <item>20</item>
+        <item>50</item>
+        <item>100</item>
+        <item>150</item>
+        <item>200</item>
+        <item>350</item>
+        <item>300</item>
+    </string-array>
+    <string-array name="timeOptions">
+        <item>5 mins</item>
+        <item>10 mins</item>
+        <item>15 mins</item>
+        <item>20 mins</item>
+    </string-array>
+    <string name="request">Next</string>
+    <string name="checkRequest">Cash Withdrawal History</string>
+    <string name="selectTimeLocation">Wait Period and Location</string>
+    <string name="selectLocation">Meeting Location</string>
+    <string name="waiting">Please Wait</string>
+    <string name="confirmCash">User Found</string>
+    <string-array name="locationOptions">
+        <item>Tunku Abdul Rahman University College</item>
+        <item>Setapak Central</item>
+        <item>Jalan Genting Klang</item>
+    </string-array>
+    <string name="QRconfirm">QR code</string>
+
+    <!-- Strings related to ScanQRcode.java-->
+    <string name="scan_barcode_button">Scan barcode</string>
+    <string name="no_barcode_captured">No barcode captured</string>
+    <string name="barcode_error_format">"Error reading barcode: %1$s"</string>
+
+    <!-- Strings related to barcode scanner -->
+    <string name="ok">OK</string>
+    <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
+    <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
+    <string name="low_storage_error">Face detector dependencies cannot be downloaded due to low device storage</string>
+
+
+</resources>

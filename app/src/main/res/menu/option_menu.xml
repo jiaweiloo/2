@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/myaccount"
+        android:icon="@drawable/ic_account_circle_black_24dp"
+        android:orderInCategory="101"
+        android:title="My Account" />
+    <item
+        android:id="@+id/action_checkDatabase"
+        android:orderInCategory="102"
+        android:title="@string/action_checkDatabase"
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/action_checkWithdraw"
+        android:orderInCategory="103"
+        android:title="@string/action_checkWithdraw"
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/action_logout"
+        android:orderInCategory="104"
+        android:title="@string/action_logout"
+        app:showAsAction="collapseActionView" />
+</menu>
