@@ -1,6 +1,8 @@
 package my.edu.tarc.mobilecashservice.NanFung;
 
 import android.content.Intent;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,9 +19,11 @@ public class LoginPage extends AppCompatActivity {
     UserRecord user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_page);
         database = new UserSQLHelper(this);
+
     }
 
     public void BtnLogin(View view) {
@@ -37,13 +41,23 @@ public class LoginPage extends AppCompatActivity {
                 Intent intentLogin = new Intent(this, HomePage.class);
                 intentLogin.putExtra("user_id", user.getUser_id());
                 startActivityForResult(intentLogin, 1);
+                this.finish();
             } else {
-                Toast.makeText(LoginPage.this, "Password not match", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginPage.this, "Username or password not match", Toast.LENGTH_SHORT).show();
             }
         }//check if user is null
         else {
             Toast.makeText(LoginPage.this, "Username not match", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        ActivityCompat.finishAffinity(this);
+        //this.finish();
+        //System.exit(1);
+         //   super.onBackPressed();
+
     }
 
     public void BtnToRegister(View view) {

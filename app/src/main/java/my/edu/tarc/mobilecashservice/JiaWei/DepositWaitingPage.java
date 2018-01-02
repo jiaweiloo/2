@@ -20,6 +20,7 @@ import my.edu.tarc.mobilecashservice.R;
 public class DepositWaitingPage extends AppCompatActivity {
     String amount;
     String areaCode;
+    int user_id;
     TextView tViewTimer;
     TextView tViewStatus;
     TextView tviewUser;
@@ -29,6 +30,7 @@ public class DepositWaitingPage extends AppCompatActivity {
     Button btnCancel;
     Button btnMatch;
     Deposit deposit = new Deposit();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,20 +39,23 @@ public class DepositWaitingPage extends AppCompatActivity {
         setTitle("Waiting for a pair..");
 
         Bundle bundle = getIntent().getExtras();
-        amount = bundle.getString("amount");
-        areaCode = bundle.getString("areaCode");
-
+        if (bundle != null) {
+            amount = bundle.getString("amount");
+            areaCode = bundle.getString("areaCode");
+            user_id = Integer.parseInt(bundle.getString("user_id"));
+        }
 
         Log.i("[System]", "Amount :" + amount);
         Log.i("[System]", "Area code :" + areaCode);
 
 
-        if (amount != null && areaCode != null && !amount.isEmpty() && !areaCode.isEmpty()) {
+        if (amount != null && areaCode != null && !amount.isEmpty() && !areaCode.isEmpty() && user_id != 0) {
             Log.i("[System]", "string not empty " + amount);
         } else {
             Log.i("[System]", "Error strings not match any if else");
             amount = "0";
             areaCode = "400001";
+            user_id = 888888;
         }
 
         depositDataSource = new DepositSQLHelper(this);
@@ -106,10 +111,10 @@ public class DepositWaitingPage extends AppCompatActivity {
     }
 
     public void btnCancelAction(View view) {
-        if(btnCancel.getText().equals("Retry")) {
+        if (btnCancel.getText().equals("Retry")) {
             Intent intent = new Intent(this, DepositSelectCash.class);
             startActivityForResult(intent, 2);
-        }else{
+        } else {
             Intent intent = new Intent(this, DepositScanQRcode.class);
             intent.putExtra("deposit_id", deposit.getDeposit_id());
             startActivityForResult(intent, 2);
@@ -127,7 +132,7 @@ public class DepositWaitingPage extends AppCompatActivity {
         }
 
         deposit.setDeposit_id(tempdep.getDeposit_id() + 1);
-        deposit.setUser_id(100001);
+        deposit.setUser_id(user_id);
         deposit.setAmount(Double.parseDouble(amount));
         deposit.setWithdrawal_id(0);
         deposit.setLocation_id(Integer.parseInt(areaCode));

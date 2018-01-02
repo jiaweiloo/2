@@ -13,6 +13,8 @@ public class DepositSelectArea extends AppCompatActivity {
 
     TextView txtArea;
     String amount;
+    int user_id = 0;
+    TextView txtView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,15 +24,13 @@ public class DepositSelectArea extends AppCompatActivity {
         //MapView mapView = (MapView)findViewById(R.id.map);
         //onMapReady((GoogleMap)mapView);
         txtArea = findViewById(R.id.txtArea);
+        txtView = findViewById(R.id.txtAmt);
         Bundle bundle = getIntent().getExtras();
-        amount = bundle.getString("amount");
-        if (amount != null) {
-            Log.i("[System]", amount);
-        } else {
-            Log.i("[System]", "Null");
+        if (bundle != null) {
+            amount = bundle.getString("amount");
+            user_id = Integer.parseInt(bundle.getString("user_id"));
         }
-        TextView txtview = findViewById(R.id.txtAmt);
-        txtview.setText(amount);
+        txtView.setText(amount);
         //String message;
     }
 
@@ -44,6 +44,7 @@ public class DepositSelectArea extends AppCompatActivity {
 
         intent.putExtra("amount", amount);
         intent.putExtra("areaCode", txtArea.getText().toString());
+        intent.putExtra("user_id", String.valueOf(user_id));
         startActivityForResult(intent, 2);
     }
 }

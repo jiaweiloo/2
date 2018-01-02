@@ -29,6 +29,7 @@ public class HomePage extends AppCompatActivity
 
     int user_id = 0;
     TextView txtViewUserID;
+    //boolean isLogin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +43,12 @@ public class HomePage extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Available in the future", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -65,10 +66,11 @@ public class HomePage extends AppCompatActivity
             if (getIntent().getIntExtra("user_id", 0) != 0) {
                 user_id = bundle.getInt("user_id");
                 txtViewUserID.setText(String.valueOf(user_id));
+            }else{
+                goToLogin();
             }
         } else {
-            Intent intentLogin = new Intent(this, LoginPage.class);
-            startActivityForResult(intentLogin, 1);
+            goToLogin();
         }
     }
 
@@ -80,6 +82,8 @@ public class HomePage extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+        //getIntent().
+
     }
 
     @Override
@@ -99,18 +103,19 @@ public class HomePage extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
-        }else if(id == R.id.action_checkDatabase){
-            goToCheckDatabase();
+        } else if (id == R.id.action_checkDatabase) {
+            Intent intent = new Intent(this, AllDepositRecords.class);
+            //intent.putExtra("message", txtAmount.getText().toString());
+            startActivityForResult(intent, 2);
             return true;
-        }else if(id == R.id.action_checkWithdraw){
-            Intent intent = new Intent(this, CheckRequest.class);
-            intent.putExtra("userID",user_id);
-            startActivity(intent);
-            return true;
-        }else if(id == R.id.action_logout) {
+        } else if (id == R.id.action_checkWithdraw) {
             Intent intent = new Intent(this, CheckRequest.class);
             intent.putExtra("userID", user_id);
             startActivity(intent);
+            return true;
+        } else if (id == R.id.action_logout) {
+            goToLogin();
+
             return true;
         }
 
@@ -142,21 +147,26 @@ public class HomePage extends AppCompatActivity
         return true;
     }
 
-    public void goToDeposit(View view){
+    public void goToDeposit(View view) {
+
         Toast.makeText(HomePage.this, "Picture pressed!", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, DepositSelectCash.class);
+        intent.putExtra("user_id", String.valueOf(user_id));
         startActivityForResult(intent, 1);
-    }
-
-    public void goToCheckDatabase(){
-        Intent intent = new Intent(this, AllDepositRecords.class);
-        //intent.putExtra("message", txtAmount.getText().toString());
-        startActivityForResult(intent, 2);
     }
 
     public void gotToWithdraw(View view) {
         Intent intent = new Intent(this, RequestCash.class);
-        intent.putExtra("userID",user_id);
+        intent.putExtra("userID", user_id);
         startActivity(intent);
     }
+
+    public void goToLogin() {
+        getIntent().removeExtra("user_id");
+        Intent intentLogin = new Intent(this, LoginPage.class);
+        startActivityForResult(intentLogin, 1);
+        this.finish();
+    }
+
+
 }

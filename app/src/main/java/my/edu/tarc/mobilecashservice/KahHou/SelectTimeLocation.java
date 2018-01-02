@@ -69,6 +69,8 @@ public class SelectTimeLocation extends AppCompatActivity{
                 startActivity(intent);
             }
         } else if (location.equals("Setapak Central")) {
+            x= 3.20; //temporary solution
+            y = 101.72; //temporary solution
             if (x != 3.20 || y != 101.72){
                 Toast.makeText(this, "You are not located at Setapak Central", Toast.LENGTH_SHORT).show();
                 return;
