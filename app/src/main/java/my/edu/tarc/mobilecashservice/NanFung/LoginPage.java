@@ -1,10 +1,14 @@
 package my.edu.tarc.mobilecashservice.NanFung;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -41,6 +45,14 @@ public class LoginPage extends AppCompatActivity {
                 Intent intentLogin = new Intent(this, HomePage.class);
                 intentLogin.putExtra("user_id", user.getUser_id());
                 startActivityForResult(intentLogin, 1);
+
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putInt("user_id", user.getUser_id());
+
+                Log.i("tag", "Login Page > User ID: "+String.valueOf(user.getUser_id()));
+                editor.commit();
+
                 this.finish();
             } else {
                 Toast.makeText(LoginPage.this, "Username or password not match", Toast.LENGTH_SHORT).show();

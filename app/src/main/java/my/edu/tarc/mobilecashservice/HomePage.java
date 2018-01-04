@@ -1,7 +1,10 @@
 package my.edu.tarc.mobilecashservice;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -60,15 +63,13 @@ public class HomePage extends AppCompatActivity
         View headerView = navigationView.getHeaderView(0);
         txtViewUserID = headerView.findViewById(R.id.txtViewUserID);
 
-        Log.i("tag", txtViewUserID.getText().toString());
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            if (getIntent().getIntExtra("user_id", 0) != 0) {
-                user_id = bundle.getInt("user_id");
-                txtViewUserID.setText(String.valueOf(user_id));
-            }else{
-                goToLogin();
-            }
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        user_id = sharedPref.getInt("user_id", 0);
+
+        Log.i("tag", txtViewUserID.getText().toString() + " User ID: " + String.valueOf(user_id));
+
+        if (user_id != 0) {
+            txtViewUserID.setText(String.valueOf(user_id));
         } else {
             goToLogin();
         }
@@ -82,7 +83,6 @@ public class HomePage extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
-        //getIntent().
 
     }
 
@@ -168,5 +168,18 @@ public class HomePage extends AppCompatActivity
         this.finish();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        user_id = sharedPref.getInt("user_id", 0);
 
+        Log.i("tag", txtViewUserID.getText().toString() + " User ID: " + String.valueOf(user_id));
+
+        if (user_id != 0) {
+            txtViewUserID.setText(String.valueOf(user_id));
+        } else {
+            goToLogin();
+        }
+    }
 }
