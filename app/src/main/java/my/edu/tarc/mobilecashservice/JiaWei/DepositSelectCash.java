@@ -1,6 +1,8 @@
 package my.edu.tarc.mobilecashservice.JiaWei;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -79,15 +81,21 @@ public class DepositSelectCash extends AppCompatActivity {
     }
 
     public void goToSelectArea(View view) {
+        double amount = 0.0;
         EditText txtAmount = findViewById(R.id.txtAmount);
         Intent intent = new Intent(this, DepositSelectArea.class);
-        intent.putExtra("amount", txtAmount.getText().toString());
-        intent.putExtra("user_id", String.valueOf(user_id));
-        if (txtAmount.getText().toString().equals("")) {
+
+        if (txtAmount.getText().toString().equals("") || txtAmount.getText().toString().isEmpty()) {
             Log.i("[System]", txtAmount.getText().toString());
+            amount = 0.01;
         } else {
             Log.i("[System]", "Null");
+            amount = Integer.parseInt(txtAmount.getText().toString());
         }
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("amount", String.valueOf(amount));
+        editor.commit();
         startActivity(intent);
     }
 

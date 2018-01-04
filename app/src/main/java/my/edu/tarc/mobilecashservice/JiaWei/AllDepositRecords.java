@@ -45,11 +45,12 @@ public class AllDepositRecords extends AppCompatActivity implements AdapterView.
         depositDataSource = new DepositSQLHelper(this);
 
         final List<Deposit> values = depositDataSource.getAllDeposits();
+        /*
         for (int i = 0; i < values.size(); i++) {
             if (values.get(i).getStatus().equals("complete")) {
                 values.remove(i);
             }
-        }
+        } */
         DepositRecordAdapter adapter = new DepositRecordAdapter(this,
                 R.layout.deposit_record, values);
         //Link adapter to ListView

@@ -35,12 +35,7 @@ public class DepositRecordAdapter extends ArrayAdapter<Deposit> {
                             parent,
                             false);
         }
-        if(convertView == null) {
-            Log.i("[error]", "null");
-        }
-        else{
-            Log.i("[error]", "not null");
-        }
+
         TextView textViewDeposit_id, textViewUser_id, textViewAmount, textViewWithdrawal_id, textViewLocation_id, textViewStatus;
         textViewDeposit_id = (TextView)convertView.findViewById(R.id.textViewDeposit_id);
         textViewUser_id = (TextView)convertView.findViewById(R.id.textViewUser_id);

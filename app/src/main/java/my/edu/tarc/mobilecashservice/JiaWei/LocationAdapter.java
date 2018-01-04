@@ -34,12 +34,7 @@ public class LocationAdapter extends ArrayAdapter<Location> {
                             parent,
                             false);
         }
-        if(convertView == null) {
-            Log.i("[error]", "null");
-        }
-        else{
-            Log.i("[error]", "not null");
-        }
+
         TextView textViewLocate_id, textViewLocate_Name, textViewLocate_x, textViewLocate_y, textViewStatus;
         textViewLocate_id = (TextView)convertView.findViewById(R.id.textViewLocate_id);
         textViewLocate_Name = (TextView)convertView.findViewById(R.id.textViewLocate_Name);

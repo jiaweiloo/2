@@ -70,6 +70,7 @@ public class HomePage extends AppCompatActivity
 
         if (user_id != 0) {
             txtViewUserID.setText(String.valueOf(user_id));
+
         } else {
             goToLogin();
         }

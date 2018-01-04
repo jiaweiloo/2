@@ -67,15 +67,6 @@ public class DepositSelectArea extends AppCompatActivity implements AdapterView.
         updateList();
     }
 
-    public void goToEnterTacNumber(View view) {
-        Intent intent = new Intent(this, DepositSecurityCode.class);
-
-        intent.putExtra("amount", amount);
-        intent.putExtra("areaCode", locationID);
-        intent.putExtra("user_id", String.valueOf(user_id));
-        startActivityForResult(intent, 2);
-    }
-
     public void getLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -145,10 +136,10 @@ public class DepositSelectArea extends AppCompatActivity implements AdapterView.
         loc = values.get(position);
 
         Intent intent = new Intent(this, DepositSecurityCode.class);
-
-        intent.putExtra("amount", amount);
-        intent.putExtra("areaCode", loc.getLocation_id());
-        intent.putExtra("user_id", String.valueOf(user_id));
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("location_id", loc.getLocation_id());
+        editor.commit();
         startActivity(intent);
     }
 

@@ -39,6 +39,7 @@ public class WithdrawalRecordAdapter extends ArrayAdapter<Withdrawal> {
         textViewAmount = (TextView) convertView.findViewById(R.id.textViewAmount);
         textViewLocation = (TextView) convertView.findViewById(R.id.textViewLocation);
         textViewStatus = (TextView) convertView.findViewById(R.id.textViewStatus);
+
         textViewDateTime.setText(textViewDateTime.getText() + " : " + userRecord.getDateTime());
         textViewAmount.setText(textViewAmount.getText() + " : " + userRecord.getAmount());
         textViewLocation.setText(textViewLocation.getText() + "X : " + userRecord.getLocation_x()+", Y : "+userRecord.getLocation_y());

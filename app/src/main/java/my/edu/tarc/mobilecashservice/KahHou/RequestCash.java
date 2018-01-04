@@ -1,6 +1,8 @@
 package my.edu.tarc.mobilecashservice.KahHou;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,14 +14,18 @@ import my.edu.tarc.mobilecashservice.R;
 
 public class RequestCash extends AppCompatActivity {
     Withdrawal withdraw;
+    int user_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_cash);
         withdraw = new Withdrawal();
-        //Log.i("HIHIHIHIHIH",Integer.toString(getIntent().getExtras().getInt("userID")));
-        withdraw.setUser_id(getIntent().getExtras().getInt("userID"));
-        withdraw.setStatus("Unsucessful");
+        withdraw.setWithdrawal_id(300001);
+        //Log.i("System",Integer.toString(getIntent().getExtras().getInt("userID")));
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        user_id = sharedPref.getInt("user_id", 0);
+        withdraw.setUser_id(user_id);
+        withdraw.setStatus("unsuccessful");
     }
 
 
