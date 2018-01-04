@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import my.edu.tarc.mobilecashservice.Contract.WithdrawalContract;
 import my.edu.tarc.mobilecashservice.Contract.WithdrawalContract.WithdrawalRecord;
 import my.edu.tarc.mobilecashservice.Entity.Withdrawal;
 
@@ -69,8 +70,8 @@ public class WithdrawalSQLHelper extends SQLiteOpenHelper {
         //Prepare record
         ContentValues values = new ContentValues();
 
-        values.put(WithdrawalRecord.COLUMN_WITHDRAWAL_ID,userRecord.getWithdrawal_id());
-        values.put(WithdrawalRecord.COLUMN_DATE,userRecord.getDateTime());
+        values.put(WithdrawalRecord.COLUMN_WITHDRAWAL_ID, userRecord.getWithdrawal_id());
+        values.put(WithdrawalRecord.COLUMN_DATE, userRecord.getDateTime());
         values.put(WithdrawalRecord.COLUMN_USER_ID, userRecord.getUser_id());
         values.put(WithdrawalRecord.COLUMN_AMOUNT, userRecord.getAmount());
         values.put(WithdrawalRecord.COLUMN_DEPOSIT_ID, userRecord.getDeposit_id());
@@ -111,5 +112,65 @@ public class WithdrawalSQLHelper extends SQLiteOpenHelper {
         }
 
         return records;
+    }
+
+    public Withdrawal getLastRecord() {
+        SQLiteDatabase database = this.getReadableDatabase();
+        String selectQuery = "SELECT  * FROM " + WithdrawalContract.WithdrawalRecord.TABLE_NAME;
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        cursor.moveToLast();
+        Withdrawal withdrawal = new Withdrawal();
+        if (cursor.getCount() > 0) {
+            withdrawal.setWithdrawal_id(cursor.getInt(0));
+            withdrawal.setDateTime(cursor.getString(1));
+            withdrawal.setUser_id(cursor.getInt(2));
+            withdrawal.setAmount(cursor.getDouble(3));
+            withdrawal.setDeposit_id(cursor.getInt(4));
+            withdrawal.setLocation_x(cursor.getDouble(5));
+            withdrawal.setLocation_y(cursor.getDouble(6));
+            withdrawal.setStatus(cursor.getString(7));
+        }
+        cursor.close();
+        database.close();
+
+        return withdrawal;
+    }
+
+    public Withdrawal getDeposit(int id) {
+        SQLiteDatabase database = this.getReadableDatabase();
+
+        Cursor cursor = database.query(WithdrawalContract.WithdrawalRecord.TABLE_NAME,
+                new String[]{
+                        WithdrawalRecord.COLUMN_WITHDRAWAL_ID,
+                        WithdrawalRecord.COLUMN_DATE,
+                        WithdrawalRecord.COLUMN_USER_ID,
+                        WithdrawalRecord.COLUMN_AMOUNT,
+                        WithdrawalRecord.COLUMN_DEPOSIT_ID,
+                        WithdrawalRecord.COLUMN_LOCATION_X,
+                        WithdrawalRecord.COLUMN_LOCATION_Y,
+                        WithdrawalRecord.COLUMN_STATUS},
+                WithdrawalRecord.COLUMN_WITHDRAWAL_ID + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+
+        Withdrawal withdrawal = new Withdrawal();
+        while (cursor.getCount() > 0) {
+            withdrawal.setWithdrawal_id(cursor.getInt(0));
+            withdrawal.setDateTime(cursor.getString(1));
+            withdrawal.setUser_id(cursor.getInt(2));
+            withdrawal.setAmount(cursor.getDouble(3));
+            withdrawal.setDeposit_id(cursor.getInt(4));
+            withdrawal.setLocation_x(cursor.getDouble(5));
+            withdrawal.setLocation_y(cursor.getDouble(6));
+            withdrawal.setStatus(cursor.getString(7));
+        }
+
+        cursor.close();
+        database.close();
+
+        return withdrawal;
     }
 }

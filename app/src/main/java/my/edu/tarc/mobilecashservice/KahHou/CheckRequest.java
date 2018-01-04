@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -20,12 +21,20 @@ public class CheckRequest extends AppCompatActivity {
     ListView listViewRecords;
     WithdrawalSQLHelper userSQLHelper;
     int userID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_request);
         listViewRecords = findViewById(R.id.listViewRecords);
         userID = getIntent().getExtras().getInt("user_id");
+
+        listViewRecords.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+                Toast.makeText(CheckRequest.this, "Position " + position, Toast.LENGTH_SHORT).show();
+            }
+        });
         updateList();
     }
 
@@ -36,13 +45,13 @@ public class CheckRequest extends AppCompatActivity {
 
         final List<Withdrawal> values = userSQLHelper.getAllUsers();
 
-        if(values.isEmpty()){
+        if (values.isEmpty()) {
             Toast.makeText(getApplicationContext(), "No records", Toast.LENGTH_SHORT).show();
         }
 
-        for(int a=0;a<values.size();a++){
+        for (int a = 0; a < values.size(); a++) {
             //Log.i("hihihi",Integer.toString(values.get(a).getUser_id())+"+" +Integer.toString(userID));
-            if(values.get(a).getUser_id()!=userID)
+            if (values.get(a).getUser_id() != userID)
                 values.remove(a);
         }
 
@@ -54,7 +63,7 @@ public class CheckRequest extends AppCompatActivity {
 
     public void btnHomePage(View view) {
         Intent intent = new Intent(this, HomePage.class);
-        intent.putExtra("user_id",userID);
+        intent.putExtra("user_id", userID);
         startActivity(intent);
     }
 }

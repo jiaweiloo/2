@@ -122,12 +122,12 @@ public class DepositWaitingPage extends AppCompatActivity {
     }
 
     public void btnCancelAction(View view) {
-        if (btnCancel.getText().equals("Retry")) {
-            Intent intent = new Intent(this, DepositSelectCash.class);
-            startActivityForResult(intent, 2);
-        } else {
+        if (btnCancel.getText().equals("Finish")) {
             Intent intent = new Intent(this, DepositScanQRcode.class);
             intent.putExtra("deposit_id", deposit.getDeposit_id());
+            startActivityForResult(intent, 2);
+        } else {
+            Intent intent = new Intent(this, DepositSelectCash.class);
             startActivityForResult(intent, 2);
         }
     }
@@ -136,7 +136,7 @@ public class DepositWaitingPage extends AppCompatActivity {
         Deposit tempdep = new Deposit();
 
         if (depositDataSource.getLastRecord().getDeposit_id() != 0) {
-            Log.i("[System]", "Last records is NOT empty or null! ");
+            //Log.i("[System]", "Last records is NOT empty or null! ");
             tempdep = depositDataSource.getLastRecord();
         } else {
             tempdep.setDeposit_id(200000);

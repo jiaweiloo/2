@@ -139,4 +139,24 @@ public class UserSQLHelper extends SQLiteOpenHelper {
 
         return userrecord;
     }
+
+    public UserRecord getLastRecord() {
+        SQLiteDatabase database = this.getReadableDatabase();
+        String selectQuery = "SELECT  * FROM " + UserContract.User.TABLE_NAME;
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        cursor.moveToLast();
+        UserRecord userrecord = new UserRecord();
+        if(cursor.getCount()>0) {
+            userrecord.setUser_id(Integer.parseInt(cursor.getString(0)));
+            userrecord.setUser_name(cursor.getString(1));
+            userrecord.setPassword(cursor.getString(2));
+            userrecord.setIc_number(cursor.getString(3));
+            userrecord.setEmail(cursor.getString(4));
+            userrecord.setPhone(Integer.parseInt(cursor.getString(5)));
+        }
+        cursor.close();
+        database.close();
+
+        return userrecord;
+    }
 }

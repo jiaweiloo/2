@@ -27,7 +27,7 @@ import my.edu.tarc.mobilecashservice.Entity.Location;
 public class DepositSelectArea extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
 
-    String amount;
+    double amount = 0.0;
     int user_id = 0;
     TextView txtView;
     static final int REQUEST_LOCATION = 1;
@@ -51,12 +51,11 @@ public class DepositSelectArea extends AppCompatActivity implements AdapterView.
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         user_id = sharedPref.getInt("user_id", 0);
+        amount = Double.parseDouble(sharedPref.getString("amount", "0.0"));
 
-        Log.i("DepositSelectArea.java", "User ID: " + String.valueOf(user_id));
-        if (bundle != null) {
-            amount = bundle.getString("amount");
-        }
-        txtView.setText(amount);
+        Log.i("DepositSelectArea.java", "User ID: " + String.valueOf(user_id) +" " + String.valueOf(amount));
+
+        txtView.setText(String.valueOf(amount));
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         getLocation();
@@ -122,7 +121,7 @@ public class DepositSelectArea extends AppCompatActivity implements AdapterView.
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
-        Location loc =null;
+        Location loc = null;
         //Retrieve records from SQLite
         locationDataSource = new LocationSQLHelper(this);
         List<Location> values = locationDataSource.getAllLocations();

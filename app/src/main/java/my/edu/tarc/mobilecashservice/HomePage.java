@@ -21,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import my.edu.tarc.mobilecashservice.DatabaseHelper.UserSQLHelper;
+import my.edu.tarc.mobilecashservice.Entity.UserRecord;
 import my.edu.tarc.mobilecashservice.JiaWei.AllDepositRecords;
 import my.edu.tarc.mobilecashservice.JiaWei.DepositSelectCash;
 import my.edu.tarc.mobilecashservice.KahHou.CheckRequest;
@@ -32,6 +34,8 @@ public class HomePage extends AppCompatActivity
 
     int user_id = 0;
     TextView txtViewUserID;
+    TextView txtViewName;
+    UserRecord user = new UserRecord();
     //boolean isLogin = false;
 
     @Override
@@ -62,15 +66,18 @@ public class HomePage extends AppCompatActivity
 
         View headerView = navigationView.getHeaderView(0);
         txtViewUserID = headerView.findViewById(R.id.txtViewUserID);
+        txtViewName = headerView.findViewById(R.id.txtViewName);
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         user_id = sharedPref.getInt("user_id", 0);
+        UserSQLHelper userSQLHelper = new UserSQLHelper(this);
+        user = userSQLHelper.getUser(user_id);
 
         Log.i("tag", txtViewUserID.getText().toString() + " User ID: " + String.valueOf(user_id));
 
         if (user_id != 0) {
-            txtViewUserID.setText(String.valueOf(user_id));
-
+            txtViewUserID.setText("User ID: "+String.valueOf(user_id));
+            txtViewName.setText(user.getUser_name());
         } else {
             goToLogin();
         }

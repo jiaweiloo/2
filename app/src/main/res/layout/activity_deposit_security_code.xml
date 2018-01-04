@@ -7,12 +7,12 @@
     tools:context="my.edu.tarc.mobilecashservice.JiaWei.DepositSecurityCode">
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/txtPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="Reenter your password"
         android:inputType="textPersonName"
-        android:text="Reenter your password"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintLeft_toLeftOf="parent"

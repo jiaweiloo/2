@@ -22,7 +22,7 @@ public class RegisterPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_page);
         databaseSource = new UserSQLHelper(this);
-        createDummy();
+        //createDummy();
     }
 
     public void BtnRegister(View v) {
@@ -74,8 +74,15 @@ public class RegisterPage extends AppCompatActivity {
             Toast toastpass = Toast.makeText(RegisterPage.this, "Password not match !", Toast.LENGTH_SHORT);
             toastpass.show();
         } else {
+            int user_id = 100001;
             UserRecord userRecord = new UserRecord();
-            userRecord.setUser_id(100001);
+
+            UserRecord temp = databaseSource.getLastRecord();
+            if (temp.getUser_id() != 0) {
+                user_id = temp.getUser_id() + 1;
+            }
+
+            userRecord.setUser_id(user_id);
             userRecord.setUser_name(name);
             userRecord.setPassword(pass);
             userRecord.setIc_number(ic);
@@ -90,10 +97,10 @@ public class RegisterPage extends AppCompatActivity {
 
     }
 
-    public void createDummy(){
+    public void createDummy() {
         UserRecord userRecord = new UserRecord(100001, 012311112, "user", "abc123", "970103-10-5530", "user@mail.com");
         databaseSource.insertUser(userRecord);
         Toast.makeText(RegisterPage.this,
-                "Dummy record added " +userRecord.getUser_name() +" "+ userRecord.getPassword(), Toast.LENGTH_SHORT).show();
+                "Dummy record added " + userRecord.getUser_name() + " " + userRecord.getPassword(), Toast.LENGTH_SHORT).show();
     }
 }

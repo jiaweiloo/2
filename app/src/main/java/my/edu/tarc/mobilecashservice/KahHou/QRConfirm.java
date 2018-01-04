@@ -14,15 +14,25 @@ import my.edu.tarc.mobilecashservice.HomePage;
 import my.edu.tarc.mobilecashservice.R;
 
 public class QRConfirm extends AppCompatActivity {
+    WithdrawalSQLHelper withdrawalDataSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrconfirm);
-        WithdrawalSQLHelper userDataSource = new WithdrawalSQLHelper(QRConfirm.this);
-        final Withdrawal withdraw = (Withdrawal)getIntent().getSerializableExtra("withdraw");
-        withdraw.setStatus("Sucessful");
-        userDataSource.insertWithdrawal(withdraw);
+
+        withdrawalDataSource = new WithdrawalSQLHelper(QRConfirm.this);
+        final Withdrawal withdraw = (Withdrawal) getIntent().getSerializableExtra("withdraw");
+
+        int withdrawal_id = 300001;
+        Withdrawal temp = withdrawalDataSource.getLastRecord();
+        if (temp.getWithdrawal_id() != 0) {
+            withdrawal_id = temp.getWithdrawal_id() + 1;
+        }
+
+        withdraw.setWithdrawal_id(withdrawal_id);
+        withdraw.setStatus("SUCCESSFUL");
+        withdrawalDataSource.insertWithdrawal(withdraw);
         //this.finish();
         new Handler().postDelayed(new Runnable() {
             @Override

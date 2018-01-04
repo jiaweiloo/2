@@ -15,7 +15,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/textView9"
         android:layout_marginTop="11dp"
-        android:text="Full Name"
+        android:text="Username"
         android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="bold"

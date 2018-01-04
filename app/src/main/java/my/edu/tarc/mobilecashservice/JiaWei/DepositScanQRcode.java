@@ -2,6 +2,7 @@ package my.edu.tarc.mobilecashservice.JiaWei;
 
 import android.content.Intent;
 import android.graphics.Point;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,8 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 
 import my.edu.tarc.mobilecashservice.DatabaseHelper.DepositSQLHelper;
+import my.edu.tarc.mobilecashservice.DatabaseHelper.UserSQLHelper;
+import my.edu.tarc.mobilecashservice.DatabaseHelper.WithdrawalSQLHelper;
 import my.edu.tarc.mobilecashservice.Entity.Deposit;
 import my.edu.tarc.mobilecashservice.HomePage;
 import my.edu.tarc.mobilecashservice.R;
@@ -25,6 +28,8 @@ private static final int BARCODE_READER_REQUEST_CODE = 1;
     private TextView mResultTextView;
     Deposit deposit = new Deposit();
     DepositSQLHelper depositDataSource;
+    WithdrawalSQLHelper withdrawalSQLHelper;
+    UserSQLHelper userSQLHelper;
     TextView tviewDepositID;
     Button scanBarcodeButton;
 
@@ -34,6 +39,9 @@ private static final int BARCODE_READER_REQUEST_CODE = 1;
         setContentView(R.layout.activity_deposit_scan_qrcode);
 
         depositDataSource = new DepositSQLHelper(this);
+        withdrawalSQLHelper = new WithdrawalSQLHelper(this);
+        userSQLHelper = new UserSQLHelper(this);
+
         tviewDepositID = findViewById(R.id.tviewDepositID);
 
         Bundle bundle = getIntent().getExtras();
@@ -90,5 +98,13 @@ private static final int BARCODE_READER_REQUEST_CODE = 1;
             Toast.makeText(DepositScanQRcode.this,
                     "Withdrawal id :" + withdrawalID, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void showDial(View view){
+        int user_id = 0;
+        //user_id = withdrawalSQLHelper.getDeposit(deposit.getWithdrawal_id()).getUser_id();
+        //userSQLHelper.getUser(user_id).getPhone()
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+"0128383131"));
+        startActivity(intent);
     }
 }
