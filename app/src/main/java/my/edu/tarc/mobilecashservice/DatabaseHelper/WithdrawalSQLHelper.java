@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import my.edu.tarc.mobilecashservice.Contract.WithdrawalContract;
 import my.edu.tarc.mobilecashservice.Contract.WithdrawalContract.WithdrawalRecord;
@@ -136,35 +137,34 @@ public class WithdrawalSQLHelper extends SQLiteOpenHelper {
         return withdrawal;
     }
 
-    public Withdrawal getDeposit(int id) {
+    public Withdrawal getWithdrawal(int id) {
         SQLiteDatabase database = this.getReadableDatabase();
-
         Cursor cursor = database.query(WithdrawalContract.WithdrawalRecord.TABLE_NAME,
                 new String[]{
                         WithdrawalRecord.COLUMN_WITHDRAWAL_ID,
-                        WithdrawalRecord.COLUMN_DATE,
                         WithdrawalRecord.COLUMN_USER_ID,
                         WithdrawalRecord.COLUMN_AMOUNT,
                         WithdrawalRecord.COLUMN_DEPOSIT_ID,
                         WithdrawalRecord.COLUMN_LOCATION_X,
                         WithdrawalRecord.COLUMN_LOCATION_Y,
+                        WithdrawalRecord.COLUMN_DATE,
                         WithdrawalRecord.COLUMN_STATUS},
                 WithdrawalRecord.COLUMN_WITHDRAWAL_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
-        if (cursor != null)
+
+        if (cursor != null) {
             cursor.moveToFirst();
-
-
+        }
         Withdrawal withdrawal = new Withdrawal();
-        while (cursor.getCount() > 0) {
+        if (cursor.getCount() > 0) {
             withdrawal.setWithdrawal_id(cursor.getInt(0));
-            withdrawal.setDateTime(cursor.getString(1));
-            withdrawal.setUser_id(cursor.getInt(2));
-            withdrawal.setAmount(cursor.getDouble(3));
-            withdrawal.setDeposit_id(cursor.getInt(4));
-            withdrawal.setLocation_x(cursor.getDouble(5));
-            withdrawal.setLocation_y(cursor.getDouble(6));
+            withdrawal.setUser_id(cursor.getInt(1));
+            withdrawal.setAmount(cursor.getDouble(2));
+            withdrawal.setDeposit_id(cursor.getInt(3));
+            withdrawal.setLocation_x(cursor.getDouble(4));
+            withdrawal.setLocation_y(cursor.getDouble(5));
+            withdrawal.setDateTime(cursor.getString(6));
             withdrawal.setStatus(cursor.getString(7));
         }
 

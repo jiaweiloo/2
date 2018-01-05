@@ -153,7 +153,7 @@ public class DepositSelectArea extends AppCompatActivity implements AdapterView.
         Location loc = new Location(
                 temploc.getLocation_id() + 1,
                 "WANGSA METROVIEW" + (temploc.getLocation_id() + 1),
-                3.20,
+                3.21,
                 101.74,
                 "AVAILABLE");
         locationDataSource.insertLocation(loc);

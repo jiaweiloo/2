@@ -1,8 +1,10 @@
 package my.edu.tarc.mobilecashservice.JiaWei;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,20 +20,23 @@ import my.edu.tarc.mobilecashservice.DatabaseHelper.DepositSQLHelper;
 import my.edu.tarc.mobilecashservice.DatabaseHelper.UserSQLHelper;
 import my.edu.tarc.mobilecashservice.DatabaseHelper.WithdrawalSQLHelper;
 import my.edu.tarc.mobilecashservice.Entity.Deposit;
+import my.edu.tarc.mobilecashservice.Entity.Withdrawal;
 import my.edu.tarc.mobilecashservice.HomePage;
 import my.edu.tarc.mobilecashservice.R;
 import my.edu.tarc.mobilecashservice.barcode.BarcodeCaptureActivity;
 
 public class DepositScanQRcode extends AppCompatActivity {
-private static final int BARCODE_READER_REQUEST_CODE = 1;
+    private static final int BARCODE_READER_REQUEST_CODE = 1;
 
     private TextView mResultTextView;
     Deposit deposit = new Deposit();
     DepositSQLHelper depositDataSource;
     WithdrawalSQLHelper withdrawalSQLHelper;
     UserSQLHelper userSQLHelper;
-    TextView tviewDepositID;
+    TextView tviewShowInfo;
     Button scanBarcodeButton;
+    int user_id = 0;
+    double amount = 0.0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,16 +47,22 @@ private static final int BARCODE_READER_REQUEST_CODE = 1;
         withdrawalSQLHelper = new WithdrawalSQLHelper(this);
         userSQLHelper = new UserSQLHelper(this);
 
-        tviewDepositID = findViewById(R.id.tviewDepositID);
+        tviewShowInfo = findViewById(R.id.tviewShowInfo);
 
+        //Grab user_id and amount from SharedPreferences
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        user_id = sharedPref.getInt("user_id", 0);
+        amount = Double.parseDouble(sharedPref.getString("amount", "0.0"));
+
+        //Grab deposit_id from previous page
         Bundle bundle = getIntent().getExtras();
-        int depositid = 0;
+        int deposit_id = 0;
         if (getIntent().getIntExtra("deposit_id", 0) != 0) {
-            depositid = bundle.getInt("deposit_id");
+            deposit_id = bundle.getInt("deposit_id");
         }
-        deposit = depositDataSource.getDeposit(depositid);
+        deposit = depositDataSource.getDeposit(deposit_id);
         if (deposit.getDeposit_id() != 0) {
-            tviewDepositID.setText("Deposit id : " + deposit.getDeposit_id());
+            tviewShowInfo.setText("Deposit id : " + deposit.getDeposit_id());
         }
         mResultTextView = findViewById(R.id.result_textview);
 
@@ -60,10 +71,10 @@ private static final int BARCODE_READER_REQUEST_CODE = 1;
     }
 
     public void btnScanQR(View view) {
-        if(scanBarcodeButton.getText().equals("Back to main menu")){
+        if (scanBarcodeButton.getText().equals("Back to main menu")) {
             Intent intent = new Intent(getApplicationContext(), HomePage.class);
             startActivityForResult(intent, 1);
-        }else {
+        } else {
             Intent intent = new Intent(getApplicationContext(), BarcodeCaptureActivity.class);
             Log.i("[tag]", "before starting");
             startActivityForResult(intent, BARCODE_READER_REQUEST_CODE);
@@ -91,7 +102,7 @@ private static final int BARCODE_READER_REQUEST_CODE = 1;
         if (deposit.getWithdrawal_id() == withdrawalID) {
             deposit.setStatus("complete");
             depositDataSource.updateDeposit(deposit);
-            mResultTextView.setText("Scan code complete txn withdrawal id : "+ withdrawalID);
+            mResultTextView.setText("Scan code complete txn withdrawal id : " + withdrawalID);
             scanBarcodeButton.setText("Back to main menu");
         } else {
             mResultTextView.setText("QR code not matched, please try again! ");
@@ -100,11 +111,19 @@ private static final int BARCODE_READER_REQUEST_CODE = 1;
         }
     }
 
-    public void showDial(View view){
+    public void showDial(View view) {
         int user_id = 0;
-        //user_id = withdrawalSQLHelper.getDeposit(deposit.getWithdrawal_id()).getUser_id();
-        //userSQLHelper.getUser(user_id).getPhone()
-        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+"0128383131"));
+        int withdrawal_id = deposit.getWithdrawal_id();
+        int phoneNumber = 0;
+        Withdrawal withdrawal;
+        withdrawal = withdrawalSQLHelper.getWithdrawal(withdrawal_id);
+        user_id = withdrawal.getUser_id();
+
+        phoneNumber = userSQLHelper.getUser(user_id).getPhone();
+        /*Toast.makeText(DepositScanQRcode.this,
+                "Contacting user : " + user_id + " w/ phone : " + phoneNumber, Toast.LENGTH_SHORT).show();
+                */
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phoneNumber));
         startActivity(intent);
     }
 }

@@ -7,7 +7,7 @@
     tools:context="my.edu.tarc.mobilecashservice.JiaWei.DepositScanQRcode">
 
     <TextView
-        android:id="@+id/tviewDepositID"
+        android:id="@+id/tviewShowInfo"
         android:layout_width="357dp"
         android:layout_height="wrap_content"
         android:text="Deposit id : "
@@ -33,7 +33,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.413" />
+        app:layout_constraintVertical_bias="0.563" />
 
     <Button
         android:id="@+id/scan_barcode_button"
@@ -48,7 +48,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.553" />
+        app:layout_constraintVertical_bias="0.835" />
 
     <Button
         android:id="@+id/contact"
@@ -60,10 +60,10 @@
         android:onClick="showDial"
         android:text="Contact User"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.691" />
+        app:layout_constraintVertical_bias="0.965" />
 
 </android.support.constraint.ConstraintLayout>

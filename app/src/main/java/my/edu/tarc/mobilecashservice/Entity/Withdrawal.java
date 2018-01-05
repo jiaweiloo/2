@@ -10,38 +10,17 @@ import java.util.Date;
  */
 
 public class Withdrawal implements Serializable{
-    int deposit_id;
+
+
+    int withdrawal_id;
     int user_id;
     double amount;
-    int withdrawal_id;
+    int deposit_id;
+    int location_id;
     double location_x;
     double location_y;
     String dateTime;
     String status;
-
-    public String getDateTime() {
-        return dateTime;
-    }
-
-    public void setDateTime(String dateTime) {
-        this.dateTime = dateTime;
-    }
-
-    public double getLocation_x() {
-        return location_x;
-    }
-
-    public void setLocation_x(double location_x) {
-        this.location_x = location_x;
-    }
-
-    public double getLocation_y() {
-        return location_y;
-    }
-
-    public void setLocation_y(double location_y) {
-        this.location_y = location_y;
-    }
 
     public Withdrawal() {
         //this(0,0,0.0,0,0,null);
@@ -57,12 +36,26 @@ public class Withdrawal implements Serializable{
         this.status = status;
     }
 
-    public int getDeposit_id() {
-        return deposit_id;
+    public Withdrawal(int withdrawal_id, int user_id, double amount,
+                      int deposit_id, int location_id, double location_x,
+                      double location_y, String dateTime, String status) {
+        this.withdrawal_id = withdrawal_id;
+        this.user_id = user_id;
+        this.amount = amount;
+        this.deposit_id = deposit_id;
+        this.location_id = location_id;
+        this.location_x = location_x;
+        this.location_y = location_y;
+        this.dateTime = dateTime;
+        this.status = status;
     }
 
-    public void setDeposit_id(int deposit_id) {
-        this.deposit_id = deposit_id;
+    public int getWithdrawal_id() {
+        return withdrawal_id;
+    }
+
+    public void setWithdrawal_id(int withdrawal_id) {
+        this.withdrawal_id = withdrawal_id;
     }
 
     public int getUser_id() {
@@ -81,12 +74,44 @@ public class Withdrawal implements Serializable{
         this.amount = amount;
     }
 
-    public int getWithdrawal_id() {
-        return withdrawal_id;
+    public int getDeposit_id() {
+        return deposit_id;
     }
 
-    public void setWithdrawal_id(int withdrawal_id) {
-        this.withdrawal_id = withdrawal_id;
+    public void setDeposit_id(int deposit_id) {
+        this.deposit_id = deposit_id;
+    }
+
+    public int getLocation_id() {
+        return location_id;
+    }
+
+    public void setLocation_id(int location_id) {
+        this.location_id = location_id;
+    }
+
+    public double getLocation_x() {
+        return location_x;
+    }
+
+    public void setLocation_x(double location_x) {
+        this.location_x = location_x;
+    }
+
+    public double getLocation_y() {
+        return location_y;
+    }
+
+    public void setLocation_y(double location_y) {
+        this.location_y = location_y;
+    }
+
+    public String getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
     }
 
     public String getStatus() {
