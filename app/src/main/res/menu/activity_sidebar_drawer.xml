@@ -9,6 +9,11 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="Import" />
         <item
+            android:id="@+id/nav_Wallet"
+            android:icon="@drawable/ic_account_balance_wallet_black_24px"
+            android:title="Wallet" />
+
+        <item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_menu_gallery"
             android:title="Gallery" />

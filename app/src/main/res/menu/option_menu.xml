@@ -22,9 +22,16 @@
         android:orderInCategory="103"
         android:title="@string/action_checkWithdraw"
         app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/action_DatabaseLoc"
+        android:orderInCategory="104"
+        android:title="Check Location"
+        app:showAsAction="collapseActionView" />
+
     <item
         android:id="@+id/action_logout"
-        android:orderInCategory="104"
+        android:orderInCategory="105"
         android:title="@string/action_logout"
         app:showAsAction="collapseActionView" />
 </menu>

@@ -9,6 +9,9 @@
     <string name="action_checkDatabase">Check Database</string>
     <string name="action_checkWithdraw">Check Withdrawal Record</string>
 
+    <string name="tab_text_1">Location Records</string>
+    <string name="tab_text_2">Add Location</string>
+
     <string name="action_logout">Log Out</string>
     <!-- Nan Fung's strings-->
     <string name="open">Open</string>

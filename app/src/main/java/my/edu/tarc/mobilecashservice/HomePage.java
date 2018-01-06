@@ -125,6 +125,10 @@ public class HomePage extends AppCompatActivity
             goToLogin();
 
             return true;
+        }else if (id == R.id.action_DatabaseLoc) {
+            Intent intent = new Intent(this, LocationModule.class);
+            startActivity(intent);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
