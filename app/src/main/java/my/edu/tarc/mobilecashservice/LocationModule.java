@@ -1,6 +1,7 @@
 package my.edu.tarc.mobilecashservice;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.support.design.widget.Snackbar;
@@ -56,13 +57,14 @@ public class LocationModule extends AppCompatActivity implements AdapterView.OnI
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_module);
-
+        setTitle("Location Module");
         //listViewRecordsLoc = findViewById(R.id.listViewRecordsLoc);
         //listViewRecordsLoc.setOnItemClickListener(this);
 
         locationDataSource = new LocationSQLHelper(this);
 
         //Get location to display
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         getLocation();
 
         // Create the adapter that will return a fragment for each of the three

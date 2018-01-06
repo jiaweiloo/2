@@ -21,11 +21,13 @@ public class DepositSecurityCode extends AppCompatActivity {
     int user_id = 0;
     TextView txtPassword;
     UserSQLHelper userSQLHelper;
+
     UserRecord user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deposit_security_code);
+        setTitle("Enter Password");
 
         txtPassword = findViewById(R.id.txtPassword);
         userSQLHelper = new UserSQLHelper(this);

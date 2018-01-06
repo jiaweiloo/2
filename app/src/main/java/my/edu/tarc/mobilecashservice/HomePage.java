@@ -140,13 +140,17 @@ public class HomePage extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_Deposit) {
+            // Handle the deposit action
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_Withdrawal) {
+            //Handle the withdrawal action
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_Wallet) {
+            // handle the wallet action
+
+        } else if (id == R.id.nav_CreditCard) {
+            // handle the credit card action
 
         } else if (id == R.id.nav_share) {
 

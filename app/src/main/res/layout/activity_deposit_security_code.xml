@@ -34,16 +34,16 @@
         app:layout_constraintVertical_bias="0.371" />
 
     <TextView
-        android:id="@+id/textView10"
+        android:id="@+id/tViewSecTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="Re enter your password to confirm :"
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.097"
-        tools:text="Re enter your password to confirm :" />
+        app:layout_constraintVertical_bias="0.067" />
 
 </android.support.constraint.ConstraintLayout>

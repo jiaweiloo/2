@@ -42,6 +42,8 @@ public class DepositSelectArea extends AppCompatActivity implements AdapterView.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deposit_select_area);
+        setTitle("Select location");
+
         listViewRecords = (ListView) findViewById(R.id.listViewRecords);
         listViewRecords.setOnItemClickListener(this);
 

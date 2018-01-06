@@ -42,6 +42,7 @@ public class DepositScanQRcode extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deposit_scan_qrcode);
+        setTitle("Scan QR Code");
 
         depositDataSource = new DepositSQLHelper(this);
         withdrawalSQLHelper = new WithdrawalSQLHelper(this);

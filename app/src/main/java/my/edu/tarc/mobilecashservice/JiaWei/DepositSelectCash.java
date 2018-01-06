@@ -25,6 +25,7 @@ public class DepositSelectCash extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deposit_select_cash);
+        setTitle("Select cash...");
 
         txtViewUserID = findViewById(R.id.txtViewUserID);
 

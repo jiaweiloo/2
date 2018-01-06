@@ -26,6 +26,7 @@ public class DepositPairWithdrawal extends AppCompatActivity implements AdapterV
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deposit_pair_withdrawal);
+        setTitle("Select withdrawal");
 
         listViewRecordsWd = findViewById(R.id.listViewRecordsWd);
         DepositPairWithdrawal DPW = new DepositPairWithdrawal();

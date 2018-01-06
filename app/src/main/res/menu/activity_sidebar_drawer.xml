@@ -4,27 +4,23 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
+
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:id="@+id/nav_Deposit"
+            android:icon="@drawable/ic_in_black_24px"
+            android:title="Deposit" />
+        <item
+            android:id="@+id/nav_Withdrawal"
+            android:icon="@drawable/ic_out_black_24px"
+            android:title="Withdrawal" />
         <item
             android:id="@+id/nav_Wallet"
             android:icon="@drawable/ic_account_balance_wallet_black_24px"
             android:title="Wallet" />
-
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/nav_CreditCard"
+            android:icon="@drawable/ic_credit_card_black_24px"
+            android:title="Credit Card" />
     </group>
 
     <item android:title="Communicate">

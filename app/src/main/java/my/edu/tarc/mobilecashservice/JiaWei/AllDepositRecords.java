@@ -21,6 +21,8 @@ public class AllDepositRecords extends AppCompatActivity implements AdapterView.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_deposit_records);
+        setTitle("All Deposit Records");
+
         listViewRecords = (ListView) findViewById(R.id.listViewRecords);
         listViewRecords.setOnItemClickListener(this);
 
