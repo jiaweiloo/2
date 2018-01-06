@@ -78,6 +78,8 @@ public class DepositSelectArea extends AppCompatActivity implements AdapterView.
             if (location != null) {
                 x = Double.parseDouble(String.format("%.2f", location.getLatitude()));
                 y = Double.parseDouble(String.format("%.2f", location.getLongitude()));
+                Toast.makeText(this, "X : " +Double.toString(x) +" Y: "+Double.toString(y), Toast.LENGTH_SHORT).show();
+
             } else {
                 Toast.makeText(this, "Unable to find correct location", Toast.LENGTH_SHORT).show();
                 return;

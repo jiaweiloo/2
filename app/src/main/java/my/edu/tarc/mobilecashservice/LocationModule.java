@@ -1,7 +1,11 @@
 package my.edu.tarc.mobilecashservice;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -13,6 +17,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,9 +31,11 @@ import my.edu.tarc.mobilecashservice.JiaWei.LocationAdapter;
 
 public class LocationModule extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
-    ListView listViewRecordsLoc;
     LocationSQLHelper locationDataSource;
-    TextView txtxViewLocAdd;
+    double x;
+    double y;
+    static final int REQUEST_LOCATION = 1;
+    LocationManager locationManager;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -54,6 +62,8 @@ public class LocationModule extends AppCompatActivity implements AdapterView.OnI
 
         locationDataSource = new LocationSQLHelper(this);
 
+        //Get location to display
+        getLocation();
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -63,40 +73,17 @@ public class LocationModule extends AppCompatActivity implements AdapterView.OnI
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
+
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+
+
     }
 
-    public void addRecord(View v) {
-        Location temploc = null;
-        if (locationDataSource.getLastRecord() != null) {
-            temploc = locationDataSource.getLastRecord();
-        } else {
-            temploc.setLocation_id(400000);
-        }
-        Location loc = new Location(temploc.getLocation_id() + 1, "Klang", 3.12, 101.74, "available");
-        locationDataSource.insertLocation(loc);
-        updateList();
-    }
-
-    private void updateList() {
-        //Retrieve records from SQLite
-        //locationDataSource = new DepositSQLHelper(this);
-
-        final List<Location> values = locationDataSource.getAllLocations();
-        /*
-        for (int i = 0; i < values.size(); i++) {
-            if (values.get(i).getStatus().equals("complete")) {
-                values.remove(i);
-            }
-        } */
-        LocationAdapter adapter = new LocationAdapter(this,
-                R.layout.location_record, values);
-        //Link adapter to ListView
-        listViewRecordsLoc.setAdapter(null);
-        listViewRecordsLoc.setAdapter(adapter);
+    public void dataChanged() {
+        mViewPager.getAdapter().notifyDataSetChanged();
     }
 
     @Override
@@ -105,14 +92,26 @@ public class LocationModule extends AppCompatActivity implements AdapterView.OnI
         Toast.makeText(this, "Position :" + position, Toast.LENGTH_SHORT).show();
     }
 
-    public void deleteAll(View view) {
-        //depositDataSource = new DepositSQLHelper(this);
-        int totaldeleted = locationDataSource.deleteAllLocation();
+    public void getLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
 
-        Snackbar.make(view, "Total records deleted :" + totaldeleted, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
 
-        updateList();
+        } else {
+            android.location.Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+            if (location != null) {
+                x = Double.parseDouble(String.format("%.2f", location.getLatitude()));
+                y = Double.parseDouble(String.format("%.2f", location.getLongitude()));
+                Toast.makeText(this, "X : " + Double.toString(x) + " Y: " + Double.toString(y), Toast.LENGTH_SHORT).show();
+
+            } else {
+                Toast.makeText(this, "Unable to find correct location", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
     }
 
 
@@ -130,11 +129,12 @@ public class LocationModule extends AppCompatActivity implements AdapterView.OnI
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
+
             switch (position) {
                 case 0:
+
+                    Log.i("tag", "tab record called!");
                     location_tab_records ltr = new location_tab_records();
-                    //   listViewRecordsLoc = ltr.listViewRecordsLoc;
-//                    listViewRecordsLoc.setOnItemClickListener(LocationModule.this);
                     return ltr;
                 case 1:
                     location_tab_add lta = new location_tab_add();
@@ -145,17 +145,27 @@ public class LocationModule extends AppCompatActivity implements AdapterView.OnI
 
         }
 
+
+        @Override
+        public int getItemPosition(Object object) {
+            // POSITION_NONE makes it possible to reload the PagerAdapter
+            //LocationModule.this.updateList();
+            return POSITION_NONE;
+        }
+
         @Override
         public int getCount() {
             // Show 3 total pages.
             return 2;
         }
+
+
     }
 
     /**
      * A placeholder location_tab_records containing a simple view.
      */
-    public static class location_tab_records extends Fragment implements AdapterView.OnItemClickListener{
+    public static class location_tab_records extends Fragment implements AdapterView.OnItemClickListener {
         TextView txtxViewLocTitle;
         ListView listViewRecordsLoc;
         LocationSQLHelper locationDataSource;
@@ -164,6 +174,7 @@ public class LocationModule extends AppCompatActivity implements AdapterView.OnI
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             locationDataSource = new LocationSQLHelper(getActivity());
+
             View rootView = inflater.inflate(R.layout.location_tab_records, container, false);
             txtxViewLocTitle = rootView.findViewById(R.id.txtxViewLocTitle);
             listViewRecordsLoc = rootView.findViewById(R.id.listViewRecordsLoc);
@@ -177,26 +188,31 @@ public class LocationModule extends AppCompatActivity implements AdapterView.OnI
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
-           Toast.makeText(getActivity(), "Position :" + position, Toast.LENGTH_SHORT).show();
-           // Toast.makeText(location_tab_records.this, "", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Position :" + position, Toast.LENGTH_SHORT).show();
+            // Toast.makeText(location_tab_records.this, "", Toast.LENGTH_SHORT).show();
         }
 
         private void updateList() {
             //Retrieve records from SQLite
             //locationDataSource = new DepositSQLHelper(this);
+            List<Location> values = null;
+            locationDataSource = new LocationSQLHelper(getActivity());
 
-            final List<Location> values = locationDataSource.getAllLocations();
-        /*
-        for (int i = 0; i < values.size(); i++) {
-            if (values.get(i).getStatus().equals("complete")) {
-                values.remove(i);
+            if (locationDataSource.getAllLocations() != null) {
+                values = locationDataSource.getAllLocations();
+                 /*
+                for (int i = 0; i < values.size(); i++) {
+                    if (values.get(i).getStatus().equals("complete")) {
+                        values.remove(i);
+                    }
+                } */
+                LocationAdapter adapter = new LocationAdapter(getActivity(),
+                        R.layout.location_record, values);
+                //Link adapter to ListView
+                listViewRecordsLoc.setAdapter(null);
+                listViewRecordsLoc.setAdapter(adapter);
             }
-        } */
-            LocationAdapter adapter = new LocationAdapter(getActivity(),
-                    R.layout.location_record, values);
-            //Link adapter to ListView
-            listViewRecordsLoc.setAdapter(null);
-            listViewRecordsLoc.setAdapter(adapter);
+
         }
 
     }
@@ -204,17 +220,85 @@ public class LocationModule extends AppCompatActivity implements AdapterView.OnI
     /**
      * A placeholder location_tab_add containing a simple view.
      */
-    public static class location_tab_add extends Fragment {
-        TextView txtxViewLocAdd;
+    public static class location_tab_add extends Fragment implements View.OnClickListener {
+        TextView txtxViewLocAdd, txtxViewLocXY;
+        EditText etLocX, etLocY, etName, etStatus;
+        LocationSQLHelper locationDataSource;
+        Button btnDelAll;
+        Button btnAdd;
+        Double location_x, location_y;
+        String location_name, location_status;
+        double x;
+        double y;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+            locationDataSource = new LocationSQLHelper(getActivity());
+
+
             View rootView2 = inflater.inflate(R.layout.location_tab_add, container, false);
             txtxViewLocAdd = rootView2.findViewById(R.id.txtxViewLocAdd);
+            txtxViewLocXY = rootView2.findViewById(R.id.txtxViewLocXY);
+            etLocX = rootView2.findViewById(R.id.etLocX);
+            etLocY = rootView2.findViewById(R.id.etLocY);
+            etName = rootView2.findViewById(R.id.etName);
+            etStatus = rootView2.findViewById(R.id.etStatus);
+            btnDelAll = rootView2.findViewById(R.id.btnDelAll);
+            btnAdd = rootView2.findViewById(R.id.btnAdd);
+            btnDelAll.setOnClickListener(this);
+            btnAdd.setOnClickListener(this);
+
             txtxViewLocAdd.setText("Location Add !");
+            ((LocationModule) getActivity()).getLocation();
+            x = ((LocationModule) getActivity()).x;
+            y = ((LocationModule) getActivity()).y;
+            txtxViewLocXY.setText("X: " + x + " Y: " + y);
+            etLocX.setText(String.valueOf(x));
+            etLocY.setText(String.valueOf(y));
             return rootView2;
         }
+
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.btnDelAll:
+                    int totaldeleted = locationDataSource.deleteAllLocation();
+
+                    Snackbar.make(view, "Total records deleted :" + totaldeleted, Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                    break;
+                case R.id.btnAdd:
+                    Location temploc;
+
+                    temploc = locationDataSource.getLastRecord();
+                    if (temploc.getLocation_id() == 0) {
+                        temploc.setLocation_id(400000);
+                    }
+
+                    location_x = Double.parseDouble(etLocX.getText().toString());
+                    location_y = Double.parseDouble(etLocY.getText().toString());
+                    location_name = etName.getText().toString();
+                    location_status = etStatus.getText().toString();
+
+                    Location loc = new Location(
+                            temploc.getLocation_id() + 1,
+                            location_name,
+                            location_x,
+                            location_y,
+                            location_status);
+                    locationDataSource.insertLocation(loc);
+                    Snackbar.make(view, "Record added :" + loc.getLocation_id(), Snackbar.LENGTH_SHORT)
+                            .setAction("Action", null).show();
+
+                    break;
+                default:
+                    break;
+            }
+            ((LocationModule) getActivity()).dataChanged();
+        }
+
+
     }
 
 }
