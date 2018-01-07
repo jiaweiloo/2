@@ -21,6 +21,7 @@ import my.edu.tarc.mobilecashservice.R;
 public class LoginPage extends AppCompatActivity {
     UserSQLHelper database;
     UserRecord user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 

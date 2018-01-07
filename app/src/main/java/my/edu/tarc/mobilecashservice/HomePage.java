@@ -35,6 +35,7 @@ public class HomePage extends AppCompatActivity
     int user_id = 0;
     TextView txtViewUserID;
     TextView txtViewName;
+    TextView txtViewBal;
     UserRecord user = new UserRecord();
     //boolean isLogin = false;
 
@@ -67,6 +68,7 @@ public class HomePage extends AppCompatActivity
         View headerView = navigationView.getHeaderView(0);
         txtViewUserID = headerView.findViewById(R.id.txtViewUserID);
         txtViewName = headerView.findViewById(R.id.txtViewName);
+        txtViewBal = findViewById(R.id.txtViewBal);
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         user_id = sharedPref.getInt("user_id", 0);
@@ -76,8 +78,9 @@ public class HomePage extends AppCompatActivity
         Log.i("tag", txtViewUserID.getText().toString() + " User ID: " + String.valueOf(user_id));
 
         if (user_id != 0) {
-            txtViewUserID.setText("User ID: "+String.valueOf(user_id));
+            txtViewUserID.setText("User ID: " + String.valueOf(user_id));
             txtViewName.setText(user.getUser_name());
+            txtViewBal.setText(String.format("RM %.2f", user.getWallet_balance()));
         } else {
             goToLogin();
         }
@@ -109,6 +112,7 @@ public class HomePage extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
+
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_checkDatabase) {
@@ -125,7 +129,7 @@ public class HomePage extends AppCompatActivity
             goToLogin();
 
             return true;
-        }else if (id == R.id.action_DatabaseLoc) {
+        } else if (id == R.id.action_DatabaseLoc) {
             Intent intent = new Intent(this, LocationModule.class);
             startActivity(intent);
             return true;
@@ -140,7 +144,10 @@ public class HomePage extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_Deposit) {
+
+        if (id == R.id.nav_Home) {
+
+        } else if (id == R.id.nav_Deposit) {
             // Handle the deposit action
 
         } else if (id == R.id.nav_Withdrawal) {

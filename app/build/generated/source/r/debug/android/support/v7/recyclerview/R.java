@@ -88,23 +88,23 @@ public final class R {
         public static final int blocking = 0x7f09002b;
         public static final int chronometer = 0x7f090042;
         public static final int forever = 0x7f09006b;
-        public static final int icon = 0x7f09006f;
-        public static final int icon_group = 0x7f090070;
+        public static final int icon = 0x7f090071;
+        public static final int icon_group = 0x7f090072;
         public static final int info = 0x7f090077;
         public static final int italic = 0x7f090078;
         public static final int item_touch_helper_previous_elevation = 0x7f090079;
         public static final int line1 = 0x7f09007d;
         public static final int line3 = 0x7f09007e;
-        public static final int normal = 0x7f090095;
-        public static final int notification_background = 0x7f090096;
-        public static final int notification_main_column = 0x7f090097;
-        public static final int notification_main_column_container = 0x7f090098;
-        public static final int right_icon = 0x7f0900a6;
-        public static final int right_side = 0x7f0900a7;
-        public static final int text = 0x7f0900da;
-        public static final int text2 = 0x7f0900db;
-        public static final int time = 0x7f0900fc;
-        public static final int title = 0x7f0900fd;
+        public static final int normal = 0x7f090096;
+        public static final int notification_background = 0x7f090097;
+        public static final int notification_main_column = 0x7f090098;
+        public static final int notification_main_column_container = 0x7f090099;
+        public static final int right_icon = 0x7f0900a7;
+        public static final int right_side = 0x7f0900a8;
+        public static final int text = 0x7f0900db;
+        public static final int text2 = 0x7f0900dc;
+        public static final int time = 0x7f0900fd;
+        public static final int title = 0x7f0900fe;
     }
     public static final class integer {
         public static final int status_bar_notification_info_maxnum = 0x7f0a000a;

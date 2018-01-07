@@ -1,7 +1,12 @@
 package my.edu.tarc.mobilecashservice.JiaWei;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,7 +15,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import my.edu.tarc.mobilecashservice.KahHou.CheckRequest;
@@ -83,21 +90,28 @@ public class DepositSelectCash extends AppCompatActivity {
 
     public void goToSelectArea(View view) {
         double amount = 0.0;
-        EditText txtAmount = findViewById(R.id.txtAmount);
-        Intent intent = new Intent(this, DepositSelectArea.class);
+        Spinner mySpinner = findViewById(R.id.spinnerCash);
+        String cashAmount = mySpinner.getSelectedItem().toString();
+        CheckBox checkBox = findViewById(R.id.checkBox);
 
-        if (txtAmount.getText().toString().equals("") || txtAmount.getText().toString().isEmpty()) {
-            Log.i("[System]", txtAmount.getText().toString());
-            amount = 0.01;
+        if (checkBox.isChecked()) {
+            Intent intent = new Intent(this, DepositSelectArea.class);
+
+            if (cashAmount.equals("") || cashAmount.isEmpty()) {
+                Log.i("[System]", cashAmount.toString());
+                amount = 0.01;
+            } else {
+                Log.i("[System]", "Null");
+                amount = Integer.parseInt(cashAmount);
+            }
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString("amount", String.valueOf(amount));
+            editor.commit();
+            startActivity(intent);
         } else {
-            Log.i("[System]", "Null");
-            amount = Integer.parseInt(txtAmount.getText().toString());
+            showDialog();
         }
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("amount", String.valueOf(amount));
-        editor.commit();
-        startActivity(intent);
     }
 
     public void goToLogin() {
@@ -108,5 +122,27 @@ public class DepositSelectCash extends AppCompatActivity {
         this.finish();
     }
 
+    public void showDialog() {
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(DepositSelectCash.this, android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(DepositSelectCash.this);
+        }
+        builder.setTitle("Fail")
+                .setMessage("Please agree with terms and condition before proceeding.")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // continue with delete
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
 
 }

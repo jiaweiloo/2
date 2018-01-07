@@ -20,6 +20,7 @@ import my.edu.tarc.mobilecashservice.DatabaseHelper.DepositSQLHelper;
 import my.edu.tarc.mobilecashservice.DatabaseHelper.UserSQLHelper;
 import my.edu.tarc.mobilecashservice.DatabaseHelper.WithdrawalSQLHelper;
 import my.edu.tarc.mobilecashservice.Entity.Deposit;
+import my.edu.tarc.mobilecashservice.Entity.UserRecord;
 import my.edu.tarc.mobilecashservice.Entity.Withdrawal;
 import my.edu.tarc.mobilecashservice.HomePage;
 import my.edu.tarc.mobilecashservice.R;
@@ -90,7 +91,7 @@ public class DepositScanQRcode extends AppCompatActivity {
                 if (data != null) {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
                     Point[] p = barcode.cornerPoints;
-                    mResultTextView.setText(barcode.displayValue);
+                    //mResultTextView.setText(barcode.displayValue);
                     //pair with withdrawal id
                     pair(Integer.parseInt(barcode.displayValue));
                 } else mResultTextView.setText(R.string.no_barcode_captured);
@@ -103,7 +104,12 @@ public class DepositScanQRcode extends AppCompatActivity {
         if (deposit.getWithdrawal_id() == withdrawalID) {
             deposit.setStatus("complete");
             depositDataSource.updateDeposit(deposit);
+            UserRecord temp = userSQLHelper.getUser(deposit.getUser_id());
+            temp.setWallet_balance(temp.getWallet_balance() + deposit.getAmount());
+            userSQLHelper.updateUser(temp);
+
             mResultTextView.setText("Scan code complete txn withdrawal id : " + withdrawalID);
+
             scanBarcodeButton.setText("Back to main menu");
         } else {
             mResultTextView.setText("QR code not matched, please try again! ");

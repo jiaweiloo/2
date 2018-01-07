@@ -6,4 +6,5 @@
 
     <color name="white">#ffffff</color>
     <color name="darkgrey">#808080</color>
+    <color name="milkBackground">#ECEFF1</color>
 </resources>

@@ -45,6 +45,10 @@
         <activity android:name=".KahHou.QRConfirm" />
         <activity android:name=".JiaWei.DepositPairWithdrawal"></activity>
         <activity android:name=".LocationModule"></activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

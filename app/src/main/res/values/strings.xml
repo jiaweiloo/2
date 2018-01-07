@@ -26,7 +26,7 @@
     <!-- End of Nan Fung's strings-->
 
     <!-- Jia Wei's strings-->
-    <string name="title_menu">Enter amount to be deposit</string>
+    <string name="title_menu">Select amount to be deposit</string>
     <string name="title_area">Select area of transaction</string>
     <string name="title_activity_maps">Map</string>
 

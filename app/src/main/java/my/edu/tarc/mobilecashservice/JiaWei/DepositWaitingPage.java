@@ -110,7 +110,7 @@ public class DepositWaitingPage extends AppCompatActivity {
 
         //depositDataSource.getTotalRecords();
         tviewUser.setText(Integer.toString(depositDataSource.getTotalRecords()));
-        addRecord();
+
         tViewDetails.setText("Deposit ID: " + deposit.getDeposit_id()
                 + "\n" + "Amount: " + deposit.getAmount() + "\n" + "Location id: " + location_id);
     }
@@ -132,33 +132,29 @@ public class DepositWaitingPage extends AppCompatActivity {
         }
     }
 
-    public void addRecord() {
+    public void addRecord(int withdrawal_id, String status) {
         Deposit tempdep = new Deposit();
 
+        //if else statement show that if database is empty, initialise first row deposit id to 200001
         if (depositDataSource.getLastRecord().getDeposit_id() != 0) {
-            //Log.i("[System]", "Last records is NOT empty or null! ");
             tempdep = depositDataSource.getLastRecord();
         } else {
             tempdep.setDeposit_id(200000);
         }
 
+        //when pair successfully, add data into database
         deposit.setDeposit_id(tempdep.getDeposit_id() + 1);
         deposit.setUser_id(user_id);
         deposit.setAmount(amount);
-        deposit.setWithdrawal_id(0);
+        deposit.setWithdrawal_id(withdrawal_id);
         deposit.setLocation_id(location_id);
-        deposit.setStatus("pending");
-        //Log.i("[System]", "Add records " + deposit.getDeposit_id());
-        //Deposit dep = new Deposit(tempdep.getDeposit_id() + 1, 100001, 50, 300001, 400001, "pending");
+        deposit.setStatus(status);
         depositDataSource.insertDeposit(deposit);
     }
 
     public void pair(View view) {
-        /*
-        deposit.setWithdrawal_id(300001);
-        deposit.setStatus("paired");
-        depositDataSource.updateDeposit(deposit); */
 
+        // Start activity to pair for a withdrawal
         Intent intent = new Intent(this, DepositPairWithdrawal.class);
         startActivityForResult(intent, 2);
     }
@@ -168,12 +164,13 @@ public class DepositWaitingPage extends AppCompatActivity {
         if (requestCode == 2) {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
+                    //get data from the pairing activity
                     int withdrawal_id = data.getExtras().getInt("withdrawal_id");
                     Log.i("tag", "Withdrawal ID: " + withdrawal_id);
+
                     tViewStatus.setText("Pair Success with " + withdrawal_id);
-                    deposit.setWithdrawal_id(withdrawal_id);
-                    deposit.setStatus("paired");
                     depositDataSource.updateDeposit(deposit);
+                    addRecord(withdrawal_id, "paired");
 
                 } else tViewStatus.setText("Pair Failure !");
             } else Log.i("tag", "R.string.barcode_error_format" +

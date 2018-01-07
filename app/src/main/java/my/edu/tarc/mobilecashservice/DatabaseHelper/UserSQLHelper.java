@@ -16,6 +16,7 @@ import my.edu.tarc.mobilecashservice.Entity.UserRecord;
 public class UserSQLHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "users.db";
+
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + UserContract.User.TABLE_NAME + "(" +
                     UserContract.User.COLUMN_USERID + " bigint," +
@@ -167,5 +168,24 @@ public class UserSQLHelper extends SQLiteOpenHelper {
         database.close();
 
         return userrecord;
+    }
+
+    public int updateUser(UserRecord UserRecord) {
+        SQLiteDatabase database = this.getWritableDatabase();
+
+        //Prepare record
+        ContentValues values = new ContentValues();
+
+        values.put(UserContract.User.COLUMN_USERID, UserRecord.getUser_id());
+        values.put(UserContract.User.COLUMN_USERNAME, UserRecord.getUser_name());
+        values.put(UserContract.User.COLUMN_USERPASSWORD, UserRecord.getPassword());
+        values.put(UserContract.User.COLUMN_IC, UserRecord.getIc_number());
+        values.put(UserContract.User.COLUMN_EMAIL, UserRecord.getEmail());
+        values.put(UserContract.User.COLUMN_PHONE, UserRecord.getPhone());
+        values.put(UserContract.User.COLUMN_WALLET_BALANCE, UserRecord.getWallet_balance());
+
+        // updating row
+        return database.update(UserContract.User.TABLE_NAME, values, UserContract.User.COLUMN_USERID + " = ?",
+                new String[] { String.valueOf(UserRecord.getUser_id()) });
     }
 }
