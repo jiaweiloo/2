@@ -16,5 +16,6 @@ public class UserContract {
         public static final String COLUMN_IC ="ic_number";
         public static final String COLUMN_EMAIL ="email";
         public static final String COLUMN_PHONE = "phone";
+        public static final String COLUMN_WALLET_BALANCE = "wallet_balance";
     }
 }

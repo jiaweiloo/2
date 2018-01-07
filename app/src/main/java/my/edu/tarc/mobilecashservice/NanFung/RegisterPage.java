@@ -88,7 +88,7 @@ public class RegisterPage extends AppCompatActivity {
             userRecord.setIc_number(ic);
             userRecord.setEmail(email);
             userRecord.setPhone(phone);
-
+            userRecord.setWallet_balance(0.0);
 
             databaseSource.insertUser(userRecord);
             Toast.makeText(RegisterPage.this, "Register Successfully", Toast.LENGTH_SHORT).show();
@@ -98,7 +98,7 @@ public class RegisterPage extends AppCompatActivity {
     }
 
     public void createDummy() {
-        UserRecord userRecord = new UserRecord(100001, 012311112, "user", "abc123", "970103-10-5530", "user@mail.com");
+        UserRecord userRecord = new UserRecord(100001, 012311112, "user", "abc123", "970103-10-5530", "user@mail.com",0.0);
         databaseSource.insertUser(userRecord);
         Toast.makeText(RegisterPage.this,
                 "Dummy record added " + userRecord.getUser_name() + " " + userRecord.getPassword(), Toast.LENGTH_SHORT).show();

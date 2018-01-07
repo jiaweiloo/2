@@ -23,7 +23,8 @@ public class UserSQLHelper extends SQLiteOpenHelper {
                     UserContract.User.COLUMN_USERPASSWORD + " TEXT," +
                     UserContract.User.COLUMN_IC + " TEXT," +
                     UserContract.User.COLUMN_EMAIL + " TEXT," +
-                    UserContract.User.COLUMN_PHONE + " bigint)";
+                    UserContract.User.COLUMN_PHONE + " bigint," +
+                    UserContract.User.COLUMN_WALLET_BALANCE + " DOUBLE)";
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + UserContract.User.TABLE_NAME;
     private String[] allColumn = {
@@ -32,11 +33,14 @@ public class UserSQLHelper extends SQLiteOpenHelper {
             UserContract.User.COLUMN_USERPASSWORD,
             UserContract.User.COLUMN_IC,
             UserContract.User.COLUMN_EMAIL,
-            UserContract.User.COLUMN_PHONE
+            UserContract.User.COLUMN_PHONE,
+            UserContract.User.COLUMN_WALLET_BALANCE
     };
+
     public UserSQLHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
 
@@ -48,11 +52,12 @@ public class UserSQLHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_DELETE_ENTRIES);
         onCreate(db);
     }
-    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion){
+
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }
 
-    public void insertUser(UserRecord userRecord){
+    public void insertUser(UserRecord userRecord) {
         //Prepare record
         ContentValues values = new ContentValues();
         values.put(UserContract.User.COLUMN_USERID, userRecord.getUser_id());
@@ -61,8 +66,7 @@ public class UserSQLHelper extends SQLiteOpenHelper {
         values.put(UserContract.User.COLUMN_IC, userRecord.getIc_number());
         values.put(UserContract.User.COLUMN_EMAIL, userRecord.getEmail());
         values.put(UserContract.User.COLUMN_PHONE, userRecord.getPhone());
-
-
+        values.put(UserContract.User.COLUMN_WALLET_BALANCE, userRecord.getWallet_balance());
         //Insert a row
         SQLiteDatabase database = this.getWritableDatabase();
         database.insert(UserContract.User.TABLE_NAME, null, values);
@@ -84,7 +88,8 @@ public class UserSQLHelper extends SQLiteOpenHelper {
                         UserContract.User.COLUMN_USERPASSWORD,
                         UserContract.User.COLUMN_IC,
                         UserContract.User.COLUMN_EMAIL,
-                        UserContract.User.COLUMN_PHONE},
+                        UserContract.User.COLUMN_PHONE,
+                        UserContract.User.COLUMN_WALLET_BALANCE},
                 UserContract.User.COLUMN_USERNAME + "=?",
                 new String[]{usernamestr}, null, null, null, null);
 
@@ -99,6 +104,7 @@ public class UserSQLHelper extends SQLiteOpenHelper {
             userrecord.setIc_number(cursor.getString(3));
             userrecord.setEmail(cursor.getString(4));
             userrecord.setPhone(Integer.parseInt(cursor.getString(5)));
+            userrecord.setWallet_balance(Double.parseDouble(cursor.getString(6)));
         }
         cursor.close();
         database.close();
@@ -106,7 +112,7 @@ public class UserSQLHelper extends SQLiteOpenHelper {
         return userrecord;
     }
 
-    public UserRecord getUser(int id){
+    public UserRecord getUser(int id) {
         UserRecord userrecord = new UserRecord();
 
         SQLiteDatabase database = this.getReadableDatabase();
@@ -118,8 +124,9 @@ public class UserSQLHelper extends SQLiteOpenHelper {
                         UserContract.User.COLUMN_USERPASSWORD,
                         UserContract.User.COLUMN_IC,
                         UserContract.User.COLUMN_EMAIL,
-                        UserContract.User.COLUMN_PHONE},
-                        UserContract.User.COLUMN_USERID + "=?",
+                        UserContract.User.COLUMN_PHONE,
+                        UserContract.User.COLUMN_WALLET_BALANCE},
+                UserContract.User.COLUMN_USERID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
 
@@ -133,6 +140,7 @@ public class UserSQLHelper extends SQLiteOpenHelper {
             userrecord.setIc_number(cursor.getString(3));
             userrecord.setEmail(cursor.getString(4));
             userrecord.setPhone(Integer.parseInt(cursor.getString(5)));
+            userrecord.setWallet_balance(Double.parseDouble(cursor.getString(6)));
         }
         cursor.close();
         database.close();
@@ -146,13 +154,14 @@ public class UserSQLHelper extends SQLiteOpenHelper {
         Cursor cursor = database.rawQuery(selectQuery, null);
         cursor.moveToLast();
         UserRecord userrecord = new UserRecord();
-        if(cursor.getCount()>0) {
+        if (cursor.getCount() > 0) {
             userrecord.setUser_id(Integer.parseInt(cursor.getString(0)));
             userrecord.setUser_name(cursor.getString(1));
             userrecord.setPassword(cursor.getString(2));
             userrecord.setIc_number(cursor.getString(3));
             userrecord.setEmail(cursor.getString(4));
             userrecord.setPhone(Integer.parseInt(cursor.getString(5)));
+            userrecord.setWallet_balance(Double.parseDouble(cursor.getString(6)));
         }
         cursor.close();
         database.close();

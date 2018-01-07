@@ -7,17 +7,19 @@ package my.edu.tarc.mobilecashservice.Entity;
 public class UserRecord {
     int user_id, phone;
     String user_name, password, ic_number, email;
+    double wallet_balance;
 
     public UserRecord() {
     }
 
-    public UserRecord(int user_id, int phone, String user_name, String password, String ic_number, String email) {
+    public UserRecord(int user_id, int phone, String user_name, String password, String ic_number, String email, double wallet_balance) {
         this.user_id = user_id;
         this.phone = phone;
         this.user_name = user_name;
         this.password = password;
         this.ic_number = ic_number;
         this.email = email;
+        this.wallet_balance = wallet_balance;
     }
 
     public void setUser_id(int user_id) {
@@ -66,5 +68,13 @@ public class UserRecord {
 
     public int getPhone() {
         return phone;
+    }
+
+    public double getWallet_balance() {
+        return wallet_balance;
+    }
+
+    public void setWallet_balance(double wallet_balance) {
+        this.wallet_balance = wallet_balance;
     }
 }
