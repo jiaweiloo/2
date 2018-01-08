@@ -22,6 +22,7 @@ public class QRConfirm extends AppCompatActivity {
         setContentView(R.layout.activity_qrconfirm);
 
         withdrawalDataSource = new WithdrawalSQLHelper(QRConfirm.this);
+        //Intent in serializable
         final Withdrawal withdraw = (Withdrawal) getIntent().getSerializableExtra("withdraw");
 
         int withdrawal_id = 300001;

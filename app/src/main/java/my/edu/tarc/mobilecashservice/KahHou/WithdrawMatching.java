@@ -20,26 +20,33 @@ import my.edu.tarc.mobilecashservice.Entity.Withdrawal;
 import my.edu.tarc.mobilecashservice.R;
 
 public class WithdrawMatching extends AppCompatActivity {
-    TextView countTime;
+    TextView tViewcountTime;
     Handler handler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_withdraw_matching);
-        countTime = (TextView)findViewById(R.id.countTime);
-        //String sWaitingPeriod = waitingPeriod.getText().toString();
-        new CountDownTimer(Integer.parseInt(getIntent().getStringExtra("waitingPeriod"))*60000, 1000) { // adjust the milli seconds here
+        tViewcountTime = findViewById(R.id.countTime);
+
+        int waitingPeriod = Integer.parseInt(getIntent().getStringExtra("waitingPeriod"));
+
+        waitingPeriod = 1;
+        // Timer start
+        // adjust the milli seconds here
+        new CountDownTimer(waitingPeriod * 60000, 1000) {
+
             public void onTick(long millisUntilFinished) {
-                countTime.setText(""+String.format("%d min, %d sec",
-                        TimeUnit.MILLISECONDS.toMinutes( millisUntilFinished),
-                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
-                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
+
+                //getTimeDifference method calculate remaining time and return string
+                tViewcountTime.setText(getTimeDifference(millisUntilFinished));
             }
 
             public void onFinish() {
-                countTime.setText("done!");
+                tViewcountTime.setText("done!");
             }
         }.start();
+
         handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -48,10 +55,11 @@ public class WithdrawMatching extends AppCompatActivity {
                 Intent intent = new Intent(WithdrawMatching.this, ConfirmCash.class);
                 //intent.putExtra("cashAmount",getIntent().getStringExtra("cashAmount"));
                 //intent.putExtra("location",getIntent().getStringExtra("location"));
-                intent.putExtra("withdraw",(Withdrawal)getIntent().getSerializableExtra("withdraw"));
+                intent.putExtra("withdraw", (Withdrawal) getIntent().getSerializableExtra("withdraw"));
                 startActivity(intent);
             }
         }, 5000);
+
     }
 
     public void btnStop(View view) {
@@ -60,4 +68,11 @@ public class WithdrawMatching extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public String getTimeDifference(long millisUntilFinished) {
+        String diff = "" + String.format("%d min, %d sec",
+                TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
+                TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
+        return diff;
+    }
 }

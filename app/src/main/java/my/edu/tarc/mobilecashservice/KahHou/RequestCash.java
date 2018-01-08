@@ -25,7 +25,7 @@ public class RequestCash extends AppCompatActivity {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         user_id = sharedPref.getInt("user_id", 0);
         withdraw.setUser_id(user_id);
-        withdraw.setStatus("unsuccessful");
+        withdraw.setStatus("pending");
     }
 
 

@@ -1,50 +1,69 @@
 package my.edu.tarc.mobilecashservice.KahHou;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.List;
 
+import my.edu.tarc.mobilecashservice.DatabaseHelper.LocationSQLHelper;
 import my.edu.tarc.mobilecashservice.Entity.Withdrawal;
+import my.edu.tarc.mobilecashservice.JiaWei.DepositSecurityCode;
+import my.edu.tarc.mobilecashservice.JiaWei.LocationAdapter;
 import my.edu.tarc.mobilecashservice.R;
 
-public class SelectTimeLocation extends AppCompatActivity{
+public class SelectTimeLocation extends AppCompatActivity implements AdapterView.OnItemClickListener {
     static final int REQUEST_LOCATION = 1;
     LocationManager locationManager;
     double x;
     double y;
+    LocationSQLHelper locationDataSource;
+    ListView listViewRecords;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_time_location);
-        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         getLocation();
 
-        Log.i("System",Double.toString(x));
-        Log.i("System",Double.toString(y));
+        listViewRecords = findViewById(R.id.listViewRecords);
+        listViewRecords.setOnItemClickListener(this);
+
+        //Log.i("System", Double.toString(x));
+        //Log.i("System", Double.toString(y));
+        updateList();
     }
 
+    //old function waiting to remove
     public void btnMatch(View view) {
-        EditText waitingPeriod = (EditText) findViewById(R.id.editText2);
-        String sWaitingPeriod = waitingPeriod.getText().toString();
-        Spinner mySpinner = (Spinner) findViewById(R.id.spinnerLocation);
-        String location = mySpinner.getSelectedItem().toString();
+        /*
+
+        sWaitingPeriod ="1";
+
+        String location = "Setapak Central";
         Withdrawal withdraw = (Withdrawal) getIntent().getSerializableExtra("withdraw");
         withdraw.setLocation_x(x);
         withdraw.setLocation_y(y);
@@ -56,19 +75,9 @@ public class SelectTimeLocation extends AppCompatActivity{
             Toast.makeText(this, "Waiting period cannot more than 30 minutes", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (location.equals("Tunku Abdul Rahman University College")) {
-            if (x != 3.21 || y != 101.72){
-                Toast.makeText(this, "You are not locate at Tunku Tunku Abdul Rahman University College", Toast.LENGTH_SHORT).show();
-                return;
-            }else{
-                Intent intent = new Intent(this, WithdrawMatching.class);
-                //intent.putExtra("cashAmount",getIntent().getStringExtra("cashAmount"));
-                intent.putExtra("waitingPeriod", waitingPeriod.getText().toString());
-                //intent.putExtra("location",((Spinner) findViewById(R.id.spinnerLocation)).getSelectedItem().toString());
-                intent.putExtra("withdraw", withdraw);
-                startActivity(intent);
-            }
-        } else if (location.equals("Setapak Central")) {
+
+
+         if (location.equals("Setapak Central")) {
             x= 3.20; //temporary solution
             y = 101.72; //temporary solution
             if (x != 3.20 || y != 101.72){
@@ -82,24 +91,12 @@ public class SelectTimeLocation extends AppCompatActivity{
                 intent.putExtra("withdraw", withdraw);
                 startActivity(intent);
             }
-        } else if (location.equals("Jalan Genting Klang")) {
-            if (x != 3.20 || y != 101.71){
-                Toast.makeText(this, "You are not located at Jalan Genting Klang", Toast.LENGTH_SHORT).show();
-                return;
-            }else{
-                Intent intent = new Intent(this, WithdrawMatching.class);
-                //intent.putExtra("cashAmount",getIntent().getStringExtra("cashAmount"));
-                intent.putExtra("waitingPeriod", waitingPeriod.getText().toString());
-                //intent.putExtra("location",((Spinner) findViewById(R.id.spinnerLocation)).getSelectedItem().toString());
-                intent.putExtra("withdraw", withdraw);
-                startActivity(intent);
-            }
         }
+        */
     }
 
-
     void getLocation() {
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED&&ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
@@ -107,9 +104,9 @@ public class SelectTimeLocation extends AppCompatActivity{
         } else {
             Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-            if (location != null){
-                x = Double.parseDouble(String.format("%.2f",location.getLatitude()));
-                y = Double.parseDouble(String.format("%.2f",location.getLongitude()));
+            if (location != null) {
+                x = Double.parseDouble(String.format("%.2f", location.getLatitude()));
+                y = Double.parseDouble(String.format("%.2f", location.getLongitude()));
             } else {
                 Toast.makeText(this, "Unable to find correct location", Toast.LENGTH_SHORT).show();
                 return;
@@ -117,7 +114,6 @@ public class SelectTimeLocation extends AppCompatActivity{
         }
 
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -128,6 +124,82 @@ public class SelectTimeLocation extends AppCompatActivity{
                 getLocation();
                 break;
         }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position,
+                            long id) {
+
+        my.edu.tarc.mobilecashservice.Entity.Location loc = null;
+        //Retrieve records from SQLite
+        locationDataSource = new LocationSQLHelper(this);
+        List<my.edu.tarc.mobilecashservice.Entity.Location> values = locationDataSource.getAllLocations();
+        for (int i = values.size() - 1; i >= 0; i--) {
+            if (values.get(i).getLocation_x() != x || values.get(i).getLocation_y() != y) {
+                values.remove(i);
+            }
+        }
+        //Log.i("System", "Value size :" + values.size());
+        Toast.makeText(this, "Location Name :" + values.get(position).getLocation_name(), Toast.LENGTH_SHORT).show();
+        loc = values.get(position);
+
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("location_id", loc.getLocation_id());
+        editor.commit();
+
+
+        EditText waitingPeriod = findViewById(R.id.editText2);
+        //String sWaitingPeriod = waitingPeriod.getText().toString();
+        if (waitingPeriod.getText() == null || waitingPeriod.getText().toString().equals("")) {
+            showDialog();
+            waitingPeriod.setText("1");
+        } else {
+            Intent intent = new Intent(this, WithdrawMatching.class);
+            intent.putExtra("waitingPeriod", waitingPeriod.getText().toString());
+            startActivity(intent);
+        }
+    }
+
+    private void updateList() {
+        //Retrieve records from SQLite
+        locationDataSource = new LocationSQLHelper(this);
+
+        List<my.edu.tarc.mobilecashservice.Entity.Location> values = locationDataSource.getAllLocations();
+
+        for (int i = values.size() - 1; i >= 0; i--) {
+            //Log.i("System", i +" X coordinate : "+ Double.toString(x) + " "+ values.get(i).getLocation_x());
+            if (values.get(i).getLocation_x() != x || values.get(i).getLocation_y() != y) {
+                //Log.i("System", "remove :" + i);
+                values.remove(i);
+            }
+        }
+        //Log.i("System", "Value size :" + values.size());
+
+        LocationAdapter adapter = new LocationAdapter(this,
+                R.layout.location_record, values);
+        //Link adapter to ListView
+        listViewRecords.setAdapter(null);
+        listViewRecords.setAdapter(adapter);
+    }
+
+    public void showDialog() {
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(SelectTimeLocation.this, android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(SelectTimeLocation.this);
+        }
+        builder.setTitle("Fail")
+                .setMessage("Please filled in all details before proceeding.")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // continue with delete
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }
 
