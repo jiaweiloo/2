@@ -1,5 +1,7 @@
 package my.edu.tarc.mobilecashservice.JiaWei;
 
+import android.app.ProgressDialog;
+import android.os.CountDownTimer;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,10 +25,27 @@ public class AllDepositRecords extends AppCompatActivity implements AdapterView.
         setContentView(R.layout.activity_all_deposit_records);
         setTitle("All Deposit Records");
 
-        listViewRecords = (ListView) findViewById(R.id.listViewRecords);
+        listViewRecords = findViewById(R.id.listViewRecords);
         listViewRecords.setOnItemClickListener(this);
+        depositDataSource = new DepositSQLHelper(this);
 
-        updateList();
+        final ProgressDialog mProgressDialog;
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setIndeterminate(false);
+        mProgressDialog.setMessage("Loading.... Please wait");
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.show();
+
+        new CountDownTimer(2000, 1000) { // adjust the milli seconds here
+
+            public void onTick(long millisUntilFinished) {
+                //UpdateTextField();
+            }
+            public void onFinish() {
+                mProgressDialog.dismiss();
+                updateList();
+            }
+        }.start();
         //addDummyData();
     }
 
@@ -43,8 +62,6 @@ public class AllDepositRecords extends AppCompatActivity implements AdapterView.
     }
 
     private void updateList() {
-        //Retrieve records from SQLite
-        depositDataSource = new DepositSQLHelper(this);
 
         final List<Deposit> values = depositDataSource.getAllDeposits();
         /*
@@ -53,22 +70,12 @@ public class AllDepositRecords extends AppCompatActivity implements AdapterView.
                 values.remove(i);
             }
         } */
-        DepositRecordAdapter adapter = new DepositRecordAdapter(this,
+        DepositRecordAdapter adapter2 = new DepositRecordAdapter(this,
                 R.layout.deposit_record, values);
         //Link adapter to ListView
         listViewRecords.setAdapter(null);
-        listViewRecords.setAdapter(adapter);
+        listViewRecords.setAdapter(adapter2);
     }
-
-    private void addDummyData() {
-        Deposit dep = new Deposit(200001, 100001, 50, 300001, 400001, "pending");
-        Deposit dep2 = new Deposit(200002, 100001, 60, 300002, 400001, "pending");
-        Deposit dep3 = new Deposit(200003, 200001, 70, 300003, 400001, "pending");
-        depositDataSource.insertDeposit(dep);
-        depositDataSource.insertDeposit(dep2);
-        depositDataSource.insertDeposit(dep3);
-    }
-
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -77,22 +84,8 @@ public class AllDepositRecords extends AppCompatActivity implements AdapterView.
     }
 
 
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
     protected void onPause() {
         depositDataSource.close();
         super.onPause();
-    }
-
-    public void deleteAll(View view) {
-        depositDataSource = new DepositSQLHelper(this);
-        int totaldeleted = depositDataSource.deleteAllDeposit();
-
-        Snackbar.make(view, "Total records deleted :" + totaldeleted, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-
-        updateList();
     }
 }

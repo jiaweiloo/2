@@ -47,14 +47,6 @@ public class DepositWaitingPage extends AppCompatActivity {
         location_id = sharedPref.getInt("location_id", 0);
         amount = Double.parseDouble(sharedPref.getString("amount", "0.0"));
 
-
-        /*
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            amount = bundle.getString("amount");
-            areaaa = bundle.getString("areaCode");
-            user_id = Integer.parseInt(bundle.getString("user_id"));
-        } */
         Log.i("[System]", "User :" + user_id);
         Log.i("[System]", "Amount :" + amount);
         Log.i("[System]", "location_id :" + location_id);
@@ -80,7 +72,7 @@ public class DepositWaitingPage extends AppCompatActivity {
 
 
         //900000 ms for 15 minutes
-        new CountDownTimer(9000, 1000) { // adjust the milli seconds here
+        new CountDownTimer(10000, 1000) { // adjust the milli seconds here
 
             public void onTick(long millisUntilFinished) {
                 tViewTimer.setText("" + String.format("%d : %d ",
@@ -90,7 +82,7 @@ public class DepositWaitingPage extends AppCompatActivity {
             }
 
             public void onFinish() {
-                deposit = depositDataSource.getDeposit(deposit.getDeposit_id());
+                //deposit = depositDataSource.getDeposit(deposit.getDeposit_id());
                 progressBar2.setVisibility(View.GONE);
                 btnMatch.setEnabled(false);
                 if (deposit.getWithdrawal_id() == 0) {
@@ -112,19 +104,18 @@ public class DepositWaitingPage extends AppCompatActivity {
         tviewUser.setText(Integer.toString(depositDataSource.getTotalRecords()));
 
         tViewDetails.setText("Deposit ID: " + deposit.getDeposit_id()
-                + "\n" + "Amount: " + deposit.getAmount() + "\n" + "Location id: " + location_id);
-    }
-
-    public void goToCheckDatabase() {
-        Intent intent = new Intent(this, AllDepositRecords.class);
-        //intent.putExtra("message", txtAmount.getText().toString());
-        startActivityForResult(intent, 2);
+                + "\n" + "Amount: " + amount + "\n" + "Location id: " + location_id);
     }
 
     public void btnCancelAction(View view) {
         if (btnCancel.getText().equals("Finish")) {
             Intent intent = new Intent(this, DepositScanQRcode.class);
-            intent.putExtra("deposit_id", deposit.getDeposit_id());
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putInt("deposit_id", deposit.getDeposit_id());
+            editor.putInt("withdrawal_id", deposit.getWithdrawal_id());
+            editor.commit();
+
             startActivityForResult(intent, 2);
         } else {
             Intent intent = new Intent(this, DepositSelectCash.class);
@@ -157,6 +148,7 @@ public class DepositWaitingPage extends AppCompatActivity {
         // Start activity to pair for a withdrawal
         Intent intent = new Intent(this, DepositPairWithdrawal.class);
         startActivityForResult(intent, 2);
+        //addRecord(300001,"paired");
     }
 
     @Override
@@ -166,13 +158,18 @@ public class DepositWaitingPage extends AppCompatActivity {
                 if (data != null) {
                     //get data from the pairing activity
                     int withdrawal_id = data.getExtras().getInt("withdrawal_id");
-                    Log.i("tag", "Withdrawal ID: " + withdrawal_id);
+                    Log.i("tag", "Withdrawal ID onActivityResult: " + withdrawal_id);
 
                     tViewStatus.setText("Pair Success with " + withdrawal_id);
-                    depositDataSource.updateDeposit(deposit);
-                    addRecord(withdrawal_id, "paired");
+                    tViewDetails.setText("Deposit ID: " + deposit.getDeposit_id()
+                            + "\n" + "Amount: " + deposit.getAmount()
+                            + "\n" + "Location id: " + location_id
+                            + "\n" + "Withdrawal id: " + withdrawal_id);
 
-                } else tViewStatus.setText("Pair Failure !");
+                    addRecord(withdrawal_id, "paired");
+                    //depositDataSource.updateDeposit(deposit);
+
+                } else tViewStatus.setText("Withdrawal pairing Failure !");
             } else Log.i("tag", "R.string.barcode_error_format" +
                     CommonStatusCodes.getStatusCodeString(resultCode));
         } else

@@ -1,5 +1,8 @@
 package my.edu.tarc.mobilecashservice.Entity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by jiaweiloo on 29/12/2017.
  */
@@ -83,5 +86,16 @@ public class Deposit {
                 ", location_id=" + location_id +
                 ", status='" + status + '\'' +
                 '}';
+    }
+
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("deposit_id", deposit_id);
+        result.put("user_id", user_id);
+        result.put("amount", amount);
+        result.put("withdrawal_id", withdrawal_id);
+        result.put("location_id", location_id);
+        result.put("status", status);
+        return result;
     }
 }

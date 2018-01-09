@@ -1,6 +1,8 @@
 package my.edu.tarc.mobilecashservice.JiaWei;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import my.edu.tarc.mobilecashservice.DatabaseHelper.WithdrawalSQLHelper;
@@ -21,7 +24,7 @@ import my.edu.tarc.mobilecashservice.R;
 public class DepositPairWithdrawal extends AppCompatActivity implements AdapterView.OnItemClickListener {
     ListView listViewRecordsWd;
     WithdrawalSQLHelper withdrawalSQLHelper;
-
+    List<Withdrawal> values = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +34,8 @@ public class DepositPairWithdrawal extends AppCompatActivity implements AdapterV
         listViewRecordsWd = findViewById(R.id.listViewRecordsWd);
         DepositPairWithdrawal DPW = new DepositPairWithdrawal();
 
+        withdrawalSQLHelper = new WithdrawalSQLHelper(this);
+
         listViewRecordsWd.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Log.i("System", "onItemClick");
@@ -39,15 +44,32 @@ public class DepositPairWithdrawal extends AppCompatActivity implements AdapterV
 
         });
         Log.i("System", "onCreate");
-        updateList();
+
+        final ProgressDialog mProgressDialog;
+
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setIndeterminate(false);
+        mProgressDialog.setMessage("Loading.... Please wait");
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.show();
+
+        new CountDownTimer(2000, 1000) { // adjust the milli seconds here
+
+            public void onTick(long millisUntilFinished) {
+                //UpdateTextField();
+            }
+            public void onFinish() {
+                mProgressDialog.dismiss();
+                updateList();
+            }
+        }.start();
     }
 
 
     private void updateList() {
         //Retrieve records from SQLite
-        withdrawalSQLHelper = new WithdrawalSQLHelper(this);
 
-        List<Withdrawal> values = withdrawalSQLHelper.getAllWithdrawals();
+        values = withdrawalSQLHelper.getAllWithdrawals();
 
         if(values.isEmpty()){
             Toast.makeText(getApplicationContext(), "No records", Toast.LENGTH_SHORT).show();
@@ -65,8 +87,7 @@ public class DepositPairWithdrawal extends AppCompatActivity implements AdapterV
         Log.i("System", "onItemClick");
         Withdrawal withdrawal = null;
         //Retrieve records from SQLite
-        withdrawalSQLHelper = new WithdrawalSQLHelper(this);
-        List<Withdrawal> values = withdrawalSQLHelper.getAllWithdrawals();
+        values = withdrawalSQLHelper.getAllWithdrawals();
 
         //Log.i("System", "Value size :" + values.size());
         Toast.makeText(this, "Withdrawal ID :" + values.get(position).getWithdrawal_id(), Toast.LENGTH_SHORT).show();
@@ -85,8 +106,7 @@ public class DepositPairWithdrawal extends AppCompatActivity implements AdapterV
     public void complete(int position){
         Withdrawal withdrawal = null;
         //Retrieve records from SQLite
-        withdrawalSQLHelper = new WithdrawalSQLHelper(this);
-        List<Withdrawal> values = withdrawalSQLHelper.getAllWithdrawals();
+        values = withdrawalSQLHelper.getAllWithdrawals();
 
         //Log.i("System", "Value size :" + values.size());
         Toast.makeText(this, "Withdrawal ID :" + values.get(position).getWithdrawal_id(), Toast.LENGTH_SHORT).show();

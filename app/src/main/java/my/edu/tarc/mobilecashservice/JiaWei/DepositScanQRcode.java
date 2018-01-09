@@ -1,9 +1,11 @@
 package my.edu.tarc.mobilecashservice.JiaWei;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.net.Uri;
+import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,6 +40,8 @@ public class DepositScanQRcode extends AppCompatActivity {
     Button scanBarcodeButton;
     int user_id = 0;
     double amount = 0.0;
+    int withdrawal_id = 0;
+    int deposit_id = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,25 +54,34 @@ public class DepositScanQRcode extends AppCompatActivity {
         userSQLHelper = new UserSQLHelper(this);
 
         tviewShowInfo = findViewById(R.id.tviewShowInfo);
+        mResultTextView = findViewById(R.id.result_textview);
+        scanBarcodeButton = findViewById(R.id.scan_barcode_button);
 
         //Grab user_id and amount from SharedPreferences
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         user_id = sharedPref.getInt("user_id", 0);
         amount = Double.parseDouble(sharedPref.getString("amount", "0.0"));
+        deposit_id = sharedPref.getInt("deposit_id", 0);
+        withdrawal_id = sharedPref.getInt("withdrawal_id", 0);
+        final ProgressDialog mProgressDialog;
 
-        //Grab deposit_id from previous page
-        Bundle bundle = getIntent().getExtras();
-        int deposit_id = 0;
-        if (getIntent().getIntExtra("deposit_id", 0) != 0) {
-            deposit_id = bundle.getInt("deposit_id");
-        }
-        deposit = depositDataSource.getDeposit(deposit_id);
-        if (deposit.getDeposit_id() != 0) {
-            tviewShowInfo.setText("Deposit id : " + deposit.getDeposit_id());
-        }
-        mResultTextView = findViewById(R.id.result_textview);
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setIndeterminate(false);
+        mProgressDialog.setMessage("Loading.... Please wait");
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.show();
 
-        scanBarcodeButton = findViewById(R.id.scan_barcode_button);
+        new CountDownTimer(2000, 1000) { // adjust the milli seconds here
+            public void onTick(long millisUntilFinished) {
+                //UpdateTextField();
+            }
+            public void onFinish() {
+                mProgressDialog.dismiss();
+                deposit = depositDataSource.getDeposit(deposit_id);
+                tviewShowInfo.setText("Deposit id : " + deposit.getDeposit_id() +"\nWithdrawal ID: "+deposit.getWithdrawal_id());
+            }
+        }.start();
+
 
     }
 
@@ -78,9 +91,7 @@ public class DepositScanQRcode extends AppCompatActivity {
             startActivityForResult(intent, 1);
         } else {
             Intent intent = new Intent(getApplicationContext(), BarcodeCaptureActivity.class);
-            Log.i("[tag]", "before starting");
             startActivityForResult(intent, BARCODE_READER_REQUEST_CODE);
-            Log.i("[tag]", "after starting");
         }
     }
 
@@ -105,6 +116,7 @@ public class DepositScanQRcode extends AppCompatActivity {
             deposit.setStatus("complete");
             depositDataSource.updateDeposit(deposit);
             UserRecord temp = userSQLHelper.getUser(deposit.getUser_id());
+            //update user's wallet amount
             temp.setWallet_balance(temp.getWallet_balance() + deposit.getAmount());
             userSQLHelper.updateUser(temp);
 
@@ -125,7 +137,6 @@ public class DepositScanQRcode extends AppCompatActivity {
         Withdrawal withdrawal;
         withdrawal = withdrawalSQLHelper.getWithdrawal(withdrawal_id);
         user_id = withdrawal.getUser_id();
-
         phoneNumber = userSQLHelper.getUser(user_id).getPhone();
         /*Toast.makeText(DepositScanQRcode.this,
                 "Contacting user : " + user_id + " w/ phone : " + phoneNumber, Toast.LENGTH_SHORT).show();

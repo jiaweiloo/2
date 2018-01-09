@@ -5,6 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +27,11 @@ import my.edu.tarc.mobilecashservice.Entity.Deposit;
 public class DepositSQLHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "deposits.db";
+
+    List<Deposit> records = new ArrayList<>();
+    DatabaseReference dbref;
+    boolean isInitialise = false;
+
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + DepositContract.Deposits.TABLE_NAME + "(" +
                     DepositContract.Deposits.COLUMN_DEPOSIT_ID + " TEXT," +
@@ -42,6 +54,34 @@ public class DepositSQLHelper extends SQLiteOpenHelper {
 
     public DepositSQLHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        dbref = FirebaseDatabase.getInstance().getReference("deposit");
+        Log.i("Information", "onCreate ");
+        dbref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //<String, Object> td = (HashMap<String,Object>) dataSnapshot.getValue();
+
+                records.clear();
+                int itemAdded = 0;
+                //iterating through all the nodes
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    //getting depositRecord
+                    Deposit depositRecord = postSnapshot.getValue(Deposit.class);
+                    //adding depositRecord to the list
+                    Log.e("Information", "Deposit record deposit_id added: " + depositRecord.getWithdrawal_id());
+                    records.add(depositRecord);
+                    itemAdded++;
+                    isInitialise = true;
+                }
+                if (itemAdded != 0) {
+                    Log.i("Deposit", "Total " + itemAdded + " item(s) in the  list");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
 
     @Override
@@ -65,135 +105,79 @@ public class DepositSQLHelper extends SQLiteOpenHelper {
     //Add a new record
     public void insertDeposit(Deposit DepositRecord) {
         //Prepare record
-        ContentValues values = new ContentValues();
+        dbref.child(String.valueOf(DepositRecord.getDeposit_id())).setValue(DepositRecord.toMap(), new DatabaseReference.CompletionListener() {
 
-        values.put(DepositContract.Deposits.COLUMN_DEPOSIT_ID, DepositRecord.getDeposit_id());
-        values.put(DepositContract.Deposits.COLUMN_USER_ID, DepositRecord.getUser_id());
-        values.put(DepositContract.Deposits.COLUMN_AMOUNT, DepositRecord.getAmount());
-        values.put(DepositContract.Deposits.COLUMN_WITHDRAWAL_ID, DepositRecord.getWithdrawal_id());
-        values.put(DepositContract.Deposits.COLUMN_LOCATION_ID, DepositRecord.getLocation_id());
-        values.put(DepositContract.Deposits.COLUMN_STATUS, DepositRecord.getStatus());
-        //Insert a row
-        SQLiteDatabase database = this.getWritableDatabase();
-        database.insert(DepositContract.Deposits.TABLE_NAME, null, values);
-        //Close database connection
-        database.close();
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError == null) {
+                    Log.e("Info", "Save successful");
+                } else {
+                    Log.i("Info", "Save failed");
+                }
+            }
+        });
     }
 
     //Get all records
     public List<Deposit> getAllDeposits() {
-        List<Deposit> records = new ArrayList<Deposit>();
-        SQLiteDatabase database = this.getReadableDatabase();
-        Cursor cursor = database.query(DepositContract.Deposits.TABLE_NAME, allColumn, null, null, null,
-                null, null);
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            Deposit DepositRecord = new Deposit();
-            DepositRecord.setDeposit_id(Integer.parseInt(cursor.getString(0)));
-            DepositRecord.setUser_id(Integer.parseInt(cursor.getString(1)));
-            DepositRecord.setAmount(Double.parseDouble(cursor.getString(2)));
-            DepositRecord.setWithdrawal_id(Integer.parseInt(cursor.getString(3)));
-            DepositRecord.setLocation_id(Integer.parseInt(cursor.getString(4)));
-            DepositRecord.setStatus(cursor.getString(5));
-            records.add(DepositRecord);
-            cursor.moveToNext();
-        }
         return records;
     }
 
     public Deposit getLastRecord() {
-        SQLiteDatabase database = this.getReadableDatabase();
-        String selectQuery = "SELECT  * FROM " + DepositContract.Deposits.TABLE_NAME;
-        Cursor cursor = database.rawQuery(selectQuery, null);
-        cursor.moveToLast();
         Deposit DepositRecord = new Deposit();
-        if(cursor.getCount()>0) {
-            DepositRecord.setDeposit_id(Integer.parseInt(cursor.getString(0)));
-            DepositRecord.setUser_id(Integer.parseInt(cursor.getString(1)));
-            DepositRecord.setAmount(Double.parseDouble(cursor.getString(2)));
-            DepositRecord.setWithdrawal_id(Integer.parseInt(cursor.getString(3)));
-            DepositRecord.setLocation_id(Integer.parseInt(cursor.getString(4)));
-            DepositRecord.setStatus(cursor.getString(5));
+        if (!records.isEmpty()) {
+            DepositRecord = records.get((records.size() - 1));
         }
-        cursor.close();
-        database.close();
-
         return DepositRecord;
     }
 
     public int getTotalRecords() {
-        SQLiteDatabase database = this.getReadableDatabase();
-        String selectQuery = "SELECT  * FROM " + DepositContract.Deposits.TABLE_NAME;
-        Cursor cursor = database.rawQuery(selectQuery, null);
-        return cursor.getCount();
+        return records.size();
     }
 
     public Deposit getDeposit(int id) {
-        SQLiteDatabase database = this.getReadableDatabase();
-
-        Cursor cursor = database.query(DepositContract.Deposits.TABLE_NAME,
-                new String[]{
-                        DepositContract.Deposits.COLUMN_DEPOSIT_ID,
-                        DepositContract.Deposits.COLUMN_USER_ID,
-                        DepositContract.Deposits.COLUMN_AMOUNT,
-                        DepositContract.Deposits.COLUMN_WITHDRAWAL_ID,
-                        DepositContract.Deposits.COLUMN_LOCATION_ID,
-                        DepositContract.Deposits.COLUMN_STATUS},
-                DepositContract.Deposits.COLUMN_DEPOSIT_ID + "=?",
-                new String[]{String.valueOf(id)}, null, null, null, null);
-
-
-        if (cursor != null)
-            cursor.moveToFirst();
-
         Deposit DepositRecord = new Deposit();
 
-        if (cursor.getCount() > 0) {
-            DepositRecord.setDeposit_id(Integer.parseInt(cursor.getString(0)));
-            DepositRecord.setUser_id(Integer.parseInt(cursor.getString(1)));
-            DepositRecord.setAmount(Double.parseDouble(cursor.getString(2)));
-            DepositRecord.setWithdrawal_id(Integer.parseInt(cursor.getString(3)));
-            DepositRecord.setLocation_id(Integer.parseInt(cursor.getString(4)));
-            DepositRecord.setStatus(cursor.getString(5));
+        if (!records.isEmpty()) {
+
+            for (int count = 0; count < records.size(); count++) {
+                if (records.get(count).getDeposit_id() == id) {
+                    DepositRecord = records.get(count);
+                    Log.i("Check", "Request of deposit !" + DepositRecord.getDeposit_id());
+                    break;
+                } else {
+                    Log.e("NO", "Un match user record!");
+                }
+            }//end of for loop
+        } else {
+            Log.e("Information", "records is empty !");
         }
-        cursor.close();
-        database.close();
 
         return DepositRecord;
 
     }
 
-    public int updateDeposit(Deposit DepositRecord) {
-        SQLiteDatabase database = this.getWritableDatabase();
+    public boolean updateDeposit(Deposit DepositRecord) {
 
-        //Prepare record
-        ContentValues values = new ContentValues();
-
-        values.put(DepositContract.Deposits.COLUMN_DEPOSIT_ID, DepositRecord.getDeposit_id());
-        values.put(DepositContract.Deposits.COLUMN_USER_ID, DepositRecord.getUser_id());
-        values.put(DepositContract.Deposits.COLUMN_AMOUNT, DepositRecord.getAmount());
-        values.put(DepositContract.Deposits.COLUMN_WITHDRAWAL_ID, DepositRecord.getWithdrawal_id());
-        values.put(DepositContract.Deposits.COLUMN_LOCATION_ID, DepositRecord.getLocation_id());
-        values.put(DepositContract.Deposits.COLUMN_STATUS, DepositRecord.getStatus());
-
-        // updating row
-        return database.update(DepositContract.Deposits.TABLE_NAME, values, DepositContract.Deposits.COLUMN_DEPOSIT_ID + " = ?",
-                new String[] { String.valueOf(DepositRecord.getDeposit_id()) });
+        dbref = FirebaseDatabase.getInstance().getReference("deposit").child(String.valueOf(DepositRecord.getDeposit_id()));
+        dbref.setValue(DepositRecord);
+        Log.i("Info", "Method updateDeposit: Update  UserRecord successful");
+        return true;
     }
 
     // Deleting single contact
     public void deleteDeposit(Deposit DepositRecord) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(DepositContract.Deposits.TABLE_NAME, DepositContract.Deposits.COLUMN_DEPOSIT_ID + " = ?",
-                new String[] { String.valueOf(DepositRecord.getDeposit_id()) });
+                new String[]{String.valueOf(DepositRecord.getDeposit_id())});
 
         db.close();
     }
 
     //delete all deposits
-    public int deleteAllDeposit(){
+    public int deleteAllDeposit() {
         SQLiteDatabase db = this.getWritableDatabase();
-        int totaldeleted= db.delete(DepositContract.Deposits.TABLE_NAME, "1", null);
+        int totaldeleted = db.delete(DepositContract.Deposits.TABLE_NAME, "1", null);
         db.close();
         return totaldeleted;
     }
