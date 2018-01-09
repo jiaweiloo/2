@@ -32,7 +32,7 @@ public class LoginPage extends AppCompatActivity {
     }
 
     public void BtnLogin(View view) {
-        EditText username = (EditText) findViewById(R.id.editTextUserName);
+        EditText username = findViewById(R.id.editTextUserName);
         String usernamestr = username.getText().toString();
         EditText password = (EditText) findViewById(R.id.editTextPassword);
         String passwordstr = password.getText().toString();

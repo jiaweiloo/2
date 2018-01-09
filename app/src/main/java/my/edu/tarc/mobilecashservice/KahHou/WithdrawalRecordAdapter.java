@@ -24,7 +24,7 @@ public class WithdrawalRecordAdapter extends ArrayAdapter<Withdrawal> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-       Withdrawal userRecord = getItem(position);
+       Withdrawal withdrawalRecord = getItem(position);
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).
@@ -40,10 +40,10 @@ public class WithdrawalRecordAdapter extends ArrayAdapter<Withdrawal> {
         textViewLocation = (TextView) convertView.findViewById(R.id.textViewLocation);
         textViewStatus = (TextView) convertView.findViewById(R.id.textViewStatus);
 
-        textViewDateTime.setText(textViewDateTime.getText() + " : " + userRecord.getDateTime());
-        textViewAmount.setText(textViewAmount.getText() + " : " + userRecord.getAmount());
-        textViewLocation.setText(textViewLocation.getText() + "X : " + userRecord.getLocation_x()+", Y : "+userRecord.getLocation_y());
-        textViewStatus.setText(textViewStatus.getText() + " : " + userRecord.getStatus());
+        textViewDateTime.setText(textViewDateTime.getText() + " : " + withdrawalRecord.getDateTime());
+        textViewAmount.setText(textViewAmount.getText() + " : " + withdrawalRecord.getAmount());
+        textViewLocation.setText(textViewLocation.getText() + "ID : " + withdrawalRecord.getLocation_id());
+        textViewStatus.setText(textViewStatus.getText() + " : " + withdrawalRecord.getStatus());
 
 
         return convertView;

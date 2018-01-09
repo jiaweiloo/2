@@ -5,6 +5,19 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.CountDownTimer;
+import android.util.Log;
+import android.view.View;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import my.edu.tarc.mobilecashservice.Contract.UserContract;
 import my.edu.tarc.mobilecashservice.Entity.UserRecord;
@@ -17,6 +30,9 @@ public class UserSQLHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "users.db";
 
+    List<UserRecord> records;
+    DatabaseReference dbref;
+    boolean isInitialise = false;
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + UserContract.User.TABLE_NAME + "(" +
                     UserContract.User.COLUMN_USERID + " bigint," +
@@ -40,11 +56,44 @@ public class UserSQLHelper extends SQLiteOpenHelper {
 
     public UserSQLHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        records = new ArrayList<>();
+
+        dbref = FirebaseDatabase.getInstance().getReference("user");
+        dbref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //<String, Object> td = (HashMap<String,Object>) dataSnapshot.getValue();
+
+
+                records.clear();
+
+                int itemAdded = 0;
+                //iterating through all the nodes
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    //getting artist
+                    UserRecord userRecord = postSnapshot.getValue(UserRecord.class);
+                    //adding artist to the list
+                    Log.i("Information", "user record user_id added: " + userRecord.getWallet_balance());
+                    records.add(userRecord);
+                    itemAdded++;
+                    isInitialise = true;
+                }
+                if (itemAdded != 0) {
+                    Log.i("Information", "Total " + itemAdded + " item(s) in the  list");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+
+        });
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
         db.execSQL(SQL_CREATE_ENTRIES);
     }
 
@@ -60,132 +109,106 @@ public class UserSQLHelper extends SQLiteOpenHelper {
 
     public void insertUser(UserRecord userRecord) {
         //Prepare record
-        ContentValues values = new ContentValues();
-        values.put(UserContract.User.COLUMN_USERID, userRecord.getUser_id());
-        values.put(UserContract.User.COLUMN_USERNAME, userRecord.getUser_name());
-        values.put(UserContract.User.COLUMN_USERPASSWORD, userRecord.getPassword());
-        values.put(UserContract.User.COLUMN_IC, userRecord.getIc_number());
-        values.put(UserContract.User.COLUMN_EMAIL, userRecord.getEmail());
-        values.put(UserContract.User.COLUMN_PHONE, userRecord.getPhone());
-        values.put(UserContract.User.COLUMN_WALLET_BALANCE, userRecord.getWallet_balance());
-        //Insert a row
-        SQLiteDatabase database = this.getWritableDatabase();
-        database.insert(UserContract.User.TABLE_NAME, null, values);
 
-        //Close database connection
-        database.close();
+        //Insert a row
+        dbref = FirebaseDatabase.getInstance().getReference("user");
+        dbref.child(String.valueOf(userRecord.getUser_id())).setValue(userRecord.toMap(), new DatabaseReference.CompletionListener() {
+
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError == null) {
+                    Log.i("Info", "Save successful");
+                } else {
+                    Log.i("Info", "Save failed");
+                }
+            }
+        });
     }
 
 
     public UserRecord searchPass(String usernamestr) {
         UserRecord userrecord = new UserRecord();
 
-        SQLiteDatabase database = this.getReadableDatabase();
+        if (!records.isEmpty()) {
 
-        Cursor cursor = database.query(UserContract.User.TABLE_NAME,
-                new String[]{
-                        UserContract.User.COLUMN_USERID,
-                        UserContract.User.COLUMN_USERNAME,
-                        UserContract.User.COLUMN_USERPASSWORD,
-                        UserContract.User.COLUMN_IC,
-                        UserContract.User.COLUMN_EMAIL,
-                        UserContract.User.COLUMN_PHONE,
-                        UserContract.User.COLUMN_WALLET_BALANCE},
-                UserContract.User.COLUMN_USERNAME + "=?",
-                new String[]{usernamestr}, null, null, null, null);
-
-
-        if (cursor != null)
-            cursor.moveToFirst();
-
-        if (cursor.getCount() > 0) {
-            userrecord.setUser_id(Integer.parseInt(cursor.getString(0)));
-            userrecord.setUser_name(cursor.getString(1));
-            userrecord.setPassword(cursor.getString(2));
-            userrecord.setIc_number(cursor.getString(3));
-            userrecord.setEmail(cursor.getString(4));
-            userrecord.setPhone(Integer.parseInt(cursor.getString(5)));
-            userrecord.setWallet_balance(Double.parseDouble(cursor.getString(6)));
+            for (int count = 0; count < records.size(); count++) {
+                if (records.get(count).getUser_name().equals(usernamestr)) {
+                    userrecord = records.get(count);
+                    Log.e("888", "Request of user_name : " + userrecord.getUser_name());
+                    break;
+                }else{
+                    Log.e("888", "Un match user record!");
+                }
+            }
+        } else {
+            Log.e("Information", "records is empty !");
         }
-        cursor.close();
-        database.close();
 
         return userrecord;
     }
 
     public UserRecord getUser(int id) {
+
         UserRecord userrecord = new UserRecord();
 
-        SQLiteDatabase database = this.getReadableDatabase();
+        if (!records.isEmpty()) {
 
-        Cursor cursor = database.query(UserContract.User.TABLE_NAME,
-                new String[]{
-                        UserContract.User.COLUMN_USERID,
-                        UserContract.User.COLUMN_USERNAME,
-                        UserContract.User.COLUMN_USERPASSWORD,
-                        UserContract.User.COLUMN_IC,
-                        UserContract.User.COLUMN_EMAIL,
-                        UserContract.User.COLUMN_PHONE,
-                        UserContract.User.COLUMN_WALLET_BALANCE},
-                UserContract.User.COLUMN_USERID + "=?",
-                new String[]{String.valueOf(id)}, null, null, null, null);
-
-
-        if (cursor != null)
-            cursor.moveToFirst();
-
-        if (cursor.getCount() > 0) {
-            userrecord.setUser_id(Integer.parseInt(cursor.getString(0)));
-            userrecord.setUser_name(cursor.getString(1));
-            userrecord.setPassword(cursor.getString(2));
-            userrecord.setIc_number(cursor.getString(3));
-            userrecord.setEmail(cursor.getString(4));
-            userrecord.setPhone(Integer.parseInt(cursor.getString(5)));
-            userrecord.setWallet_balance(Double.parseDouble(cursor.getString(6)));
+            for (int count = 0; count < records.size(); count++) {
+                if (records.get(count).getUser_id() == id) {
+                    userrecord = records.get(count);
+                    Log.e("888", "Request of user !" + userrecord.getUser_id());
+                    break;
+                }else{
+                    Log.e("888", "Un match user record!");
+                }
+            }
+        } else {
+            Log.e("Information", "records is empty !");
         }
-        cursor.close();
-        database.close();
+
 
         return userrecord;
     }
 
     public UserRecord getLastRecord() {
-        SQLiteDatabase database = this.getReadableDatabase();
-        String selectQuery = "SELECT  * FROM " + UserContract.User.TABLE_NAME;
-        Cursor cursor = database.rawQuery(selectQuery, null);
-        cursor.moveToLast();
+
         UserRecord userrecord = new UserRecord();
-        if (cursor.getCount() > 0) {
-            userrecord.setUser_id(Integer.parseInt(cursor.getString(0)));
-            userrecord.setUser_name(cursor.getString(1));
-            userrecord.setPassword(cursor.getString(2));
-            userrecord.setIc_number(cursor.getString(3));
-            userrecord.setEmail(cursor.getString(4));
-            userrecord.setPhone(Integer.parseInt(cursor.getString(5)));
-            userrecord.setWallet_balance(Double.parseDouble(cursor.getString(6)));
+        if (!records.isEmpty()) {
+            userrecord = records.get((records.size()-1));
         }
-        cursor.close();
-        database.close();
 
         return userrecord;
     }
 
-    public int updateUser(UserRecord UserRecord) {
-        SQLiteDatabase database = this.getWritableDatabase();
+    public boolean updateUser(UserRecord UserRecord) {
+        dbref = FirebaseDatabase.getInstance().getReference("user").child(String.valueOf(UserRecord.getUser_id()));
 
-        //Prepare record
-        ContentValues values = new ContentValues();
+        dbref.setValue(UserRecord);
+        Log.i("Info", "Method updateUser: Update  UserRecord successful");
+        return true;
+    }
 
-        values.put(UserContract.User.COLUMN_USERID, UserRecord.getUser_id());
-        values.put(UserContract.User.COLUMN_USERNAME, UserRecord.getUser_name());
-        values.put(UserContract.User.COLUMN_USERPASSWORD, UserRecord.getPassword());
-        values.put(UserContract.User.COLUMN_IC, UserRecord.getIc_number());
-        values.put(UserContract.User.COLUMN_EMAIL, UserRecord.getEmail());
-        values.put(UserContract.User.COLUMN_PHONE, UserRecord.getPhone());
-        values.put(UserContract.User.COLUMN_WALLET_BALANCE, UserRecord.getWallet_balance());
+    public boolean searchUsername(String usernamestr) {
+        if (!records.isEmpty()) {
 
-        // updating row
-        return database.update(UserContract.User.TABLE_NAME, values, UserContract.User.COLUMN_USERID + " = ?",
-                new String[] { String.valueOf(UserRecord.getUser_id()) });
+        }
+        SQLiteDatabase database = this.getReadableDatabase();
+        String query = " select user_name from " + UserContract.User.TABLE_NAME;
+        Cursor cursor = database.rawQuery(query, null);
+        String username, result;
+        result = "not found";
+        if (cursor.moveToFirst()) {
+            do {
+                username = cursor.getString(0);
+                if (username.equals(usernamestr)) {
+                    return false;
+                }
+            } while (cursor.moveToNext());
+        }
+        return true;
+    }
+
+    public List<UserRecord> getAllUsers() {
+        return records;
     }
 }

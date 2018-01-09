@@ -1,18 +1,21 @@
 package my.edu.tarc.mobilecashservice.Entity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by Nan Fung Lim on 31/12/2017.
  */
 
 public class UserRecord {
-    int user_id, phone;
-    String user_name, password, ic_number, email;
+    int user_id;
+    String phone, user_name, password, ic_number, email;
     double wallet_balance;
 
     public UserRecord() {
     }
 
-    public UserRecord(int user_id, int phone, String user_name, String password, String ic_number, String email, double wallet_balance) {
+    public UserRecord(int user_id, String phone, String user_name, String password, String ic_number, String email, double wallet_balance) {
         this.user_id = user_id;
         this.phone = phone;
         this.user_name = user_name;
@@ -62,11 +65,11 @@ public class UserRecord {
         return email;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
@@ -76,5 +79,17 @@ public class UserRecord {
 
     public void setWallet_balance(double wallet_balance) {
         this.wallet_balance = wallet_balance;
+    }
+
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("user_id", user_id);
+        result.put("phone", phone);
+        result.put("user_name", user_name);
+        result.put("password", password);
+        result.put("ic_number", ic_number);
+        result.put("email", email);
+        result.put("wallet_balance", wallet_balance);
+        return result;
     }
 }

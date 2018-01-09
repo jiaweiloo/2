@@ -16,8 +16,7 @@ public class WithdrawalContract {
         public static final String COLUMN_USER_ID = "user_id";
         public static final String COLUMN_AMOUNT ="amount";
         public static final String COLUMN_DEPOSIT_ID ="deposit_id";
-        public static final String COLUMN_LOCATION_X = "location_x";
-        public static final String COLUMN_LOCATION_Y = "location_y";
+        public static final String COLUMN_LOCATION_ID = "location_id";
         public static final String COLUMN_STATUS = "status";
     }
 }

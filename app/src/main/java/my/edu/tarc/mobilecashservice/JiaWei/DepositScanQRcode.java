@@ -121,7 +121,7 @@ public class DepositScanQRcode extends AppCompatActivity {
     public void showDial(View view) {
         int user_id = 0;
         int withdrawal_id = deposit.getWithdrawal_id();
-        int phoneNumber = 0;
+        String phoneNumber = "0";
         Withdrawal withdrawal;
         withdrawal = withdrawalSQLHelper.getWithdrawal(withdrawal_id);
         user_id = withdrawal.getUser_id();

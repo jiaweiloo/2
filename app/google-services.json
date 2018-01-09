@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "581984577314",
+    "firebase_url": "https://mobilecashservice.firebaseio.com",
+    "project_id": "mobilecashservice",
+    "storage_bucket": "mobilecashservice.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:581984577314:android:36d90d212dc09166",
+        "android_client_info": {
+          "package_name": "my.edu.tarc.mobilecashservice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "581984577314-5egotugpqf40c5dv8tmciu2blf0s81fp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACgnYdN0PA0qVeN4xQfGghAVzad_jDatI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

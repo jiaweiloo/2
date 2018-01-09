@@ -34,7 +34,7 @@ public class RegisterPage extends AppCompatActivity {
         editTextConPass = findViewById(R.id.tfConfirmPass);
 
         String name, ic, email, pass, conpass;
-        Integer phone;
+        String phone;
 
         conpass = editTextConPass.getText().toString();
         if (conpass.isEmpty()) {
@@ -51,7 +51,7 @@ public class RegisterPage extends AppCompatActivity {
             editTextIC.setError(getString(R.string.error_ic));
             return;
         }
-        phone = Integer.parseInt(editTextPhone.getText().toString());
+        phone = editTextPhone.getText().toString();
         if (phone == null) {
             editTextPhone.setError(getString(R.string.error_phone));
             return;
@@ -70,10 +70,12 @@ public class RegisterPage extends AppCompatActivity {
             return;
         }
 
+        //confirm password field must equal to password field
         if (!conpass.equals(pass)) {
-            Toast toastpass = Toast.makeText(RegisterPage.this, "Password not match !", Toast.LENGTH_SHORT);
-            toastpass.show();
+            Toast.makeText(RegisterPage.this, "Password not match !", Toast.LENGTH_SHORT).show();
+
         } else {
+
             int user_id = 100001;
             UserRecord userRecord = new UserRecord();
 
@@ -82,25 +84,26 @@ public class RegisterPage extends AppCompatActivity {
                 user_id = temp.getUser_id() + 1;
             }
 
-            userRecord.setUser_id(user_id);
-            userRecord.setUser_name(name);
-            userRecord.setPassword(pass);
-            userRecord.setIc_number(ic);
-            userRecord.setEmail(email);
-            userRecord.setPhone(phone);
-            userRecord.setWallet_balance(0.0);
+            boolean searchResult = databaseSource.searchUsername(name);
+            searchResult = true;
+            if (searchResult) {
+                userRecord.setUser_id(user_id);
+                userRecord.setUser_name(name);
+                userRecord.setPassword(pass);
+                userRecord.setIc_number(ic);
+                userRecord.setEmail(email);
+                userRecord.setPhone(phone);
+                userRecord.setWallet_balance(0.0);
 
-            databaseSource.insertUser(userRecord);
-            Toast.makeText(RegisterPage.this, "Register Successfully", Toast.LENGTH_SHORT).show();
-            this.finish(); //Terminate this Activity
+                databaseSource.insertUser(userRecord);
+                Toast.makeText(RegisterPage.this, "Register Successfully", Toast.LENGTH_SHORT).show();
+                this.finish(); //Terminate this Activity
+
+            } else {
+                Toast.makeText(RegisterPage.this, "Username already exist", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }
 
-    public void createDummy() {
-        UserRecord userRecord = new UserRecord(100001, 012311112, "user", "abc123", "970103-10-5530", "user@mail.com",0.0);
-        databaseSource.insertUser(userRecord);
-        Toast.makeText(RegisterPage.this,
-                "Dummy record added " + userRecord.getUser_name() + " " + userRecord.getPassword(), Toast.LENGTH_SHORT).show();
-    }
 }

@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Loi Kah Hou on 12/30/2017.
@@ -17,8 +19,6 @@ public class Withdrawal implements Serializable{
     double amount;
     int deposit_id;
     int location_id;
-    double location_x;
-    double location_y;
     String dateTime;
     String status;
 
@@ -27,25 +27,21 @@ public class Withdrawal implements Serializable{
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         dateTime = dateFormat.format(new Date());
     }
-
+/*
     public Withdrawal(int withdrawal_id, int user_id, double amount, int deposit_id, String status) {
         this.deposit_id = deposit_id;
         this.user_id = user_id;
         this.amount = amount;
         this.withdrawal_id = withdrawal_id;
         this.status = status;
-    }
+    } */
 
-    public Withdrawal(int withdrawal_id, int user_id, double amount,
-                      int deposit_id, int location_id, double location_x,
-                      double location_y, String dateTime, String status) {
+    public Withdrawal(int withdrawal_id, int user_id, double amount, int deposit_id, int location_id, String dateTime, String status) {
         this.withdrawal_id = withdrawal_id;
         this.user_id = user_id;
         this.amount = amount;
         this.deposit_id = deposit_id;
         this.location_id = location_id;
-        this.location_x = location_x;
-        this.location_y = location_y;
         this.dateTime = dateTime;
         this.status = status;
     }
@@ -90,22 +86,6 @@ public class Withdrawal implements Serializable{
         this.location_id = location_id;
     }
 
-    public double getLocation_x() {
-        return location_x;
-    }
-
-    public void setLocation_x(double location_x) {
-        this.location_x = location_x;
-    }
-
-    public double getLocation_y() {
-        return location_y;
-    }
-
-    public void setLocation_y(double location_y) {
-        this.location_y = location_y;
-    }
-
     public String getDateTime() {
         return dateTime;
     }
@@ -131,5 +111,17 @@ public class Withdrawal implements Serializable{
                 ", withdrawal_id=" + withdrawal_id +
                 ", status='" + status + '\'' +
                 '}';
+    }
+
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("withdrawal_id", withdrawal_id);
+        result.put("user_id", user_id);
+        result.put("amount", amount);
+        result.put("deposit_id", deposit_id);
+        result.put("location_id", location_id);
+        result.put("dateTime", dateTime);
+        result.put("status", status);
+        return result;
     }
 }

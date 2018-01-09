@@ -1,9 +1,11 @@
 package my.edu.tarc.mobilecashservice;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -38,6 +40,7 @@ public class HomePage extends AppCompatActivity
     TextView txtViewBal;
     UserRecord user = new UserRecord();
     //boolean isLogin = false;
+    UserSQLHelper userSQLHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,18 +75,51 @@ public class HomePage extends AppCompatActivity
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         user_id = sharedPref.getInt("user_id", 0);
-        UserSQLHelper userSQLHelper = new UserSQLHelper(this);
+        userSQLHelper = new UserSQLHelper(this);
+
         user = userSQLHelper.getUser(user_id);
+
+        Log.e("tag","First time get request");
+        final ProgressDialog mProgressDialog;
+
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setIndeterminate(false);
+        mProgressDialog.setMessage("Loading.... Please wait");
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.show();
+
+        new CountDownTimer(2000, 1000) { // adjust the milli seconds here
+
+            public void onTick(long millisUntilFinished) {
+                //UpdateTextField();
+            }
+            public void onFinish() {
+                mProgressDialog.dismiss();
+                UpdateTextField();
+            }
+
+        }.start();
 
         Log.i("tag", txtViewUserID.getText().toString() + " User ID: " + String.valueOf(user_id));
 
+    }
+
+
+    public void UpdateTextField(){
         if (user_id != 0) {
+
+            user = userSQLHelper.getUser(user_id);
+
+            Log.e("tag","timer finish and retrieve user_id: " + user_id);
+
             txtViewUserID.setText("User ID: " + String.valueOf(user_id));
             txtViewName.setText(user.getUser_name());
             txtViewBal.setText(String.format("RM %.2f", user.getWallet_balance()));
+            Log.e("tag","Update textview(s) ");
         } else {
             goToLogin();
         }
+
     }
 
     @Override

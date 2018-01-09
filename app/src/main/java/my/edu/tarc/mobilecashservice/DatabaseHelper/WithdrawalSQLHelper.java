@@ -7,6 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import my.edu.tarc.mobilecashservice.Contract.WithdrawalContract;
 import my.edu.tarc.mobilecashservice.Contract.WithdrawalContract.WithdrawalRecord;
 import my.edu.tarc.mobilecashservice.Entity.Withdrawal;
@@ -21,6 +27,11 @@ import java.util.List;
 public class WithdrawalSQLHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "withdraw.db";
+
+    List<Withdrawal> records = new ArrayList<>();
+    DatabaseReference dbref;
+    boolean isInitialise = false;
+
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + WithdrawalRecord.TABLE_NAME + "(" +
                     WithdrawalRecord.COLUMN_WITHDRAWAL_ID + " TEXT," +
@@ -28,8 +39,7 @@ public class WithdrawalSQLHelper extends SQLiteOpenHelper {
                     WithdrawalRecord.COLUMN_USER_ID + " TEXT," +
                     WithdrawalRecord.COLUMN_AMOUNT + " TEXT," +
                     WithdrawalRecord.COLUMN_DEPOSIT_ID + " TEXT," +
-                    WithdrawalRecord.COLUMN_LOCATION_X + " TEXT," +
-                    WithdrawalRecord.COLUMN_LOCATION_Y + " TEXT," +
+                    WithdrawalRecord.COLUMN_LOCATION_ID + " TEXT," +
                     WithdrawalRecord.COLUMN_STATUS + " TEXT)";
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + WithdrawalRecord.TABLE_NAME;
@@ -39,18 +49,45 @@ public class WithdrawalSQLHelper extends SQLiteOpenHelper {
             WithdrawalRecord.COLUMN_USER_ID,
             WithdrawalRecord.COLUMN_AMOUNT,
             WithdrawalRecord.COLUMN_DEPOSIT_ID,
-            WithdrawalRecord.COLUMN_LOCATION_X,
-            WithdrawalRecord.COLUMN_LOCATION_Y,
+            WithdrawalRecord.COLUMN_LOCATION_ID,
             WithdrawalRecord.COLUMN_STATUS,
     };
 
     public WithdrawalSQLHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        dbref = FirebaseDatabase.getInstance().getReference("withdrawal");
+        Log.i("Information", "onCreate ");
+        dbref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //<String, Object> td = (HashMap<String,Object>) dataSnapshot.getValue();
+
+                records.clear();
+                int itemAdded = 0;
+                //iterating through all the nodes
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    //getting withdrawalRecord
+                    Withdrawal withdrawalRecord = postSnapshot.getValue(Withdrawal.class);
+                    //adding withdrawalRecord to the list
+                    Log.e("Information", "withdrawal record user_id added: " + withdrawalRecord.getWithdrawal_id());
+                    records.add(withdrawalRecord);
+                    itemAdded++;
+                    isInitialise = true;
+                }
+                if (itemAdded != 0) {
+                    Log.i("Information", "Total " + itemAdded + " item(s) in the  list");
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_ENTRIES);
+
     }
 
     @Override
@@ -67,109 +104,53 @@ public class WithdrawalSQLHelper extends SQLiteOpenHelper {
     }
 
     //Add a new record
-    public void insertWithdrawal(Withdrawal userRecord) {
-        //Prepare record
-        ContentValues values = new ContentValues();
+    public void insertWithdrawal(Withdrawal withdrawal) {
+        dbref.child(String.valueOf(withdrawal.getWithdrawal_id())).setValue(withdrawal.toMap(), new DatabaseReference.CompletionListener() {
 
-        values.put(WithdrawalRecord.COLUMN_WITHDRAWAL_ID, userRecord.getWithdrawal_id());
-        values.put(WithdrawalRecord.COLUMN_DATE, userRecord.getDateTime());
-        values.put(WithdrawalRecord.COLUMN_USER_ID, userRecord.getUser_id());
-        values.put(WithdrawalRecord.COLUMN_AMOUNT, userRecord.getAmount());
-        values.put(WithdrawalRecord.COLUMN_DEPOSIT_ID, userRecord.getDeposit_id());
-        values.put(WithdrawalRecord.COLUMN_LOCATION_X, userRecord.getLocation_x());
-        values.put(WithdrawalRecord.COLUMN_LOCATION_Y, userRecord.getLocation_y());
-        values.put(WithdrawalRecord.COLUMN_STATUS, userRecord.getStatus());
-
-        //Insert a row
-        SQLiteDatabase database = this.getWritableDatabase();
-        database.insert(WithdrawalRecord.TABLE_NAME, null, values);
-
-        //Close database connection
-        database.close();
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError == null) {
+                    Log.i("Info", "Save successful");
+                } else {
+                    Log.i("Info", "Save failed");
+                }
+            }
+        });
     }
 
     //Get all records
-    public List<Withdrawal> getAllUsers() {
-        List<Withdrawal> records = new ArrayList<Withdrawal>();
-
-        SQLiteDatabase database = this.getReadableDatabase();
-
-        Cursor cursor = database.query(WithdrawalRecord.TABLE_NAME, allColumn, null, null, null, null, null);
-
-        cursor.moveToFirst();
-
-        while (!cursor.isAfterLast()) {
-            Withdrawal userRecord = new Withdrawal();
-            userRecord.setWithdrawal_id(cursor.getInt(0));
-            userRecord.setDateTime(cursor.getString(1));
-            userRecord.setUser_id(cursor.getInt(2));
-            userRecord.setAmount(cursor.getDouble(3));
-            userRecord.setDeposit_id(cursor.getInt(4));
-            userRecord.setLocation_x(cursor.getDouble(5));
-            userRecord.setLocation_y(cursor.getDouble(6));
-            userRecord.setStatus(cursor.getString(7));
-            records.add(userRecord);
-            cursor.moveToNext();
-        }
-
+    public List<Withdrawal> getAllWithdrawals() {
         return records;
     }
 
     public Withdrawal getLastRecord() {
-        SQLiteDatabase database = this.getReadableDatabase();
-        String selectQuery = "SELECT  * FROM " + WithdrawalContract.WithdrawalRecord.TABLE_NAME;
-        Cursor cursor = database.rawQuery(selectQuery, null);
-        cursor.moveToLast();
         Withdrawal withdrawal = new Withdrawal();
-        if (cursor.getCount() > 0) {
-            withdrawal.setWithdrawal_id(cursor.getInt(0));
-            withdrawal.setDateTime(cursor.getString(1));
-            withdrawal.setUser_id(cursor.getInt(2));
-            withdrawal.setAmount(cursor.getDouble(3));
-            withdrawal.setDeposit_id(cursor.getInt(4));
-            withdrawal.setLocation_x(cursor.getDouble(5));
-            withdrawal.setLocation_y(cursor.getDouble(6));
-            withdrawal.setStatus(cursor.getString(7));
+
+        if (!records.isEmpty()) {
+            withdrawal = records.get((records.size() - 1));
         }
-        cursor.close();
-        database.close();
 
         return withdrawal;
     }
 
     public Withdrawal getWithdrawal(int id) {
-        SQLiteDatabase database = this.getReadableDatabase();
-        Cursor cursor = database.query(WithdrawalContract.WithdrawalRecord.TABLE_NAME,
-                new String[]{
-                        WithdrawalRecord.COLUMN_WITHDRAWAL_ID,
-                        WithdrawalRecord.COLUMN_USER_ID,
-                        WithdrawalRecord.COLUMN_AMOUNT,
-                        WithdrawalRecord.COLUMN_DEPOSIT_ID,
-                        WithdrawalRecord.COLUMN_LOCATION_X,
-                        WithdrawalRecord.COLUMN_LOCATION_Y,
-                        WithdrawalRecord.COLUMN_DATE,
-                        WithdrawalRecord.COLUMN_STATUS},
-                WithdrawalRecord.COLUMN_WITHDRAWAL_ID + "=?",
-                new String[]{String.valueOf(id)}, null, null, null, null);
 
-
-        if (cursor != null) {
-            cursor.moveToFirst();
-        }
         Withdrawal withdrawal = new Withdrawal();
-        if (cursor.getCount() > 0) {
-            withdrawal.setWithdrawal_id(cursor.getInt(0));
-            withdrawal.setUser_id(cursor.getInt(1));
-            withdrawal.setAmount(cursor.getDouble(2));
-            withdrawal.setDeposit_id(cursor.getInt(3));
-            withdrawal.setLocation_x(cursor.getDouble(4));
-            withdrawal.setLocation_y(cursor.getDouble(5));
-            withdrawal.setDateTime(cursor.getString(6));
-            withdrawal.setStatus(cursor.getString(7));
-        }
 
-        cursor.close();
-        database.close();
+        if (!records.isEmpty()) {
+
+            for (int count = 0; count < records.size(); count++) {
+                if (records.get(count).getWithdrawal_id() == id) {
+                    withdrawal = records.get(count);
+                    Log.e("Check", "Request of withdrawal !" + withdrawal.getWithdrawal_id());
+                    break;
+                } else {
+                    Log.e("NO", "Un match user record!");
+                }
+            }
+        } else {
+            Log.e("Information", "records is empty !");
+        }
 
         return withdrawal;
     }

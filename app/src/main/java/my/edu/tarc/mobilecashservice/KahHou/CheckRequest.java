@@ -1,6 +1,8 @@
 package my.edu.tarc.mobilecashservice.KahHou;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,15 +21,16 @@ import my.edu.tarc.mobilecashservice.R;
 
 public class CheckRequest extends AppCompatActivity {
     ListView listViewRecords;
-    WithdrawalSQLHelper userSQLHelper;
+    WithdrawalSQLHelper WSH;
     int userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_request);
+        setTitle("CheckRequest");
         listViewRecords = findViewById(R.id.listViewRecords);
-        userID = getIntent().getExtras().getInt("user_id");
+        //userID = getIntent().getExtras().getInt("user_id");
 
         listViewRecords.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -35,26 +38,47 @@ public class CheckRequest extends AppCompatActivity {
                 Toast.makeText(CheckRequest.this, "Position " + position, Toast.LENGTH_SHORT).show();
             }
         });
-        updateList();
+        WSH = new WithdrawalSQLHelper(this);
+
+        WSH.getWithdrawal(300001);
+        Log.e("tag","First time get request");
+        final ProgressDialog mProgressDialog;
+
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setIndeterminate(false);
+        mProgressDialog.setMessage("Loading.... Please wait");
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.show();
+
+        new CountDownTimer(2000, 1000) { // adjust the milli seconds here
+
+            public void onTick(long millisUntilFinished) {
+                //UpdateTextField();
+            }
+            public void onFinish() {
+                mProgressDialog.dismiss();
+                updateList();
+            }
+        }.start();
+
     }
 
 
     private void updateList() {
         //Retrieve records from SQLite
-        userSQLHelper = new WithdrawalSQLHelper(this);
 
-        final List<Withdrawal> values = userSQLHelper.getAllUsers();
+        final List<Withdrawal> values = WSH.getAllWithdrawals();
 
         if (values.isEmpty()) {
             Toast.makeText(getApplicationContext(), "No records", Toast.LENGTH_SHORT).show();
         }
-
+        /*
         for (int a = 0; a < values.size(); a++) {
-            //Log.i("hihihi",Integer.toString(values.get(a).getUser_id())+"+" +Integer.toString(userID));
+
             if (values.get(a).getUser_id() != userID)
                 values.remove(a);
         }
-
+        */
         WithdrawalRecordAdapter adapter = new WithdrawalRecordAdapter(this, R.layout.withdrawal_record, values);
 
         //Link adapter to ListView

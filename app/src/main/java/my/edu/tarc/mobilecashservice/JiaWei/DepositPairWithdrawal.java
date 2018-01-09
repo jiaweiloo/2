@@ -30,12 +30,13 @@ public class DepositPairWithdrawal extends AppCompatActivity implements AdapterV
 
         listViewRecordsWd = findViewById(R.id.listViewRecordsWd);
         DepositPairWithdrawal DPW = new DepositPairWithdrawal();
+
         listViewRecordsWd.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Log.i("System", "onItemClick");
                 complete(position);
-
             }
+
         });
         Log.i("System", "onCreate");
         updateList();
@@ -46,7 +47,7 @@ public class DepositPairWithdrawal extends AppCompatActivity implements AdapterV
         //Retrieve records from SQLite
         withdrawalSQLHelper = new WithdrawalSQLHelper(this);
 
-        List<Withdrawal> values = withdrawalSQLHelper.getAllUsers();
+        List<Withdrawal> values = withdrawalSQLHelper.getAllWithdrawals();
 
         if(values.isEmpty()){
             Toast.makeText(getApplicationContext(), "No records", Toast.LENGTH_SHORT).show();
@@ -56,6 +57,7 @@ public class DepositPairWithdrawal extends AppCompatActivity implements AdapterV
 
         //Link adapter to ListView
         listViewRecordsWd.setAdapter(adapter);
+
     }
 
 
@@ -64,7 +66,7 @@ public class DepositPairWithdrawal extends AppCompatActivity implements AdapterV
         Withdrawal withdrawal = null;
         //Retrieve records from SQLite
         withdrawalSQLHelper = new WithdrawalSQLHelper(this);
-        List<Withdrawal> values = withdrawalSQLHelper.getAllUsers();
+        List<Withdrawal> values = withdrawalSQLHelper.getAllWithdrawals();
 
         //Log.i("System", "Value size :" + values.size());
         Toast.makeText(this, "Withdrawal ID :" + values.get(position).getWithdrawal_id(), Toast.LENGTH_SHORT).show();
@@ -84,7 +86,7 @@ public class DepositPairWithdrawal extends AppCompatActivity implements AdapterV
         Withdrawal withdrawal = null;
         //Retrieve records from SQLite
         withdrawalSQLHelper = new WithdrawalSQLHelper(this);
-        List<Withdrawal> values = withdrawalSQLHelper.getAllUsers();
+        List<Withdrawal> values = withdrawalSQLHelper.getAllWithdrawals();
 
         //Log.i("System", "Value size :" + values.size());
         Toast.makeText(this, "Withdrawal ID :" + values.get(position).getWithdrawal_id(), Toast.LENGTH_SHORT).show();
