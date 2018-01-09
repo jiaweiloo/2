@@ -77,48 +77,50 @@ public class HomePage extends AppCompatActivity
         user_id = sharedPref.getInt("user_id", 0);
         userSQLHelper = new UserSQLHelper(this);
 
-        user = userSQLHelper.getUser(user_id);
-
-        Log.e("tag","First time get request");
-        final ProgressDialog mProgressDialog;
-
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setIndeterminate(false);
-        mProgressDialog.setMessage("Loading.... Please wait");
-        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        mProgressDialog.show();
-
-        new CountDownTimer(2000, 1000) { // adjust the milli seconds here
-
-            public void onTick(long millisUntilFinished) {
-                //UpdateTextField();
-            }
-            public void onFinish() {
-                mProgressDialog.dismiss();
-                UpdateTextField();
-            }
-
-        }.start();
-
-        Log.i("tag", txtViewUserID.getText().toString() + " User ID: " + String.valueOf(user_id));
-
-    }
-
-
-    public void UpdateTextField(){
         if (user_id != 0) {
-
             user = userSQLHelper.getUser(user_id);
 
-            Log.e("tag","timer finish and retrieve user_id: " + user_id);
+            Log.e("tag", "First time get request");
 
-            txtViewUserID.setText("User ID: " + String.valueOf(user_id));
-            txtViewName.setText(user.getUser_name());
-            txtViewBal.setText(String.format("RM %.2f", user.getWallet_balance()));
-            Log.e("tag","Update textview(s) ");
+            final ProgressDialog mProgressDialog;
+
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setIndeterminate(false);
+            mProgressDialog.setMessage("Loading.... Please wait");
+            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            mProgressDialog.show();
+
+            new CountDownTimer(2000, 1000) { // adjust the milli seconds here
+
+                public void onTick(long millisUntilFinished) {
+                    //UpdateTextField();
+                }
+
+                public void onFinish() {
+                    mProgressDialog.dismiss();
+                    UpdateTextField();
+                }
+
+            }.start();
+
+            Log.i("tag", txtViewUserID.getText().toString() + " User ID: " + String.valueOf(user_id));
         } else {
             goToLogin();
         }
+    }
+
+
+    public void UpdateTextField() {
+
+        user = userSQLHelper.getUser(user_id);
+
+        Log.e("tag", "timer finish and retrieve user_id: " + user_id);
+
+        txtViewUserID.setText("User ID: " + String.valueOf(user_id));
+        txtViewName.setText(user.getUser_name());
+        txtViewBal.setText(String.format("RM %.2f", user.getWallet_balance()));
+        Log.e("tag", "Update textview(s) ");
+
 
     }
 
