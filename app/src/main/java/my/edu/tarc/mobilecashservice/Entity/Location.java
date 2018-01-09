@@ -1,5 +1,8 @@
 package my.edu.tarc.mobilecashservice.Entity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by jiaweiloo on 4/1/2018.
  */
@@ -60,5 +63,15 @@ public class Location {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("location_id", location_id);
+        result.put("location_name", location_name);
+        result.put("location_x", location_x);
+        result.put("location_y", location_y);
+        result.put("status", status);
+        return result;
     }
 }

@@ -1,9 +1,11 @@
 package my.edu.tarc.mobilecashservice;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.os.CountDownTimer;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -183,7 +185,27 @@ public class LocationModule extends AppCompatActivity implements AdapterView.OnI
             listViewRecordsLoc.setOnItemClickListener(location_tab_records.this);
 
             txtxViewLocTitle.setText("Location Database ! ");
-            updateList();
+
+            final ProgressDialog mProgressDialog;
+
+            mProgressDialog = new ProgressDialog(getActivity());
+            mProgressDialog.setIndeterminate(false);
+            mProgressDialog.setMessage("Loading.... Please wait");
+            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            mProgressDialog.show();
+
+            new CountDownTimer(2000, 1000) { // adjust the milli seconds here
+
+                public void onTick(long millisUntilFinished) {
+                    //UpdateTextField();
+                }
+
+                public void onFinish() {
+                    mProgressDialog.dismiss();
+                    updateList();
+                }
+
+            }.start();
             return rootView;
         }
 
@@ -198,16 +220,9 @@ public class LocationModule extends AppCompatActivity implements AdapterView.OnI
             //Retrieve records from SQLite
             //locationDataSource = new DepositSQLHelper(this);
             List<Location> values = null;
-            locationDataSource = new LocationSQLHelper(getActivity());
 
             if (locationDataSource.getAllLocations() != null) {
                 values = locationDataSource.getAllLocations();
-                 /*
-                for (int i = 0; i < values.size(); i++) {
-                    if (values.get(i).getStatus().equals("complete")) {
-                        values.remove(i);
-                    }
-                } */
                 LocationAdapter adapter = new LocationAdapter(getActivity(),
                         R.layout.location_record, values);
                 //Link adapter to ListView
@@ -289,6 +304,7 @@ public class LocationModule extends AppCompatActivity implements AdapterView.OnI
                             location_x,
                             location_y,
                             location_status);
+
                     locationDataSource.insertLocation(loc);
                     Snackbar.make(view, "Record added :" + loc.getLocation_id(), Snackbar.LENGTH_SHORT)
                             .setAction("Action", null).show();

@@ -2,6 +2,7 @@ package my.edu.tarc.mobilecashservice.KahHou;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
+import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -42,6 +44,7 @@ public class SelectTimeLocation extends AppCompatActivity implements AdapterView
     LocationSQLHelper locationDataSource;
     ListView listViewRecords;
 
+    List<my.edu.tarc.mobilecashservice.Entity.Location> values ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,48 +54,27 @@ public class SelectTimeLocation extends AppCompatActivity implements AdapterView
 
         listViewRecords = findViewById(R.id.listViewRecords);
         listViewRecords.setOnItemClickListener(this);
-
+        locationDataSource = new LocationSQLHelper(this);
         //Log.i("System", Double.toString(x));
         //Log.i("System", Double.toString(y));
-        updateList();
-    }
+        final ProgressDialog mProgressDialog;
 
-    //old function waiting to remove
-    public void btnMatch(View view) {
-        /*
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setIndeterminate(false);
+        mProgressDialog.setMessage("Loading.... Please wait");
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.show();
 
-        sWaitingPeriod ="1";
+        new CountDownTimer(2000, 1000) { // adjust the milli seconds here
 
-        String location = "Setapak Central";
-        Withdrawal withdraw = (Withdrawal) getIntent().getSerializableExtra("withdraw");
-        withdraw.setLocation_x(x);
-        withdraw.setLocation_y(y);
-
-        if (sWaitingPeriod.matches("")) {
-            Toast.makeText(this, "Please fill in waiting period", Toast.LENGTH_SHORT).show();
-            return;
-        } else if (Integer.parseInt(sWaitingPeriod) > 30) {
-            Toast.makeText(this, "Waiting period cannot more than 30 minutes", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-
-         if (location.equals("Setapak Central")) {
-            x= 3.20; //temporary solution
-            y = 101.72; //temporary solution
-            if (x != 3.20 || y != 101.72){
-                Toast.makeText(this, "You are not located at Setapak Central", Toast.LENGTH_SHORT).show();
-                return;
-            }else{
-                Intent intent = new Intent(this, WithdrawMatching.class);
-                //intent.putExtra("cashAmount",getIntent().getStringExtra("cashAmount"));
-                intent.putExtra("waitingPeriod", waitingPeriod.getText().toString());
-                //intent.putExtra("location",((Spinner) findViewById(R.id.spinnerLocation)).getSelectedItem().toString());
-                intent.putExtra("withdraw", withdraw);
-                startActivity(intent);
+            public void onTick(long millisUntilFinished) {
+                //UpdateTextField();
             }
-        }
-        */
+            public void onFinish() {
+                mProgressDialog.dismiss();
+                updateList();
+            }
+        }.start();
     }
 
     void getLocation() {
@@ -132,8 +114,7 @@ public class SelectTimeLocation extends AppCompatActivity implements AdapterView
 
         my.edu.tarc.mobilecashservice.Entity.Location loc = null;
         //Retrieve records from SQLite
-        locationDataSource = new LocationSQLHelper(this);
-        List<my.edu.tarc.mobilecashservice.Entity.Location> values = locationDataSource.getAllLocations();
+
         for (int i = values.size() - 1; i >= 0; i--) {
             if (values.get(i).getLocation_x() != x || values.get(i).getLocation_y() != y) {
                 values.remove(i);
@@ -166,7 +147,7 @@ public class SelectTimeLocation extends AppCompatActivity implements AdapterView
         //Retrieve records from SQLite
         locationDataSource = new LocationSQLHelper(this);
 
-        List<my.edu.tarc.mobilecashservice.Entity.Location> values = locationDataSource.getAllLocations();
+        values = locationDataSource.getAllLocations();
 
         for (int i = values.size() - 1; i >= 0; i--) {
             //Log.i("System", i +" X coordinate : "+ Double.toString(x) + " "+ values.get(i).getLocation_x());

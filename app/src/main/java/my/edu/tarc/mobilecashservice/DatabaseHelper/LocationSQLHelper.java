@@ -5,6 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +27,11 @@ public class LocationSQLHelper extends SQLiteOpenHelper {
 
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "location.db";
+
+    List<Location> records = new ArrayList<>();
+    DatabaseReference dbref;
+
+    boolean isInitialise = false;
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + LocationContract.Location.TABLE_NAME + "(" +
                     LocationContract.Location.COLUMN_LOCATION_ID + " TEXT," +
@@ -40,6 +52,35 @@ public class LocationSQLHelper extends SQLiteOpenHelper {
 
     public LocationSQLHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+
+        dbref = FirebaseDatabase.getInstance().getReference("location");
+        Log.i("Information", "onCreate ");
+        dbref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //<String, Object> td = (HashMap<String,Object>) dataSnapshot.getValue();
+
+                records.clear();
+                int itemAdded = 0;
+                //iterating through all the nodes
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    //getting depositRecord
+                    Location locationRecord = postSnapshot.getValue(Location.class);
+                    //adding depositRecord to the list
+                    Log.e("Information", "Location record location_id added: " + locationRecord.getLocation_id());
+                    records.add(locationRecord);
+                    itemAdded++;
+                    isInitialise = true;
+                }
+                if (itemAdded != 0) {
+                    Log.i("Location", "Total " + itemAdded + " item(s) in the  list");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
 
     @Override
@@ -63,114 +104,68 @@ public class LocationSQLHelper extends SQLiteOpenHelper {
     //Add a new record
     public void insertLocation(Location LocationRecord) {
         //Prepare record
-        ContentValues values = new ContentValues();
+        dbref.child(String.valueOf(LocationRecord.getLocation_id())).setValue(LocationRecord.toMap(), new DatabaseReference.CompletionListener() {
 
-        values.put(LocationContract.Location.COLUMN_LOCATION_ID, LocationRecord.getLocation_id());
-        values.put(LocationContract.Location.COLUMN_LOCATION_NAME, LocationRecord.getLocation_name());
-        values.put(LocationContract.Location.COLUMN_LOCATION_X, LocationRecord.getLocation_x());
-        values.put(LocationContract.Location.COLUMN_LOCATION_Y, LocationRecord.getLocation_y());
-        values.put(LocationContract.Location.COLUMN_STATUS, LocationRecord.getStatus());
-        //Insert a row
-        SQLiteDatabase database = this.getWritableDatabase();
-        database.insert(LocationContract.Location.TABLE_NAME, null, values);
-        //Close database connection
-        database.close();
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError == null) {
+                    Log.e("Info", "Save successful");
+                } else {
+                    Log.i("Info", "Save failed");
+                }
+            }
+        });
     }
 
     //Get all records
     public List<Location> getAllLocations() {
-        List<Location> records = new ArrayList<Location>();
-        SQLiteDatabase database = this.getReadableDatabase();
-        Cursor cursor = database.query(LocationContract.Location.TABLE_NAME, allColumn, null, null, null,
-                null, null);
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            Location LocationRecord = new Location();
-            LocationRecord.setLocation_id(Integer.parseInt(cursor.getString(0)));
-            LocationRecord.setLocation_name(cursor.getString(1));
-            LocationRecord.setLocation_x(Double.parseDouble(cursor.getString(2)));
-            LocationRecord.setLocation_y(Double.parseDouble(cursor.getString(3)));
-            LocationRecord.setStatus(cursor.getString(4));
-            records.add(LocationRecord);
-            cursor.moveToNext();
-        }
         return records;
     }
 
     public Location getLastRecord() {
-        SQLiteDatabase database = this.getReadableDatabase();
-        String selectQuery = "SELECT  * FROM " + LocationContract.Location.TABLE_NAME;
-        Cursor cursor = database.rawQuery(selectQuery, null);
-        cursor.moveToLast();
+
         Location LocationRecord = new Location();
-        if (cursor.getCount() > 0) {
-            LocationRecord.setLocation_id(Integer.parseInt(cursor.getString(0)));
-            LocationRecord.setLocation_name(cursor.getString(1));
-            LocationRecord.setLocation_x(Double.parseDouble(cursor.getString(2)));
-            LocationRecord.setLocation_y(Double.parseDouble(cursor.getString(3)));
-            LocationRecord.setStatus(cursor.getString(4));
+
+        if (!records.isEmpty()) {
+            LocationRecord = records.get((records.size() - 1));
         }
-        cursor.close();
-        database.close();
 
         return LocationRecord;
     }
 
     public int getTotalRecords() {
-        SQLiteDatabase database = this.getReadableDatabase();
-        String selectQuery = "SELECT  * FROM " + LocationContract.Location.TABLE_NAME;
-        Cursor cursor = database.rawQuery(selectQuery, null);
-        return cursor.getCount();
+        return records.size();
     }
 
     public Location getLocation(int id) {
-        SQLiteDatabase database = this.getReadableDatabase();
 
-        Cursor cursor = database.query(LocationContract.Location.TABLE_NAME,
-                new String[]{
-                        LocationContract.Location.COLUMN_LOCATION_ID,
-                        LocationContract.Location.COLUMN_LOCATION_NAME,
-                        LocationContract.Location.COLUMN_LOCATION_X,
-                        LocationContract.Location.COLUMN_LOCATION_Y,
-                        LocationContract.Location.COLUMN_STATUS},
-                        LocationContract.Location.COLUMN_LOCATION_ID + "=?",
-                new String[]{String.valueOf(id)}, null, null, null, null);
-
-
-        if (cursor != null)
-            cursor.moveToFirst();
 
         Location LocationRecord = new Location();
 
-        if (cursor.getCount() > 0) {
-            LocationRecord.setLocation_id(Integer.parseInt(cursor.getString(0)));
-            LocationRecord.setLocation_name(cursor.getString(1));
-            LocationRecord.setLocation_x(Double.parseDouble(cursor.getString(2)));
-            LocationRecord.setLocation_y(Double.parseDouble(cursor.getString(3)));
-            LocationRecord.setStatus(cursor.getString(4));
+        if (!records.isEmpty()) {
+
+            for (int count = 0; count < records.size(); count++) {
+                if (records.get(count).getLocation_id() == id) {
+                    LocationRecord = records.get(count);
+                    Log.i("Check", "Request of location !" + LocationRecord.getLocation_id());
+                    break;
+                } else {
+                    Log.e("NO", "Un match record!");
+                }
+            }//end of for loop
+        } else {
+            Log.e("Information", "records is empty !");
         }
-        cursor.close();
-        database.close();
 
         return LocationRecord;
 
     }
 
-    public int updateLocation(Location LocationRecord) {
-        SQLiteDatabase database = this.getWritableDatabase();
-
-        //Prepare record
-        ContentValues values = new ContentValues();
-
-        values.put(LocationContract.Location.COLUMN_LOCATION_ID, LocationRecord.getLocation_id());
-        values.put(LocationContract.Location.COLUMN_LOCATION_NAME, LocationRecord.getLocation_name());
-        values.put(LocationContract.Location.COLUMN_LOCATION_X, LocationRecord.getLocation_x());
-        values.put(LocationContract.Location.COLUMN_LOCATION_Y, LocationRecord.getLocation_y());
-        values.put(LocationContract.Location.COLUMN_STATUS, LocationRecord.getStatus());
-
-        // updating row
-        return database.update(LocationContract.Location.TABLE_NAME, values, LocationContract.Location.COLUMN_LOCATION_ID + " = ?",
-                new String[]{String.valueOf(LocationRecord.getLocation_id())});
+    public boolean updateLocation(Location LocationRecord) {
+        dbref = FirebaseDatabase.getInstance().getReference("location").child(String.valueOf(LocationRecord.getLocation_id()));
+        dbref.setValue(LocationRecord);
+        Log.i("Info", "Method updateLocation: Update  LocationRecord successful");
+        return true;
     }
 
     // Deleting single contact
@@ -184,9 +179,7 @@ public class LocationSQLHelper extends SQLiteOpenHelper {
 
     //delete all deposits
     public int deleteAllLocation() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        int totaldeleted = db.delete(LocationContract.Location.TABLE_NAME, "1", null);
-        db.close();
-        return totaldeleted;
+        Log.i("No function","delete function not available");
+        return 0;
     }
 }

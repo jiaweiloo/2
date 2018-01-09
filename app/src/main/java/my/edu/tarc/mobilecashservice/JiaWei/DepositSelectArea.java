@@ -1,11 +1,13 @@
 package my.edu.tarc.mobilecashservice.JiaWei;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -60,12 +62,28 @@ public class DepositSelectArea extends AppCompatActivity implements AdapterView.
         txtView.setText(String.valueOf(amount));
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+
         getLocation();
 
-        Log.i("System", Double.toString(x));
-        Log.i("System", Double.toString(y));
+        final ProgressDialog mProgressDialog;
 
-        updateList();
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setIndeterminate(false);
+        mProgressDialog.setMessage("Loading.... Please wait");
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.show();
+
+        new CountDownTimer(2000, 1000) { // adjust the milli seconds here
+
+            public void onTick(long millisUntilFinished) {
+                //UpdateTextField();
+            }
+            public void onFinish() {
+                mProgressDialog.dismiss();
+                updateList();
+            }
+        }.start();
     }
 
     public void getLocation() {

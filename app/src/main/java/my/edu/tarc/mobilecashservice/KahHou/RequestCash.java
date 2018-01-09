@@ -37,6 +37,12 @@ public class RequestCash extends AppCompatActivity {
         //intent.putExtra("cashAmount", cashAmount);
         withdraw.setAmount(Double.parseDouble(cashAmount));
         intent.putExtra("withdraw",withdraw);
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("amount", cashAmount);
+        editor.commit();
+
         startActivity(intent);
     }
 }
