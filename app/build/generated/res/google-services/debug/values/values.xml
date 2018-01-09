@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">581984577314-5egotugpqf40c5dv8tmciu2blf0s81fp.apps.googleusercontent.com</string>
+    <string name="firebase_database_url" translatable="false">https://mobilecashservice.firebaseio.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">581984577314</string>
+    <string name="google_api_key" translatable="false">AIzaSyACgnYdN0PA0qVeN4xQfGghAVzad_jDatI</string>
+    <string name="google_app_id" translatable="false">1:581984577314:android:36d90d212dc09166</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyACgnYdN0PA0qVeN4xQfGghAVzad_jDatI</string>
+    <string name="google_storage_bucket" translatable="false">mobilecashservice.appspot.com</string>
+    <string name="project_id" translatable="false">mobilecashservice</string>
+</resources>
