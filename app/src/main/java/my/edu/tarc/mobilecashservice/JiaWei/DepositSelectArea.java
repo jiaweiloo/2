@@ -119,6 +119,7 @@ public class DepositSelectArea extends AppCompatActivity implements AdapterView.
             if (values.get(i).getLocation_x() != x || values.get(i).getLocation_y() != y) {
                 //Log.i("System", "remove :" + i);
                 values.remove(i);
+                Log.e("System", "Values removed at location " + i );
             }
         }
         //Log.i("System", "Value size :" + values.size());
@@ -129,16 +130,6 @@ public class DepositSelectArea extends AppCompatActivity implements AdapterView.
         //Link adapter to ListView
         listViewRecords.setAdapter(null);
         listViewRecords.setAdapter(adapter);
-    }
-
-    public void deleteAll(View view) {
-        locationDataSource = new LocationSQLHelper(this);
-        int totaldeleted = locationDataSource.deleteAllLocation();
-
-        Snackbar.make(view, "Total records deleted :" + totaldeleted, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-
-        updateList();
     }
 
     @Override
@@ -165,21 +156,7 @@ public class DepositSelectArea extends AppCompatActivity implements AdapterView.
         startActivity(intent);
     }
 
-    public void addRecord(View v) {
-        Location temploc;
-
-        temploc = locationDataSource.getLastRecord();
-        if (temploc.getLocation_id() == 0) {
-            temploc.setLocation_id(400000);
-        }
-
-        Location loc = new Location(
-                temploc.getLocation_id() + 1,
-                "WANGSA METROVIEW" + (temploc.getLocation_id() + 1),
-                3.21,
-                101.74,
-                "AVAILABLE");
-        locationDataSource.insertLocation(loc);
+    public void refresh(View v) {
         updateList();
     }
 
