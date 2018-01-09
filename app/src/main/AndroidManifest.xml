@@ -34,21 +34,24 @@
         <activity android:name=".JiaWei.DepositSelectArea" />
         <activity android:name=".JiaWei.DepositSecurityCode" />
         <activity android:name=".JiaWei.DepositWaitingPage" />
-        <activity android:name=".JiaWei.DepositScanQRcode"></activity>
+        <activity android:name=".JiaWei.DepositScanQRcode" />
         <activity android:name=".JiaWei.AllDepositRecords" />
         <activity android:name=".barcode.BarcodeCaptureActivity" />
         <activity android:name=".KahHou.CheckRequest" />
-        <activity android:name=".KahHou.RequestCash"></activity>
+        <activity android:name=".KahHou.RequestCash" />
         <activity android:name=".KahHou.SelectTimeLocation" />
         <activity android:name=".KahHou.WithdrawMatching" />
         <activity android:name=".KahHou.ConfirmCash" />
         <activity android:name=".KahHou.QRConfirm" />
-        <activity android:name=".JiaWei.DepositPairWithdrawal"></activity>
-        <activity android:name=".LocationModule"></activity>
+        <activity android:name=".JiaWei.DepositPairWithdrawal" />
+        <activity android:name=".LocationModule" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <activity android:name=".NanFung.ForgetPassword" />
+        <activity android:name=".NanFung.MyAccount"></activity>
     </application>
 
 </manifest>

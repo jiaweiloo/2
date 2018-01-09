@@ -9,6 +9,10 @@
             android:icon="@drawable/ic_home_black_24dp"
             android:title="Home" />
         <item
+            android:id="@+id/nav_MyAccount"
+            android:icon="@drawable/ic_account_box_white_24dp"
+            android:title="My Account" />
+        <item
             android:id="@+id/nav_Deposit"
             android:icon="@drawable/ic_in_black_24px"
             android:title="Deposit" />

@@ -70,10 +70,9 @@ public class UserSQLHelper extends SQLiteOpenHelper {
                 int itemAdded = 0;
                 //iterating through all the nodes
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    //getting artist
+                    //getting userRecord
                     UserRecord userRecord = postSnapshot.getValue(UserRecord.class);
-                    //adding artist to the list
-                    Log.i("Information", "user record user_id added: " + userRecord.getWallet_balance());
+                    //adding userRecord to the list
                     records.add(userRecord);
                     itemAdded++;
                     isInitialise = true;
@@ -188,27 +187,25 @@ public class UserSQLHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean searchUsername(String usernamestr) {
+    public UserRecord searchUsername(String usernamestr) {
+        UserRecord usr = new UserRecord();
+        boolean found = true;
         if (!records.isEmpty()) {
-
-        }
-        SQLiteDatabase database = this.getReadableDatabase();
-        String query = " select user_name from " + UserContract.User.TABLE_NAME;
-        Cursor cursor = database.rawQuery(query, null);
-        String username, result;
-        result = "not found";
-        if (cursor.moveToFirst()) {
-            do {
-                username = cursor.getString(0);
-                if (username.equals(usernamestr)) {
-                    return false;
+            for (int count = 0; count < records.size(); count++) {
+                if (records.get(count).getUser_name().equals(usernamestr)) {
+                    usr = records.get(count);
+                    Log.e("661236", "Username found!");
+                    return usr;
+                }else{
+                    Log.e("666", "Un match user record!");
                 }
-            } while (cursor.moveToNext());
+            }
         }
-        return true;
+        return usr;
     }
 
     public List<UserRecord> getAllUsers() {
         return records;
     }
+
 }

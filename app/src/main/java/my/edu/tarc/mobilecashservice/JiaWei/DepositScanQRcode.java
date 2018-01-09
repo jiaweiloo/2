@@ -115,6 +115,9 @@ public class DepositScanQRcode extends AppCompatActivity {
         if (deposit.getWithdrawal_id() == withdrawalID) {
             deposit.setStatus("complete");
             depositDataSource.updateDeposit(deposit);
+            Withdrawal wit  = withdrawalSQLHelper.getWithdrawal(withdrawalID);
+            wit.setStatus("complete");
+            withdrawalSQLHelper.updateWithdrawal(wit);
             UserRecord temp = userSQLHelper.getUser(deposit.getUser_id());
             //update user's wallet amount
             temp.setWallet_balance(temp.getWallet_balance() + deposit.getAmount());

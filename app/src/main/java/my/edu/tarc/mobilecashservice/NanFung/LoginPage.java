@@ -77,4 +77,9 @@ public class LoginPage extends AppCompatActivity {
         Intent intentRegister = new Intent(this, RegisterPage.class);
         startActivityForResult(intentRegister, 1);
     }
+
+    public void ForgetPassword(View view){
+        Intent intentRegister = new Intent(this, ForgetPassword.class);
+        startActivity(intentRegister);
+    }
 }

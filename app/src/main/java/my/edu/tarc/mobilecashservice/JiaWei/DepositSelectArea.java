@@ -62,9 +62,9 @@ public class DepositSelectArea extends AppCompatActivity implements AdapterView.
         txtView.setText(String.valueOf(amount));
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-
+        locationDataSource = new LocationSQLHelper(this);
         getLocation();
+
 
         final ProgressDialog mProgressDialog;
 
@@ -109,10 +109,10 @@ public class DepositSelectArea extends AppCompatActivity implements AdapterView.
     }
 
     private void updateList() {
-        //Retrieve records from SQLite
-        locationDataSource = new LocationSQLHelper(this);
 
         List<Location> values = locationDataSource.getAllLocations();
+        Log.e("System", "Location id at 0 :" + values.get(0).getLocation_id());
+
 
         for (int i = values.size() - 1; i >= 0; i--) {
             //Log.i("System", i +" X coordinate : "+ Double.toString(x) + " "+ values.get(i).getLocation_x());
@@ -125,6 +125,7 @@ public class DepositSelectArea extends AppCompatActivity implements AdapterView.
 
         LocationAdapter adapter = new LocationAdapter(this,
                 R.layout.location_record, values);
+
         //Link adapter to ListView
         listViewRecords.setAdapter(null);
         listViewRecords.setAdapter(adapter);
@@ -145,7 +146,7 @@ public class DepositSelectArea extends AppCompatActivity implements AdapterView.
                             long id) {
         Location loc = null;
         //Retrieve records from SQLite
-        locationDataSource = new LocationSQLHelper(this);
+
         List<Location> values = locationDataSource.getAllLocations();
         for (int i = values.size() - 1; i >= 0; i--) {
             if (values.get(i).getLocation_x() != x || values.get(i).getLocation_y() != y) {

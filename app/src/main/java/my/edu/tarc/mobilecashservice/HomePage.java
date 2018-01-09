@@ -29,7 +29,7 @@ import my.edu.tarc.mobilecashservice.JiaWei.AllDepositRecords;
 import my.edu.tarc.mobilecashservice.JiaWei.DepositSelectCash;
 import my.edu.tarc.mobilecashservice.KahHou.CheckRequest;
 import my.edu.tarc.mobilecashservice.KahHou.RequestCash;
-import my.edu.tarc.mobilecashservice.NanFung.LoginPage;
+import my.edu.tarc.mobilecashservice.NanFung.*;
 
 public class HomePage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -164,6 +164,9 @@ public class HomePage extends AppCompatActivity
             startActivity(intent);
             return true;
         } else if (id == R.id.action_logout) {
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+            sharedPref.edit().clear().commit();
+            //sharedPref.
             goToLogin();
 
             return true;
@@ -200,6 +203,11 @@ public class HomePage extends AppCompatActivity
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
+
+        }else if (id == R.id.nav_MyAccount) {
+            // Handle the deposit action
+            Intent intentRegister = new Intent(this, MyAccount.class);
+            startActivityForResult(intentRegister,1);
 
         }
 

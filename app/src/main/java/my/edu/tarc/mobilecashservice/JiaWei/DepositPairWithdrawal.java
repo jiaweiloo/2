@@ -25,6 +25,7 @@ public class DepositPairWithdrawal extends AppCompatActivity implements AdapterV
     ListView listViewRecordsWd;
     WithdrawalSQLHelper withdrawalSQLHelper;
     List<Withdrawal> values = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +37,7 @@ public class DepositPairWithdrawal extends AppCompatActivity implements AdapterV
 
         withdrawalSQLHelper = new WithdrawalSQLHelper(this);
 
-        listViewRecordsWd.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        listViewRecordsWd.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Log.i("System", "onItemClick");
                 complete(position);
@@ -58,6 +59,7 @@ public class DepositPairWithdrawal extends AppCompatActivity implements AdapterV
             public void onTick(long millisUntilFinished) {
                 //UpdateTextField();
             }
+
             public void onFinish() {
                 mProgressDialog.dismiss();
                 updateList();
@@ -71,15 +73,19 @@ public class DepositPairWithdrawal extends AppCompatActivity implements AdapterV
 
         values = withdrawalSQLHelper.getAllWithdrawals();
 
-        if(values.isEmpty()){
+        if (values.isEmpty()) {
             Toast.makeText(getApplicationContext(), "No records", Toast.LENGTH_SHORT).show();
+        } else {
+            for (int a = 0; a < values.size(); a++) {
+                if(values.get(a).getStatus().equals("complete")){
+                    values.remove(a);
+                }
+            }
+            WithdrawalRecordAdapter adapter = new WithdrawalRecordAdapter(this, R.layout.withdrawal_record, values);
+
+            //Link adapter to ListView
+            listViewRecordsWd.setAdapter(adapter);
         }
-
-        WithdrawalRecordAdapter adapter = new WithdrawalRecordAdapter(this, R.layout.withdrawal_record, values);
-
-        //Link adapter to ListView
-        listViewRecordsWd.setAdapter(adapter);
-
     }
 
 
@@ -99,11 +105,11 @@ public class DepositPairWithdrawal extends AppCompatActivity implements AdapterV
         finish();
     }
 
-    public void Toast(View view){
+    public void Toast(View view) {
         Toast.makeText(this, "Button Toast : Pressed", Toast.LENGTH_SHORT).show();
     }
 
-    public void complete(int position){
+    public void complete(int position) {
         Withdrawal withdrawal = null;
         //Retrieve records from SQLite
         values = withdrawalSQLHelper.getAllWithdrawals();

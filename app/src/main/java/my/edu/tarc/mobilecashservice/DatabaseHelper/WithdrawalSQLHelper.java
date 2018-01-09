@@ -153,4 +153,12 @@ public class WithdrawalSQLHelper extends SQLiteOpenHelper {
 
         return withdrawal;
     }
+
+    public boolean updateWithdrawal(Withdrawal withdrawalRecord) {
+
+        dbref = FirebaseDatabase.getInstance().getReference("withdrawal").child(String.valueOf(withdrawalRecord.getWithdrawal_id()));
+        dbref.setValue(withdrawalRecord);
+        Log.i("Info", "Method updateWithdrawal: Update  withdrawalRecord successful");
+        return true;
+    }
 }
