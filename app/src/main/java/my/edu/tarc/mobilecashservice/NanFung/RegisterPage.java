@@ -2,8 +2,11 @@ package my.edu.tarc.mobilecashservice.NanFung;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -21,6 +24,7 @@ public class RegisterPage extends AppCompatActivity {
     private EditText editTextUserID, editTextUserName, editTextIC, editTextEmail, editTextPhone, editTextPass, editTextConPass;
     UserSQLHelper databaseSource;
     List<UserRecord> records;
+    CheckBox chkNewPass, chkConfirmPass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +33,32 @@ public class RegisterPage extends AppCompatActivity {
         databaseSource = new UserSQLHelper(this);
         records = new ArrayList<>();
         //createDummy();
+
+        editTextPass = findViewById(R.id.tfPass);
+        editTextConPass = findViewById(R.id.tfConfirmPass);
+        chkNewPass = (CheckBox) findViewById(R.id.RcheckBoxNewPass);
+        chkConfirmPass = (CheckBox) findViewById(R.id.RcheckBoxNewConPass);
+
+        chkNewPass.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    editTextPass.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                }else{
+                    editTextPass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                }
+            }
+        });
+        chkConfirmPass.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    editTextConPass.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                }else{
+                    editTextConPass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                }
+            }
+        });
     }
 
     public void BtnRegister(View v) {
@@ -39,7 +69,7 @@ public class RegisterPage extends AppCompatActivity {
         editTextPass = findViewById(R.id.tfPass);
         editTextConPass = findViewById(R.id.tfConfirmPass);
 
-        String name, ic, email, pass, conpass,phone;
+        String name, ic, email, pass, conpass, phone;
 
         conpass = editTextConPass.getText().toString();
         if (conpass.isEmpty()) {
@@ -89,7 +119,7 @@ public class RegisterPage extends AppCompatActivity {
             }
 
             records = databaseSource.getAllUsers();
-boolean success = true;
+            boolean success = true;
             if (!records.isEmpty()) {
                 //check every records to compare its data
                 for (int count = 0; count < records.size(); count++) {
@@ -99,18 +129,18 @@ boolean success = true;
                         Toast.makeText(RegisterPage.this, "Username already exist", Toast.LENGTH_SHORT).show();
                         success = false;
                         break;
-                    }else if (records.get(count).getIc_number().equals(ic)){
+                    } else if (records.get(count).getIc_number().equals(ic)) {
                         Toast.makeText(RegisterPage.this, "This IC already registered", Toast.LENGTH_SHORT).show();
                         success = false;
                         break;
-                    }else if (records.get(count).getEmail().equals(email)){
+                    } else if (records.get(count).getEmail().equals(email)) {
                         Toast.makeText(RegisterPage.this, "This email already exist", Toast.LENGTH_SHORT).show();
                         success = false;
                         break;
                     }//end of if-else
 
                 } // end of for-loop
-                if(success){
+                if (success) {
                     userRecord.setUser_id(user_id);
                     userRecord.setUser_name(name);
                     userRecord.setPassword(pass);
