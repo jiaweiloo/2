@@ -1,10 +1,13 @@
 package my.edu.tarc.mobilecashservice.JiaWei;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.net.Uri;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -150,12 +153,32 @@ public class DepositScanQRcode extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onCancel(View view){
-        deposit.setStatus("cancelled");
-        depositDataSource.updateDeposit(deposit);
-        Toast.makeText(DepositScanQRcode.this,
-                "Transaction cancelled !", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(getApplicationContext(), HomePage.class);
-        startActivity(intent);
+    public void onCancel(View view) {
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(DepositScanQRcode.this, android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(DepositScanQRcode.this);
+        }
+        builder.setTitle("Please confirm")
+                .setMessage("Are you sure you want to cancel? ")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // continue with delete
+                        deposit.setStatus("cancelled");
+                        depositDataSource.updateDeposit(deposit);
+                        Toast.makeText(DepositScanQRcode.this,
+                                "Transaction cancelled !", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), HomePage.class);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }
