@@ -67,9 +67,9 @@ public final class R {
         public static final int standard = 0x7f0a00d4;
         public static final int text = 0x7f0a00e0;
         public static final int text2 = 0x7f0a00e1;
-        public static final int toolbar = 0x7f0a0112;
-        public static final int wide = 0x7f0a013d;
-        public static final int wrap_content = 0x7f0a0140;
+        public static final int toolbar = 0x7f0a0113;
+        public static final int wide = 0x7f0a013e;
+        public static final int wrap_content = 0x7f0a0141;
     }
     public static final class integer {
         public static final int google_play_services_version = 0x7f0b0007;

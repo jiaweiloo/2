@@ -24,7 +24,7 @@ public class WithdrawalRecordAdapter extends ArrayAdapter<Withdrawal> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-       Withdrawal withdrawalRecord = getItem(position);
+        Withdrawal withdrawalRecord = getItem(position);
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).
@@ -33,17 +33,19 @@ public class WithdrawalRecordAdapter extends ArrayAdapter<Withdrawal> {
                             false);
         }
 
-        TextView textViewDateTime, textViewAmount, textViewLocation,textViewStatus;
+        TextView textViewDateTime, textViewAmount, textViewLocation, textViewStatus, textViewWithID;
 
-        textViewDateTime = (TextView) convertView.findViewById(R.id.textViewDateTime);
-        textViewAmount = (TextView) convertView.findViewById(R.id.textViewAmount);
-        textViewLocation = (TextView) convertView.findViewById(R.id.textViewLocation);
-        textViewStatus = (TextView) convertView.findViewById(R.id.textViewStatus);
+        textViewWithID = convertView.findViewById(R.id.textViewWithID);
+        textViewDateTime = convertView.findViewById(R.id.textViewDateTime);
+        textViewAmount = convertView.findViewById(R.id.textViewAmount);
+        textViewLocation = convertView.findViewById(R.id.textViewLocation);
+        textViewStatus = convertView.findViewById(R.id.textViewStatus);
 
-        textViewDateTime.setText(textViewDateTime.getText() + " : " + withdrawalRecord.getDateTime());
-        textViewAmount.setText(textViewAmount.getText() + " : " + withdrawalRecord.getAmount());
-        textViewLocation.setText(textViewLocation.getText() + "ID : " + withdrawalRecord.getLocation_id());
-        textViewStatus.setText(textViewStatus.getText() + " : " + withdrawalRecord.getStatus());
+        textViewWithID.setText("Withdrawal ID: " + withdrawalRecord.getWithdrawal_id());
+        textViewDateTime.setText("Date Time : " + withdrawalRecord.getDateTime());
+        textViewAmount.setText("Amount : " + withdrawalRecord.getAmount());
+        textViewLocation.setText("Location ID : " + withdrawalRecord.getLocation_id());
+        textViewStatus.setText("Status : " + withdrawalRecord.getStatus());
 
 
         return convertView;

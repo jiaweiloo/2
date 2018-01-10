@@ -113,13 +113,7 @@ public class SelectTimeLocation extends AppCompatActivity implements AdapterView
                             long id) {
 
         my.edu.tarc.mobilecashservice.Entity.Location loc = null;
-        //Retrieve records from SQLite
 
-        for (int i = values.size() - 1; i >= 0; i--) {
-            if (values.get(i).getLocation_x() != x || values.get(i).getLocation_y() != y) {
-                values.remove(i);
-            }
-        }
         //Log.i("System", "Value size :" + values.size());
         Toast.makeText(this, "Location Name :" + values.get(position).getLocation_name(), Toast.LENGTH_SHORT).show();
         loc = values.get(position);

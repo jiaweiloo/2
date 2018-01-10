@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
@@ -36,12 +37,14 @@ public class QRConfirm extends AppCompatActivity {
     int withdrawal_id = 300001;
     int location_id = 400001;
     double amount = 0.0;
+    TextView textView4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrconfirm);
         QR = findViewById(R.id.imageView);
+        textView4 = findViewById(R.id.textView4);
         withdrawalDataSource = new WithdrawalSQLHelper(QRConfirm.this);
         //Intent in serializable
         //Withdrawal withdraw =  (Withdrawal) getIntent().getSerializableExtra("withdraw");
@@ -55,20 +58,36 @@ public class QRConfirm extends AppCompatActivity {
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mProgressDialog.show();
 
-        new CountDownTimer(2000, 1000) { // adjust the milli seconds here
+
+        new CountDownTimer(120000, 1000) { // adjust the milli seconds here
+            int timer = 0;
+            boolean isFinished = false;
+
             public void onTick(long millisUntilFinished) {
                 //UpdateTextField();
+
+                //Splash loading screen before proceed to set QR Code
+                if (timer > 2 && timer < 4) {
+                    mProgressDialog.dismiss();
+                    setQRcode();
+                }
+                if (timer > 4 && !isFinished)
+                    isFinished = checkWithdrawalStatus();
+                if (isFinished) {
+                    this.cancel();
+                }
+                timer++;
             }
 
             public void onFinish() {
-                mProgressDialog.dismiss();
-                setQRcode();
+                textView4.setText("pairing fail");
             }
         }.start();
 
 
-        //Delay 5 seconds before navigating to finish screen
+        //Delay 6 seconds before navigating to finish screen
         //this.finish();
+        /*
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -77,6 +96,7 @@ public class QRConfirm extends AppCompatActivity {
                 startActivity(intent);
             }
         }, 6000);
+        */
     }
 
     public void setQRcode() {
@@ -116,5 +136,21 @@ public class QRConfirm extends AppCompatActivity {
         Log.i("Hi", Integer.toString(wt.getWithdrawal_id()));
 
         withdrawalDataSource.insertWithdrawal(wt);
+    }
+
+    public Boolean checkWithdrawalStatus() {
+        Log.e("Check WITHDRAWAL_ID", "Withdrawal ID :" + withdrawal_id);
+
+        Withdrawal temp = withdrawalDataSource.getWithdrawal(withdrawal_id);
+        if (temp != null) {
+            if (temp.getStatus().equals("complete")) {
+                Toast.makeText(QRConfirm.this, "Transaction successful", Toast.LENGTH_SHORT).show();
+                this.finish();
+                Intent intent = new Intent(QRConfirm.this, CheckRequest.class);
+                startActivity(intent);
+                return true;
+            }
+        }
+        return false;
     }
 }

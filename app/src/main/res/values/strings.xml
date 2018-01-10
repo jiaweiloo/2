@@ -6,8 +6,8 @@
 
     <string name="action_settings">Settings</string>
     <string name="action_changeUser">Change User</string>
-    <string name="action_checkDatabase">Check Database</string>
-    <string name="action_checkWithdraw">Check Withdrawal Record</string>
+    <string name="action_checkDatabase">Check Deposit</string>
+    <string name="action_checkWithdraw">Check Withdrawal</string>
 
     <string name="tab_text_1">Location Records</string>
     <string name="tab_text_2">Add Location</string>

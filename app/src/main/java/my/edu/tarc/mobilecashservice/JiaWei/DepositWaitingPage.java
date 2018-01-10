@@ -15,22 +15,29 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import my.edu.tarc.mobilecashservice.DatabaseHelper.DepositSQLHelper;
+import my.edu.tarc.mobilecashservice.DatabaseHelper.WithdrawalSQLHelper;
 import my.edu.tarc.mobilecashservice.Entity.Deposit;
+import my.edu.tarc.mobilecashservice.Entity.Withdrawal;
 import my.edu.tarc.mobilecashservice.R;
 
 public class DepositWaitingPage extends AppCompatActivity {
     Double amount;
     int location_id;
     int user_id;
+    int withdrawal_id;
     TextView tViewTimer;
     TextView tViewStatus;
     TextView tviewUser;
     TextView tViewDetails;
     ProgressBar progressBar2;
     DepositSQLHelper depositDataSource;
+    WithdrawalSQLHelper withdrawalSQLHelper;
+    List<Withdrawal> values = new ArrayList<>();
     Button btnCancel;
     Button btnMatch;
     Deposit deposit = new Deposit();
@@ -62,6 +69,8 @@ public class DepositWaitingPage extends AppCompatActivity {
         }
 
         depositDataSource = new DepositSQLHelper(this);
+        withdrawalSQLHelper = new WithdrawalSQLHelper(this);
+
         tViewTimer = findViewById(R.id.tviewTimer);
         tViewStatus = findViewById(R.id.tViewStatus);
         progressBar2 = findViewById(R.id.progressBar2);
@@ -73,12 +82,25 @@ public class DepositWaitingPage extends AppCompatActivity {
 
         //900000 ms for 15 minutes
         new CountDownTimer(10000, 1000) { // adjust the milli seconds here
+            int count = 0;
+            boolean isFound = false;
 
             public void onTick(long millisUntilFinished) {
                 tViewTimer.setText("" + String.format("%d : %d ",
                         TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
                         TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
                                 TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
+                if (count > 2 && count < 5) {
+                    Log.e("Error", "Now count is more than 2 but still less than 4");
+                    values = withdrawalSQLHelper.getAllWithdrawals();
+                }
+                if (count > 3) {
+                    isFound = findWithdrawal();
+                }
+                if (isFound)
+                    this.onFinish();
+
+                count++;
             }
 
             public void onFinish() {
@@ -96,6 +118,7 @@ public class DepositWaitingPage extends AppCompatActivity {
                     btnCancel.setText("Finish");
                     //btnCancel.set
                 }
+                this.cancel();
             }
         }.start();
         //depositDataSource.getDeposit(deposit.deposit_id);
@@ -141,6 +164,10 @@ public class DepositWaitingPage extends AppCompatActivity {
         deposit.setLocation_id(location_id);
         deposit.setStatus(status);
         depositDataSource.insertDeposit(deposit);
+        tViewDetails.setText("Deposit ID: " + deposit.getDeposit_id()
+                + "\n" + "Amount: " + deposit.getAmount()
+                + "\n" + "Location id: " + location_id
+                + "\n" + "Withdrawal id: " + withdrawal_id);
     }
 
     public void pair(View view) {
@@ -149,6 +176,7 @@ public class DepositWaitingPage extends AppCompatActivity {
         Intent intent = new Intent(this, DepositPairWithdrawal.class);
         startActivityForResult(intent, 2);
         //addRecord(300001,"paired");
+
     }
 
     @Override
@@ -157,7 +185,7 @@ public class DepositWaitingPage extends AppCompatActivity {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
                     //get data from the pairing activity
-                    int withdrawal_id = data.getExtras().getInt("withdrawal_id");
+                    withdrawal_id = data.getExtras().getInt("withdrawal_id");
                     Log.i("tag", "Withdrawal ID onActivityResult: " + withdrawal_id);
 
                     tViewStatus.setText("Pair Success with " + withdrawal_id);
@@ -174,5 +202,24 @@ public class DepositWaitingPage extends AppCompatActivity {
                     CommonStatusCodes.getStatusCodeString(resultCode));
         } else
             super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public boolean findWithdrawal() {
+        boolean isFound = false;
+        values = withdrawalSQLHelper.getAllWithdrawals();
+        Log.i("Values ", "at findWithdrawal : Withdrawal ID onActivityResult: " + values.get(0).getLocation_id());
+        for (int a = 0; a < values.size(); a++) {
+            Withdrawal temp = values.get(a);
+            if (temp.getLocation_id() == location_id) {
+                withdrawal_id = temp.getWithdrawal_id();
+                Log.i("tag", "Withdrawal ID onActivityResult: " + withdrawal_id);
+
+                tViewStatus.setText("Pair Success with " + withdrawal_id);
+
+                addRecord(withdrawal_id, "paired");
+                isFound = true;
+            }
+        }
+        return isFound;
     }
 }
