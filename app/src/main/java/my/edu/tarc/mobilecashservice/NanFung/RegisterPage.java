@@ -36,8 +36,8 @@ public class RegisterPage extends AppCompatActivity {
 
         editTextPass = findViewById(R.id.tfPass);
         editTextConPass = findViewById(R.id.tfConfirmPass);
-        chkNewPass = (CheckBox) findViewById(R.id.RcheckBoxNewPass);
-        chkConfirmPass = (CheckBox) findViewById(R.id.RcheckBoxNewConPass);
+        chkNewPass = findViewById(R.id.RcheckBoxNewPass);
+        chkConfirmPass = findViewById(R.id.RcheckBoxNewConPass);
 
         chkNewPass.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
