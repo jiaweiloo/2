@@ -45,6 +45,7 @@ public class DepositScanQRcode extends AppCompatActivity {
     double amount = 0.0;
     int withdrawal_id = 0;
     int deposit_id = 0;
+    Withdrawal wit;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -118,11 +119,13 @@ public class DepositScanQRcode extends AppCompatActivity {
         if (deposit.getWithdrawal_id() == withdrawalID) {
             deposit.setStatus("complete");
             depositDataSource.updateDeposit(deposit);
-            Withdrawal wit  = withdrawalSQLHelper.getWithdrawal(withdrawalID);
+
 
             //update withdrawal status to complete
+            wit  = withdrawalSQLHelper.getWithdrawal(withdrawalID);
             wit.setStatus("complete");
             withdrawalSQLHelper.updateWithdrawal(wit);
+
             UserRecord temp = userSQLHelper.getUser(deposit.getUser_id());
             //update user's wallet amount
             temp.setWallet_balance(temp.getWallet_balance() + deposit.getAmount());
@@ -167,6 +170,12 @@ public class DepositScanQRcode extends AppCompatActivity {
                         // continue with delete
                         deposit.setStatus("cancelled");
                         depositDataSource.updateDeposit(deposit);
+
+                        //update withdrawal status to complete
+                        wit  = withdrawalSQLHelper.getWithdrawal(deposit.getWithdrawal_id());
+                        wit.setStatus("cancelled");
+                        withdrawalSQLHelper.updateWithdrawal(wit);
+
                         Toast.makeText(DepositScanQRcode.this,
                                 "Transaction cancelled !", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), HomePage.class);

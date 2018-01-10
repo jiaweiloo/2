@@ -44,7 +44,8 @@ public class SelectTimeLocation extends AppCompatActivity implements AdapterView
     LocationSQLHelper locationDataSource;
     ListView listViewRecords;
 
-    List<my.edu.tarc.mobilecashservice.Entity.Location> values ;
+    List<my.edu.tarc.mobilecashservice.Entity.Location> values;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +71,7 @@ public class SelectTimeLocation extends AppCompatActivity implements AdapterView
             public void onTick(long millisUntilFinished) {
                 //UpdateTextField();
             }
+
             public void onFinish() {
                 mProgressDialog.dismiss();
                 updateList();
@@ -89,6 +91,7 @@ public class SelectTimeLocation extends AppCompatActivity implements AdapterView
             if (location != null) {
                 x = Double.parseDouble(String.format("%.2f", location.getLatitude()));
                 y = Double.parseDouble(String.format("%.2f", location.getLongitude()));
+                Toast.makeText(this, "X : " + Double.toString(x) + " Y: " + Double.toString(y), Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Unable to find correct location", Toast.LENGTH_SHORT).show();
                 return;
@@ -138,17 +141,18 @@ public class SelectTimeLocation extends AppCompatActivity implements AdapterView
     }
 
     private void updateList() {
-        //Retrieve records from SQLite
-        locationDataSource = new LocationSQLHelper(this);
 
+        //Toast.makeText(this, "Update list called!", Toast.LENGTH_SHORT).show();
         values = locationDataSource.getAllLocations();
+        Toast.makeText(this, "Values size " + values.size(), Toast.LENGTH_SHORT).show();
 
-        for (int i = values.size() - 1; i >= 0; i--) {
-            //Log.i("System", i +" X coordinate : "+ Double.toString(x) + " "+ values.get(i).getLocation_x());
+        for (int i = values.size()-1 ; i >= 0 ; i--) {
+
             if (values.get(i).getLocation_x() != x || values.get(i).getLocation_y() != y) {
-                //Log.i("System", "remove :" + i);
+                Log.e("System", "remove :" + i);
                 values.remove(i);
             }
+
         }
         //Log.i("System", "Value size :" + values.size());
 

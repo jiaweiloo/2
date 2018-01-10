@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -25,16 +26,20 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import my.edu.tarc.mobilecashservice.Contract.UserContract;
+import my.edu.tarc.mobilecashservice.DatabaseHelper.UserSQLHelper;
 import my.edu.tarc.mobilecashservice.DatabaseHelper.WithdrawalSQLHelper;
+import my.edu.tarc.mobilecashservice.Entity.UserRecord;
 import my.edu.tarc.mobilecashservice.Entity.Withdrawal;
 import my.edu.tarc.mobilecashservice.HomePage;
 import my.edu.tarc.mobilecashservice.R;
 
 public class QRConfirm extends AppCompatActivity {
     WithdrawalSQLHelper withdrawalDataSource;
+    UserSQLHelper userDataSource;
     private ImageView QR;
     int user_id = 0;
-    int withdrawal_id = 300001;
+    int withdrawal_id = 0;
     int location_id = 400001;
     double amount = 0.0;
     TextView textView4;
@@ -43,11 +48,22 @@ public class QRConfirm extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrconfirm);
+
         QR = findViewById(R.id.imageView);
         textView4 = findViewById(R.id.textView4);
+
+        //Get all the data from sharedPreferences
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        user_id = sharedPref.getInt("user_id", 0);
+        location_id = sharedPref.getInt("location_id", 400000);
+        amount = Double.parseDouble(sharedPref.getString("amount", "0.0"));
+        withdrawal_id = sharedPref.getInt("withdrawal_id", 0);
+
         withdrawalDataSource = new WithdrawalSQLHelper(QRConfirm.this);
+        userDataSource = new UserSQLHelper(this);
         //Intent in serializable
         //Withdrawal withdraw =  (Withdrawal) getIntent().getSerializableExtra("withdraw");
+
 
         Withdrawal temp = withdrawalDataSource.getLastRecord();
 
@@ -67,8 +83,9 @@ public class QRConfirm extends AppCompatActivity {
                 //UpdateTextField();
 
                 //Splash loading screen before proceed to set QR Code
-                if (timer > 2 && timer < 4) {
+                if (timer == 3) {
                     mProgressDialog.dismiss();
+                    //Set QR Code with withdrawal_id
                     setQRcode();
                 }
                 if (timer > 4 && !isFinished)
@@ -100,17 +117,11 @@ public class QRConfirm extends AppCompatActivity {
     }
 
     public void setQRcode() {
-        Withdrawal temp = withdrawalDataSource.getLastRecord();
-
-        Log.e("Check QRCONFIRM", "Withdrawal ID :" + temp.getWithdrawal_id());
-        if (temp.getWithdrawal_id() != 0) {
-            withdrawal_id = temp.getWithdrawal_id() + 1;
-        }
 
         //Print QR Code to screen
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try {
-            BitMatrix bitMatrix = multiFormatWriter.encode(Integer.toString(withdrawal_id), BarcodeFormat.QR_CODE, 500, 500);
+            BitMatrix bitMatrix = multiFormatWriter.encode(Integer.toString(withdrawal_id), BarcodeFormat.QR_CODE, 600, 600);
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
             Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
             QR.setImageBitmap(bitmap);
@@ -118,24 +129,7 @@ public class QRConfirm extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        //Create an Withdrawal object and insert into database by using data from sharedPreferences
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        user_id = sharedPref.getInt("user_id", 0);
-        location_id = sharedPref.getInt("location_id", 400000);
-        amount = Double.parseDouble(sharedPref.getString("amount", "0.0"));
 
-        String formattedDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
-        Withdrawal wt = new Withdrawal(
-                withdrawal_id,
-                user_id,
-                amount,
-                0,
-                location_id,
-                formattedDate,
-                "pending");
-        Log.i("Hi", Integer.toString(wt.getWithdrawal_id()));
-
-        withdrawalDataSource.insertWithdrawal(wt);
     }
 
     public Boolean checkWithdrawalStatus() {
@@ -144,6 +138,10 @@ public class QRConfirm extends AppCompatActivity {
         Withdrawal temp = withdrawalDataSource.getWithdrawal(withdrawal_id);
         if (temp != null) {
             if (temp.getStatus().equals("complete")) {
+                UserRecord user = userDataSource.getUser(user_id);
+                user.setWallet_balance(user.getWallet_balance() - amount);
+                userDataSource.updateUser(user);
+
                 Toast.makeText(QRConfirm.this, "Transaction successful", Toast.LENGTH_SHORT).show();
                 this.finish();
                 Intent intent = new Intent(QRConfirm.this, CheckRequest.class);
@@ -152,5 +150,10 @@ public class QRConfirm extends AppCompatActivity {
             }
         }
         return false;
+    }
+
+    public void Refresh(View view) {
+        setQRcode();
+        checkWithdrawalStatus();
     }
 }

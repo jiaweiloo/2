@@ -211,7 +211,7 @@ public class DepositWaitingPage extends AppCompatActivity {
         Log.i("Values ", "at findWithdrawal : Withdrawal ID onActivityResult: " + values.get(0).getLocation_id());
         for (int a = 0; a < values.size(); a++) {
             Withdrawal temp = values.get(a);
-            if (temp.getLocation_id() == location_id) {
+            if (temp.getLocation_id() == location_id && !temp.getStatus().equals("complete")) {
                 withdrawal_id = temp.getWithdrawal_id();
                 Log.i("tag", "Withdrawal ID onActivityResult: " + withdrawal_id);
 
@@ -219,6 +219,9 @@ public class DepositWaitingPage extends AppCompatActivity {
 
                 addRecord(withdrawal_id, "paired");
                 isFound = true;
+                temp.setDeposit_id(deposit.getDeposit_id());
+                withdrawalSQLHelper.updateWithdrawal(temp);
+                break;
             }
         }
         return isFound;

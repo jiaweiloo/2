@@ -54,7 +54,8 @@ public class HomePage extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Available in the future", Snackbar.LENGTH_LONG)
+                UpdateTextField();
+                Snackbar.make(view, "Refresh !", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -114,14 +115,9 @@ public class HomePage extends AppCompatActivity
 
         user = userSQLHelper.getUser(user_id);
 
-        Log.e("tag", "timer finish and retrieve user_id: " + user_id);
-
         txtViewUserID.setText("User ID: " + String.valueOf(user_id));
         txtViewName.setText(user.getUser_name());
         txtViewBal.setText(String.format("RM %.2f", user.getWallet_balance()));
-        Log.e("tag", "Update textview(s) ");
-
-
     }
 
     @Override
