@@ -149,4 +149,13 @@ public class DepositScanQRcode extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phoneNumber));
         startActivity(intent);
     }
+
+    public void onCancel(View view){
+        deposit.setStatus("cancelled");
+        depositDataSource.updateDeposit(deposit);
+        Toast.makeText(DepositScanQRcode.this,
+                "Transaction cancelled !", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getApplicationContext(), HomePage.class);
+        startActivity(intent);
+    }
 }

@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 
@@ -173,10 +174,10 @@ public class DepositWaitingPage extends AppCompatActivity {
     public void pair(View view) {
 
         // Start activity to pair for a withdrawal
-        Intent intent = new Intent(this, DepositPairWithdrawal.class);
-        startActivityForResult(intent, 2);
+        //Intent intent = new Intent(this, DepositPairWithdrawal.class);
+        //startActivityForResult(intent, 2);
         //addRecord(300001,"paired");
-
+        Toast.makeText(this, "Function to be available in the future.", Toast.LENGTH_SHORT).show();
     }
 
     @Override
