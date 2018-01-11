@@ -56,7 +56,7 @@ public class WithdrawMatching extends HomePage {
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mProgressDialog.show();
 
-        waitingPeriod = 1;
+        //waitingPeriod = 1;
         // Timer start
         // adjust the milli seconds here
         new CountDownTimer(waitingPeriod * 60000, 1000) {

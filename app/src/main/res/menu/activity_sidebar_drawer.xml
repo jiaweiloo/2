@@ -7,35 +7,35 @@
         <item
             android:id="@+id/nav_Home"
             android:icon="@drawable/ic_home_black_24dp"
-            android:title="Home" />
+            android:title="@string/nav_home" />
         <item
             android:id="@+id/nav_MyAccount"
             android:icon="@drawable/ic_account_box_white_24dp"
-            android:title="My Account" />
+            android:title="@string/nav_myaccount" />
         <item
             android:id="@+id/nav_Deposit"
             android:icon="@drawable/ic_in_black_24px"
-            android:title="Deposit" />
+            android:title="@string/nav_deposit" />
         <item
             android:id="@+id/nav_Withdrawal"
             android:icon="@drawable/ic_out_black_24px"
-            android:title="Withdrawal" />
+            android:title="@string/nav_withdrawal" />
         <item
             android:id="@+id/nav_Wallet"
             android:icon="@drawable/ic_account_balance_wallet_black_24px"
-            android:title="Wallet" />
+            android:title="@string/nav_wallet" />
         <item
             android:id="@+id/nav_CreditCard"
             android:icon="@drawable/ic_credit_card_black_24px"
-            android:title="Credit Card" />
+            android:title="@string/nav_creditcard" />
     </group>
 
-    <item android:title="Management">
+    <item android:title="@string/nav_title_mgmt">
         <menu>
             <item
                 android:id="@+id/nav_mgmt_menu"
                 android:icon="@drawable/ic_developer_board_black_24dp"
-                android:title="Management Menu" />
+                android:title="@string/nav_mgmt_menu" />
         </menu>
     </item>
 
