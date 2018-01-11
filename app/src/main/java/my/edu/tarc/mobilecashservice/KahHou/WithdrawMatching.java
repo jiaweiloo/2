@@ -42,7 +42,7 @@ public class WithdrawMatching extends HomePage {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_withdraw_matching);
         super.replaceContentLayout(R.layout.activity_withdraw_matching);
-        setTitle("Matching...");
+        setTitle(getResources().getString(R.string.title_matching));
 
         tViewcountTime = findViewById(R.id.countTime);
         withdrawalDataSource = new WithdrawalSQLHelper(this);

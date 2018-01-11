@@ -27,6 +27,8 @@ public class LoginPage extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_page);
+        setTitle(getResources().getString(R.string.title_loginpage));
+
         database = new UserSQLHelper(this);
 
     }

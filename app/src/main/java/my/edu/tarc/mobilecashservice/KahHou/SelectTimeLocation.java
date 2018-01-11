@@ -52,6 +52,7 @@ public class SelectTimeLocation extends HomePage implements AdapterView.OnItemCl
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_select_time_location);
         super.replaceContentLayout(R.layout.activity_select_time_location);
+        setTitle(getResources().getString(R.string.title_timelocation));
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         getLocation();

@@ -72,7 +72,7 @@ public class QRConfirm extends HomePage {
         final ProgressDialog mProgressDialog;
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setIndeterminate(false);
-        mProgressDialog.setMessage("Loading.... Please wait");
+        mProgressDialog.setMessage(getResources().getString(R.string.wait));
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mProgressDialog.show();
 
@@ -146,7 +146,7 @@ public class QRConfirm extends HomePage {
 
                 Toast.makeText(QRConfirm.this, "Transaction successful", Toast.LENGTH_SHORT).show();
                 this.finish();
-                Intent intent = new Intent(QRConfirm.this, CheckRequest.class);
+                Intent intent = new Intent(QRConfirm.this, HomePage.class);
                 startActivity(intent);
                 return true;
             }

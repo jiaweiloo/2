@@ -48,12 +48,12 @@ public class CheckRequest extends HomePage {
         WSH = new WithdrawalSQLHelper(this);
 
         WSH.getWithdrawal(300001);
-        Log.e("tag","First time get request");
+        Log.e("tag", "First time get request");
         final ProgressDialog mProgressDialog;
 
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setIndeterminate(false);
-        mProgressDialog.setMessage("Loading.... Please wait");
+        mProgressDialog.setMessage(getResources().getString(R.string.wait));
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mProgressDialog.show();
 
@@ -62,6 +62,7 @@ public class CheckRequest extends HomePage {
             public void onTick(long millisUntilFinished) {
                 //UpdateTextField();
             }
+
             public void onFinish() {
                 mProgressDialog.dismiss();
                 updateList();
@@ -80,11 +81,12 @@ public class CheckRequest extends HomePage {
             Toast.makeText(getApplicationContext(), "No records", Toast.LENGTH_SHORT).show();
         }
 
+        /*
         for (int a = 0; a < values.size(); a++) {
 
             if (values.get(a).getUser_id() != userID)
                 values.remove(a);
-        }
+        } */
 
         WithdrawalRecordAdapter adapter = new WithdrawalRecordAdapter(this, R.layout.withdrawal_record, values);
 

@@ -74,7 +74,7 @@ public class DepositScanQRcode extends HomePage {
 
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setIndeterminate(false);
-        mProgressDialog.setMessage("Loading.... Please wait");
+        mProgressDialog.setMessage(getResources().getString(R.string.wait));
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mProgressDialog.show();
 

@@ -10,31 +10,31 @@
     <string name="action_checkDatabase">存款</string>
     <string name="action_checkWithdraw">提款</string>
 
-    <string name="tab_text_1">Location Records</string>
-    <string name="tab_text_2">Add Location</string>
+    <string name="tab_text_1">定位记录</string>
+    <string name="tab_text_2">添加定位</string>
 
-    <string name="action_logout">Log Out</string>
+    <string name="action_logout">登出</string>
     <!-- Nan Fung's strings-->
-    <string name="open">Open</string>
-    <string name="close">Close</string>
-    <string name="error_name">Please enter name</string>
-    <string name="error_phone">Please enter phone</string>
-    <string name="error_email">Please enter email</string>
-    <string name="error_pass">Please enter password</string>
-    <string name="error_conpass">Please enter confirmpassword</string>
-    <string name="error_ic">Please enter ic</string>
-    <string name="error_invalid_email">Please enter a valid email</string>
+    <string name="open">打开</string>
+    <string name="close">关</string>
+    <string name="error_name">请输入名字</string>
+    <string name="error_phone">请输入电话号码</string>
+    <string name="error_email">请输入电子邮件</string>
+    <string name="error_pass">请输入密码</string>
+    <string name="error_conpass">请输入确认密码</string>
+    <string name="error_ic">请输入身份证</string>
+    <string name="error_invalid_email">请输入有效电子邮件</string>
     <!-- End of Nan Fung's strings-->
 
     <!-- Jia Wei's strings-->
-    <string name="title_menu">Select amount to be deposit</string>
-    <string name="title_area">Select area of transaction</string>
+    <string name="title_menu">选择要存款的金额</string>
+    <string name="title_area">选择交易区域</string>
     <string name="title_activity_maps">Map</string>
 
     <!-- Kah Hou's strings
     <string name="app_name">Cash Request</string>-->
-    <string name="cashWant">Cash （RM）</string>
-    <string name="waitingTime">Wait Period (min)</string>
+    <string name="cashWant">现金 （RM）</string>
+    <string name="waitingTime">等待期 (min)</string>
     <string-array name="cashOptions">
         <item>20</item>
         <item>50</item>
@@ -50,17 +50,12 @@
         <item>15 mins</item>
         <item>20 mins</item>
     </string-array>
-    <string name="request">Next</string>
-    <string name="checkRequest">Cash Withdrawal History</string>
-    <string name="selectTimeLocation">Wait Period and Location</string>
-    <string name="selectLocation">Meeting Location</string>
-    <string name="waiting">Please Wait</string>
-    <string name="confirmCash">User Found</string>
-    <string-array name="locationOptions">
-        <item>Tunku Abdul Rahman University College</item>
-        <item>Setapak Central</item>
-        <item>Jalan Genting Klang</item>
-    </string-array>
+    <string name="request">下一个</string>
+    <string name="checkRequest">现金提款历史</string>
+    <string name="selectTimeLocation">等待时间和地点</string>
+    <string name="selectLocation">会议地点</string>
+    <string name="waiting">请稍候</string>
+    <string name="confirmCash">找到用户</string>
     <string name="QRconfirm">QR code</string>
 
     <!-- Strings related to ScanQRcode.java-->
@@ -70,20 +65,33 @@
 
     <!-- Strings related to barcode scanner -->
     <string name="ok">OK</string>
-    <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
-    <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
-    <string name="low_storage_error">Face detector dependencies cannot be downloaded due to low device storage</string>
+    <string name="permission_camera_rationale">需要访问摄像头进行检测</string>
+    <string name="no_camera_permission">此应用程序无法运行，因为它没有相机权限。 该应用程序现在将退出。</string>
+    <string name="low_storage_error">由于设备存储不足，无法下载人脸检测器依赖关系</string>
 
-    <string name="nav_home">Home</string>
-    <string name="nav_myaccount">My Account</string>
+    <string name="nav_home">主页</string>
+    <string name="nav_myaccount">我的帐户</string>
     <string name="nav_deposit">现金存款</string>
     <string name="nav_withdrawal">提款</string>
-    <string name="nav_wallet">Wallet</string>
-    <string name="nav_creditcard">Credit Card</string>
-    <string name="nav_title_mgmt">Management</string>
-    <string name="nav_mgmt_menu">Management Menu</string>
+    <string name="nav_wallet">钱包</string>
+    <string name="nav_creditcard">信用卡</string>
+    <string name="nav_title_mgmt">管理</string>
+    <string name="nav_mgmt_menu">管理画面</string>
 
-    <string name="guideCash">Step 1: Choose Your Amount </string>
-    <string name="guideCash2">Step 2: Choose Your Waiting Period (min) </string>
-    <string name="meetingLocation">Step 3: Choose Your Meeting Location</string>
+    <string name="guideCash">步骤1：选择您的金额</string>
+    <string name="guideCash2">步骤2：选择您的等待期（分钟） </string>
+    <string name="meetingLocation">步骤3: 选择你的会议地点</string>
+
+    <string name="go_dep">点击这里去存款 ></string>
+    <string name="go_wit">点击这里去提款 ></string>
+    <string name="welcome">欢迎！\n账户余额：</string>
+    <string name="wait">加载...请稍候</string>
+
+    <string name="title_selectcash">选择您的金额..</string>
+    <string name="title_timelocation">选择您的等待期</string>
+    <string name="title_matching">加载...</string>
+    <string name="title_forgetpassword">忘记密码</string>
+    <string name="title_loginpage">登录页面</string>
+    <string name="title_myaccount">我的帐户</string>
+    <string name="title_register">注册您的帐户</string>
 </resources>

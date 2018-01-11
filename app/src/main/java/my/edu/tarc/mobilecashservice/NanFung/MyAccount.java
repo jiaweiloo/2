@@ -29,6 +29,7 @@ public class MyAccount extends HomePage {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_my_account);
         super.replaceContentLayout(R.layout.activity_my_account);
+        setTitle(getResources().getString(R.string.title_myaccount));
 
         editTextUserID = findViewById(R.id.tfAccUserID);
         editTextUserName = findViewById(R.id.tfAccUsername);

@@ -85,4 +85,17 @@
     <string name="guideCash">Step 1: Choose Your Amount </string>
     <string name="guideCash2">Step 2: Choose Your Waiting Period (min) </string>
     <string name="meetingLocation">Step 3: Choose Your Meeting Location</string>
+
+    <string name="go_dep">Click here to go Deposit ></string>
+    <string name="go_wit">Click here to go Withdrawal ></string>
+    <string name="welcome">Welcome !\nAccount Balance:</string>
+    <string name="wait">Loading.... Please wait</string>
+
+    <string name="title_selectcash">Select cash..</string>
+    <string name="title_timelocation">Select Time and Location</string>
+    <string name="title_matching">Matching...</string>
+    <string name="title_forgetpassword">Forget Password</string>
+    <string name="title_loginpage">Login Page</string>
+    <string name="title_myaccount">My Account</string>
+    <string name="title_register">Register your account</string>
 </resources>

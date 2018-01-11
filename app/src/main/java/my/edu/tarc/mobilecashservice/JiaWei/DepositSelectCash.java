@@ -36,21 +36,6 @@ public class DepositSelectCash extends HomePage {
         super.replaceContentLayout(R.layout.activity_deposit_select_cash);
         setTitle("Select cash...");
 
-        txtViewUserID = findViewById(R.id.txtViewUserID);
-
-        // The intent will not be null here.
-        Intent intent = getIntent();
-
-        // Get the extras (if there are any)
-        Bundle bundle = intent.getExtras();
-        if (bundle != null) {
-            if (bundle.getString("user_id") != null) {
-                user_id = Integer.parseInt(bundle.getString("user_id"));
-                txtViewUserID.setText("User id > " + String.valueOf(user_id));
-            } else {
-                txtViewUserID.setText("User id > null");
-            }
-        }
     }
 
 

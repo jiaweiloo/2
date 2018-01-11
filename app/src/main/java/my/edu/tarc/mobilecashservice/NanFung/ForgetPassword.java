@@ -24,6 +24,8 @@ public class ForgetPassword extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
+        setTitle(getResources().getString(R.string.title_forgetpassword));
+
         databaseSource = new UserSQLHelper(this);
 
         editTextNewPass = findViewById(R.id.tfNewPass);

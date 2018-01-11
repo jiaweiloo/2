@@ -20,6 +20,7 @@ public class RequestCash extends HomePage {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_request_cash);
+        setTitle(getResources().getString(R.string.title_selectcash));
         super.replaceContentLayout(R.layout.activity_request_cash);
 
         withdraw = new Withdrawal();

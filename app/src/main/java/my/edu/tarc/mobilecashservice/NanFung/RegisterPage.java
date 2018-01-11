@@ -30,6 +30,7 @@ public class RegisterPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_page);
+        setTitle(getResources().getString(R.string.title_register));
         databaseSource = new UserSQLHelper(this);
         records = new ArrayList<>();
         //createDummy();

@@ -11,7 +11,7 @@
         android:id="@+id/action_myaccount"
         android:icon="@drawable/ic_account_circle_black_24dp"
         android:orderInCategory="101"
-        android:title="My Account" />
+        android:title="@string/nav_myaccount" />
 
     <item
         android:id="@+id/action_logout"
