@@ -34,21 +34,21 @@ public final class R {
         public static final int centerCrop = 0x7f0a0040;
         public static final int fitCenter = 0x7f0a0070;
         public static final int fitXY = 0x7f0a0071;
-        public static final int zxing_back_button = 0x7f0a0145;
-        public static final int zxing_barcode_scanner = 0x7f0a0146;
-        public static final int zxing_barcode_surface = 0x7f0a0147;
-        public static final int zxing_camera_error = 0x7f0a0148;
-        public static final int zxing_decode = 0x7f0a0149;
-        public static final int zxing_decode_failed = 0x7f0a014a;
-        public static final int zxing_decode_succeeded = 0x7f0a014b;
-        public static final int zxing_possible_result_points = 0x7f0a014c;
-        public static final int zxing_prewiew_size_ready = 0x7f0a014d;
-        public static final int zxing_status_view = 0x7f0a014e;
-        public static final int zxing_viewfinder_view = 0x7f0a014f;
+        public static final int zxing_back_button = 0x7f0a014a;
+        public static final int zxing_barcode_scanner = 0x7f0a014b;
+        public static final int zxing_barcode_surface = 0x7f0a014c;
+        public static final int zxing_camera_error = 0x7f0a014d;
+        public static final int zxing_decode = 0x7f0a014e;
+        public static final int zxing_decode_failed = 0x7f0a014f;
+        public static final int zxing_decode_succeeded = 0x7f0a0150;
+        public static final int zxing_possible_result_points = 0x7f0a0151;
+        public static final int zxing_prewiew_size_ready = 0x7f0a0152;
+        public static final int zxing_status_view = 0x7f0a0153;
+        public static final int zxing_viewfinder_view = 0x7f0a0154;
     }
     public static final class layout {
-        public static final int zxing_barcode_scanner = 0x7f0c0059;
-        public static final int zxing_capture = 0x7f0c005a;
+        public static final int zxing_barcode_scanner = 0x7f0c005a;
+        public static final int zxing_capture = 0x7f0c005b;
     }
     public static final class raw {
         public static final int zxing_beep = 0x7f0f0000;

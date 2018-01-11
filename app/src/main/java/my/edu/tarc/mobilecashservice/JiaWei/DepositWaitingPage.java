@@ -180,9 +180,10 @@ public class DepositWaitingPage extends AppCompatActivity {
     public boolean findWithdrawal() {
         values = withdrawalSQLHelper.getAllWithdrawals();
         Log.i("Values ", "at findWithdrawal : Withdrawal ID onActivityResult: " + values.get(0).getLocation_id());
+
         for (int a = 0; a < values.size(); a++) {
             Withdrawal temp = values.get(a);
-            if (temp.getLocation_id() == location_id && temp.getStatus().equals("pending")) {
+            if (temp.getLocation_id() == location_id && temp.getStatus().equals("pending") && temp.getAmount() == amount) {
                 withdrawal_id = temp.getWithdrawal_id();
                 Log.i("tag", "Withdrawal ID onActivityResult: " + withdrawal_id);
 

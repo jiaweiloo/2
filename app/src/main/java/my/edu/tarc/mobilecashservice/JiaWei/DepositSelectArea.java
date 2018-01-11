@@ -24,10 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import my.edu.tarc.mobilecashservice.DatabaseHelper.LocationSQLHelper;
+import my.edu.tarc.mobilecashservice.HomePage;
 import my.edu.tarc.mobilecashservice.R;
 import my.edu.tarc.mobilecashservice.Entity.Location;
 
-public class DepositSelectArea extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class DepositSelectArea extends HomePage implements AdapterView.OnItemClickListener {
 
 
     double amount = 0.0;
@@ -45,7 +46,8 @@ public class DepositSelectArea extends AppCompatActivity implements AdapterView.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_deposit_select_area);
+        //setContentView(R.layout.activity_deposit_select_area);
+        super.replaceContentLayout(R.layout.activity_deposit_select_area);
         setTitle("Select location");
 
         listViewRecords = (ListView) findViewById(R.id.listViewRecords);
@@ -166,5 +168,10 @@ public class DepositSelectArea extends AppCompatActivity implements AdapterView.
             return false;
         else
             return true;
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
     }
 }

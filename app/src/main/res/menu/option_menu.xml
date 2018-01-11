@@ -12,22 +12,6 @@
         android:icon="@drawable/ic_account_circle_black_24dp"
         android:orderInCategory="101"
         android:title="My Account" />
-    <item
-        android:id="@+id/action_checkDatabase"
-        android:orderInCategory="102"
-        android:title="@string/action_checkDatabase"
-        app:showAsAction="collapseActionView" />
-    <item
-        android:id="@+id/action_checkWithdraw"
-        android:orderInCategory="103"
-        android:title="@string/action_checkWithdraw"
-        app:showAsAction="collapseActionView" />
-
-    <item
-        android:id="@+id/action_DatabaseLoc"
-        android:orderInCategory="104"
-        android:title="Check Location"
-        app:showAsAction="collapseActionView" />
 
     <item
         android:id="@+id/action_logout"

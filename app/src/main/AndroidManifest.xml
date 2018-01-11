@@ -51,7 +51,8 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity android:name=".NanFung.ForgetPassword" />
-        <activity android:name=".NanFung.MyAccount"></activity>
+        <activity android:name=".NanFung.MyAccount" />
+        <activity android:name=".ManagementMenu"></activity>
     </application>
 
 </manifest>

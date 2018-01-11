@@ -20,18 +20,20 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import my.edu.tarc.mobilecashservice.HomePage;
 import my.edu.tarc.mobilecashservice.KahHou.CheckRequest;
 import my.edu.tarc.mobilecashservice.NanFung.LoginPage;
 import my.edu.tarc.mobilecashservice.R;
 
-public class DepositSelectCash extends AppCompatActivity {
+public class DepositSelectCash extends HomePage {
     int user_id = 0;
     TextView txtViewUserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_deposit_select_cash);
+        //setContentView(R.layout.activity_deposit_select_cash);
+        super.replaceContentLayout(R.layout.activity_deposit_select_cash);
         setTitle("Select cash...");
 
         txtViewUserID = findViewById(R.id.txtViewUserID);

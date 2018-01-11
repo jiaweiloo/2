@@ -19,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,15 +42,19 @@ public class HomePage extends AppCompatActivity
     UserRecord user = new UserRecord();
     //boolean isLogin = false;
     UserSQLHelper userSQLHelper;
+    protected DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.sidebar_menu);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
 
+        /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,9 +64,10 @@ public class HomePage extends AppCompatActivity
                 Snackbar.make(view, "Refresh !", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        }); */
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -150,27 +156,13 @@ public class HomePage extends AppCompatActivity
         //noinspection SimplifiableIfStatement
 
         if (id == R.id.action_settings) {
-            return true;
-        } else if (id == R.id.action_checkDatabase) {
-            Intent intent = new Intent(this, AllDepositRecords.class);
-            //intent.putExtra("message", txtAmount.getText().toString());
-            startActivityForResult(intent, 2);
-            return true;
-        } else if (id == R.id.action_checkWithdraw) {
-            Intent intent = new Intent(this, CheckRequest.class);
-            intent.putExtra("userID", user_id);
-            startActivity(intent);
+
             return true;
         } else if (id == R.id.action_logout) {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
             sharedPref.edit().clear().commit();
             //sharedPref.
             goToLogin();
-
-            return true;
-        } else if (id == R.id.action_DatabaseLoc) {
-            Intent intent = new Intent(this, LocationModule.class);
-            startActivity(intent);
             return true;
         }
 
@@ -185,6 +177,11 @@ public class HomePage extends AppCompatActivity
 
 
         if (id == R.id.nav_Home) {
+            if(this.getClass() != HomePage.class){
+                Intent intent = new Intent(this, HomePage.class);
+                startActivity(intent);
+                this.finish();
+            }
 
         } else if (id == R.id.nav_Deposit) {
             // Handle the deposit action
@@ -198,15 +195,14 @@ public class HomePage extends AppCompatActivity
         } else if (id == R.id.nav_CreditCard) {
             // handle the credit card action
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_mgmt_menu) {
+            // handle the management menu
+            Intent intent = new Intent(this, ManagementMenu.class);
+            startActivity(intent);
         } else if (id == R.id.nav_MyAccount) {
             // Handle the deposit action
             Intent intentRegister = new Intent(this, MyAccount.class);
             startActivityForResult(intentRegister, 1);
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -258,4 +254,19 @@ public class HomePage extends AppCompatActivity
         else
             return true;
     }
+
+    protected void replaceContentLayout(int sourceId) {
+
+        View contentLayout = findViewById(R.id.includeContent);
+
+        //contentLayout.set
+        //contentLayout.
+        ViewGroup parent = (ViewGroup) contentLayout.getParent();
+        int index = parent.indexOfChild(contentLayout);
+
+        parent.removeView(contentLayout);
+        contentLayout = getLayoutInflater().inflate(sourceId, parent, false);
+        parent.addView(contentLayout, index);
+    }
+
 }
