@@ -26,6 +26,7 @@ public class ConfirmCash extends HomePage {
     WithdrawalSQLHelper withdrawalDataSource;
     DepositSQLHelper depositDataSource;
     UserSQLHelper userDataSource;
+    Withdrawal wit;
 
     int withdrawal_id = 0;
     int user_id = 0;
@@ -74,10 +75,10 @@ public class ConfirmCash extends HomePage {
     }
 
     public void btnCancel(View view) {
-        WithdrawalSQLHelper userDataSource = new WithdrawalSQLHelper(this);
-        userDataSource.insertWithdrawal((Withdrawal) getIntent().getSerializableExtra("withdraw"));
+        wit.setStatus("cancelled");
+        withdrawalDataSource.updateWithdrawal(wit);
         this.finish();
-        Intent intent = new Intent(this, RequestCash.class);
+        Intent intent = new Intent(this, HomePage.class);
         startActivity(intent);
     }
 
@@ -87,7 +88,6 @@ public class ConfirmCash extends HomePage {
         UserRecord user = userDataSource.getUser(dep.getUser_id());
 
         TextView userInfo = findViewById(R.id.userInfo);
-        Random random = new Random();
         userInfo.setText("User matched with:\n"+
                 "Location at :" + dep.getLocation_id()+
                 "\n User name: " + user.getUser_name()+

@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.net.Uri;
 import android.os.Build;
 import android.os.CountDownTimer;
@@ -104,6 +106,8 @@ public class DepositScanQRcode extends HomePage {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == BARCODE_READER_REQUEST_CODE) {
             if (resultCode == CommonStatusCodes.SUCCESS) {
+                ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 200);
+                toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP,150);
                 if (data != null) {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
                     Point[] p = barcode.cornerPoints;

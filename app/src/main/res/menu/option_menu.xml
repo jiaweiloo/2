@@ -8,7 +8,7 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/myaccount"
+        android:id="@+id/action_myaccount"
         android:icon="@drawable/ic_account_circle_black_24dp"
         android:orderInCategory="101"
         android:title="My Account" />

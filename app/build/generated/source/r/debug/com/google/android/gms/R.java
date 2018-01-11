@@ -52,15 +52,15 @@ public final class R {
         public static final int googleg_standard_color_18 = 0x7f080078;
     }
     public static final class id {
-        public static final int adjust_height = 0x7f0a0020;
-        public static final int adjust_width = 0x7f0a0021;
-        public static final int auto = 0x7f0a0027;
-        public static final int button = 0x7f0a0031;
-        public static final int center = 0x7f0a003c;
-        public static final int contact = 0x7f0a0049;
-        public static final int dark = 0x7f0a0050;
-        public static final int icon_only = 0x7f0a0079;
-        public static final int light = 0x7f0a0083;
+        public static final int adjust_height = 0x7f0a0021;
+        public static final int adjust_width = 0x7f0a0022;
+        public static final int auto = 0x7f0a0028;
+        public static final int button = 0x7f0a0032;
+        public static final int center = 0x7f0a003d;
+        public static final int contact = 0x7f0a004a;
+        public static final int dark = 0x7f0a0051;
+        public static final int icon_only = 0x7f0a007a;
+        public static final int light = 0x7f0a0084;
         public static final int none = 0x7f0a009c;
         public static final int normal = 0x7f0a009d;
         public static final int radio = 0x7f0a00ab;

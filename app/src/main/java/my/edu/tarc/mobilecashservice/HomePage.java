@@ -159,7 +159,11 @@ public class HomePage extends AppCompatActivity
         if (id == R.id.action_settings) {
 
             return true;
-        } else if (id == R.id.action_logout) {
+        } else if (id == R.id.action_myaccount) {
+            Intent intent = new Intent(this, MyAccount.class);
+            startActivity(intent);
+            return true;
+        }else if (id == R.id.action_logout) {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
             sharedPref.edit().clear().commit();
             //sharedPref.
