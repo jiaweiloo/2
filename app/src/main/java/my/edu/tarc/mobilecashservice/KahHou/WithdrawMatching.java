@@ -104,6 +104,9 @@ public class WithdrawMatching extends HomePage {
 
     public void btnStop(View view) {
         //handler.removeCallbacksAndMessages(null);
+        Withdrawal temp  = withdrawalDataSource.getWithdrawal(withdrawal_id);
+        temp.setStatus("cancelled");
+        withdrawalDataSource.updateWithdrawal(temp);
         Intent intent = new Intent(this, RequestCash.class);
         startActivity(intent);
     }

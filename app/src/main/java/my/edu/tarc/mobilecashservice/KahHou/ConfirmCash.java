@@ -72,9 +72,11 @@ public class ConfirmCash extends HomePage {
         //intent.putExtra("cashAmount",getIntent().getStringExtra("cashAmount"));
         intent.putExtra("withdraw", (Withdrawal) getIntent().getSerializableExtra("withdraw"));
         startActivity(intent);
+        this.finish();
     }
 
     public void btnCancel(View view) {
+        wit = withdrawalDataSource.getWithdrawal(withdrawal_id);
         wit.setStatus("cancelled");
         withdrawalDataSource.updateWithdrawal(wit);
         this.finish();
@@ -83,7 +85,7 @@ public class ConfirmCash extends HomePage {
     }
 
     public void updateTextField(){
-        Withdrawal wit = withdrawalDataSource.getWithdrawal(withdrawal_id);
+        wit = withdrawalDataSource.getWithdrawal(withdrawal_id);
         Deposit dep = depositDataSource.getDeposit(wit.getDeposit_id());
         UserRecord user = userDataSource.getUser(dep.getUser_id());
 
