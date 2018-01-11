@@ -190,15 +190,15 @@ public class HomePage extends AppCompatActivity
 
         } else if (id == R.id.nav_Deposit) {
             // Handle the deposit action
-
+            Intent intent = new Intent(this, DepositSelectCash.class);
+            startActivity(intent);
         } else if (id == R.id.nav_Withdrawal) {
             //Handle the withdrawal action
-
+            Intent intent = new Intent(this, RequestCash.class);
+            startActivity(intent);
         } else if (id == R.id.nav_Wallet) {
             // handle the wallet action
-
-        } else if (id == R.id.nav_CreditCard) {
-            // handle the credit card action
+            Toast.makeText(HomePage.this, "Available in the future !", Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_mgmt_menu) {
             // handle the management menu

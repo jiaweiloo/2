@@ -94,4 +94,10 @@
     <string name="title_loginpage">登录页面</string>
     <string name="title_myaccount">我的帐户</string>
     <string name="title_register">注册您的帐户</string>
+
+    <string name="guideDep1">步骤 1: 选择您的区域 </string>
+    <string name="guideDep2">步骤 2: 选择您的金额 (RM) </string>
+    <string name="guideDep3">步骤 3: 重新输入密码</string>
+    <string name="guideDep4">步骤 4: 搜索用户...</string>
+    <string name="guideDep5">步骤 5: 扫描QR码完成</string>
 </resources>

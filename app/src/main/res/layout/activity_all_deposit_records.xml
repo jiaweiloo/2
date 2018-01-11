@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="56dp"
+    android:background="@drawable/white2"
     tools:context="my.edu.tarc.mobilecashservice.JiaWei.AllDepositRecords">
 
     <ListView
@@ -25,6 +26,7 @@
         android:layout_height="wrap_content"
         android:onClick="addRecord"
         android:text="Add"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
         app:layout_constraintLeft_toLeftOf="parent"

@@ -5,20 +5,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="56dp"
+    android:background="@drawable/white2"
     tools:context="my.edu.tarc.mobilecashservice.JiaWei.DepositScanQRcode">
+
+    <TextView
+        android:id="@+id/tviewTiLast"
+        android:layout_width="357dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:text="@string/guideDep5"
+        android:textAppearance="@android:style/TextAppearance.Holo.Medium"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.078" />
 
     <TextView
         android:id="@+id/tviewShowInfo"
         android:layout_width="357dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
         android:text="Deposit id : "
         android:textAppearance="@android:style/TextAppearance.Holo.Medium"
-        android:textSize="25sp"
+        android:textSize="25dp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.028" />
+        app:layout_constraintVertical_bias="0.225" />
 
     <TextView
         android:id="@+id/result_textview"
@@ -29,6 +49,8 @@
         android:gravity="center"
         android:text="No barcode captured"
         android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -44,6 +66,7 @@
         android:layout_below="@id/result_textview"
         android:onClick="btnScanQR"
         android:text="Scan QR code"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -60,6 +83,7 @@
         android:backgroundTint="@android:color/holo_red_dark"
         android:onClick="onCancel"
         android:text="Cancel"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -76,6 +100,7 @@
         android:backgroundTint="@android:color/holo_blue_dark"
         android:onClick="showDial"
         android:text="Contact User"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
