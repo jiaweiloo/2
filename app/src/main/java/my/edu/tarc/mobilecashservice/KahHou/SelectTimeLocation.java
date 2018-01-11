@@ -60,8 +60,6 @@ public class SelectTimeLocation extends HomePage implements AdapterView.OnItemCl
         listViewRecords = findViewById(R.id.listViewRecords);
         listViewRecords.setOnItemClickListener(this);
         locationDataSource = new LocationSQLHelper(this);
-        //Log.i("System", Double.toString(x));
-        //Log.i("System", Double.toString(y));
         final ProgressDialog mProgressDialog;
 
         mProgressDialog = new ProgressDialog(this);
@@ -73,12 +71,15 @@ public class SelectTimeLocation extends HomePage implements AdapterView.OnItemCl
         new CountDownTimer(2000, 1000) { // adjust the milli seconds here
 
             public void onTick(long millisUntilFinished) {
-                //UpdateTextField();
+                if(checkLoadFinished()){
+                    this.onFinish();
+                }
             }
 
             public void onFinish() {
                 mProgressDialog.dismiss();
                 updateList();
+                this.cancel();
             }
         }.start();
     }
@@ -121,7 +122,6 @@ public class SelectTimeLocation extends HomePage implements AdapterView.OnItemCl
 
         my.edu.tarc.mobilecashservice.Entity.Location loc = null;
 
-        //Log.i("System", "Value size :" + values.size());
         Toast.makeText(this, "Location Name :" + values.get(position).getLocation_name(), Toast.LENGTH_SHORT).show();
         loc = values.get(position);
 
@@ -133,7 +133,6 @@ public class SelectTimeLocation extends HomePage implements AdapterView.OnItemCl
 
 
         EditText waitingPeriod = findViewById(R.id.editText2);
-        //String sWaitingPeriod = waitingPeriod.getText().toString();
         if (waitingPeriod.getText() == null || waitingPeriod.getText().toString().equals("")) {
             showDialog();
             waitingPeriod.setText("1");
@@ -146,7 +145,6 @@ public class SelectTimeLocation extends HomePage implements AdapterView.OnItemCl
 
     private void updateList() {
 
-        //Toast.makeText(this, "Update list called!", Toast.LENGTH_SHORT).show();
         values = locationDataSource.getAllLocations();
         Toast.makeText(this, "Values size " + values.size(), Toast.LENGTH_SHORT).show();
 
@@ -158,7 +156,6 @@ public class SelectTimeLocation extends HomePage implements AdapterView.OnItemCl
             }
 
         }
-        //Log.i("System", "Value size :" + values.size());
 
         LocationAdapter adapter = new LocationAdapter(this,
                 R.layout.location_record, values);
@@ -183,6 +180,15 @@ public class SelectTimeLocation extends HomePage implements AdapterView.OnItemCl
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+    }
+
+    public boolean checkLoadFinished() {
+        values = locationDataSource.getAllLocations();
+
+        if (values.isEmpty())
+            return false;
+        else
+            return true;
     }
 }
 

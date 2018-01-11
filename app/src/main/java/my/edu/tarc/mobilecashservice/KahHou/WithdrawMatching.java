@@ -86,20 +86,6 @@ public class WithdrawMatching extends HomePage {
             }
         }.start();
 
-        /*
-        handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(WithdrawMatching.this, "User Found", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(WithdrawMatching.this, ConfirmCash.class);
-                //intent.putExtra("cashAmount",getIntent().getStringExtra("cashAmount"));
-                //intent.putExtra("location",getIntent().getStringExtra("location"));
-                intent.putExtra("withdraw", (Withdrawal) getIntent().getSerializableExtra("withdraw"));
-                startActivity(intent);
-            }
-        }, 5000);
-        */
     }
 
     public void btnStop(View view) {
@@ -178,5 +164,14 @@ public class WithdrawMatching extends HomePage {
     public void Refresh(View view) {
         newRow();
         checkWithdrawalStatus();
+    }
+
+    public boolean checkLoadFinished() {
+        Withdrawal temp = withdrawalDataSource.getLastRecord();
+
+        if (temp.getWithdrawal_id() != 0 )
+            return false;
+        else
+            return true;
     }
 }

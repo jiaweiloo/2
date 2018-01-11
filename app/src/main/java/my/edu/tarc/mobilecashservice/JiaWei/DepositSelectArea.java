@@ -88,7 +88,7 @@ public class DepositSelectArea extends HomePage implements AdapterView.OnItemCli
             public void onFinish() {
                 mProgressDialog.dismiss();
                 updateList();
-                this.cancel();;
+                this.cancel();
             }
         }.start();
     }

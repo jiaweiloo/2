@@ -48,6 +48,7 @@ public class DepositScanQRcode extends HomePage {
     int withdrawal_id = 0;
     int deposit_id = 0;
     Withdrawal wit;
+    boolean choice = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,10 +83,11 @@ public class DepositScanQRcode extends HomePage {
             public void onTick(long millisUntilFinished) {
                 //UpdateTextField();
             }
+
             public void onFinish() {
                 mProgressDialog.dismiss();
                 deposit = depositDataSource.getDeposit(deposit_id);
-                tviewShowInfo.setText("Deposit id : " + deposit.getDeposit_id() +"\nWithdrawal ID: "+deposit.getWithdrawal_id());
+                tviewShowInfo.setText("Deposit id : " + deposit.getDeposit_id() + "\nWithdrawal ID: " + deposit.getWithdrawal_id());
             }
         }.start();
 
@@ -107,7 +109,7 @@ public class DepositScanQRcode extends HomePage {
         if (requestCode == BARCODE_READER_REQUEST_CODE) {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 200);
-                toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP,150);
+                toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP, 150);
                 if (data != null) {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
                     Point[] p = barcode.cornerPoints;
@@ -127,7 +129,7 @@ public class DepositScanQRcode extends HomePage {
 
 
             //update withdrawal status to complete
-            wit  = withdrawalSQLHelper.getWithdrawal(withdrawalID);
+            wit = withdrawalSQLHelper.getWithdrawal(withdrawalID);
             wit.setStatus("complete");
             withdrawalSQLHelper.updateWithdrawal(wit);
 
@@ -177,7 +179,7 @@ public class DepositScanQRcode extends HomePage {
                         depositDataSource.updateDeposit(deposit);
 
                         //update withdrawal status to complete
-                        wit  = withdrawalSQLHelper.getWithdrawal(deposit.getWithdrawal_id());
+                        wit = withdrawalSQLHelper.getWithdrawal(deposit.getWithdrawal_id());
                         wit.setStatus("cancelled");
                         withdrawalSQLHelper.updateWithdrawal(wit);
 
@@ -195,4 +197,5 @@ public class DepositScanQRcode extends HomePage {
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
+
 }

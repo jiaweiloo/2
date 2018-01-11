@@ -42,6 +42,7 @@ public class DepositSecurityCode extends HomePage {
         if(user.getPassword().equals(txtPassword.getText().toString())) {
             Intent intent = new Intent(this, DepositWaitingPage.class);
             startActivity(intent);
+            this.finish();
         }else{
             Toast.makeText(this, "Password not match, please try again!" , Toast.LENGTH_SHORT).show();
         }

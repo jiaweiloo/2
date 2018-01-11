@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import my.edu.tarc.mobilecashservice.DatabaseHelper.DepositSQLHelper;
@@ -20,6 +21,8 @@ import my.edu.tarc.mobilecashservice.R;
 public class AllDepositRecords extends HomePage implements AdapterView.OnItemClickListener{
     ListView listViewRecords;
     DepositSQLHelper depositDataSource;
+    List<Deposit> values = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,14 +41,18 @@ public class AllDepositRecords extends HomePage implements AdapterView.OnItemCli
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mProgressDialog.show();
 
-        new CountDownTimer(2000, 1000) { // adjust the milli seconds here
+        new CountDownTimer(120000, 1000) { // adjust the milli seconds here
 
             public void onTick(long millisUntilFinished) {
-                //UpdateTextField();
+                if (checkLoadFinished()) {
+                    this.onFinish();
+                }
             }
+
             public void onFinish() {
                 mProgressDialog.dismiss();
                 updateList();
+                this.cancel();
             }
         }.start();
         //addDummyData();
@@ -65,7 +72,7 @@ public class AllDepositRecords extends HomePage implements AdapterView.OnItemCli
 
     private void updateList() {
 
-        final List<Deposit> values = depositDataSource.getAllDeposits();
+        values = depositDataSource.getAllDeposits();
         /*
         for (int i = 0; i < values.size(); i++) {
             if (values.get(i).getStatus().equals("complete")) {
@@ -89,5 +96,14 @@ public class AllDepositRecords extends HomePage implements AdapterView.OnItemCli
     protected void onPause() {
         depositDataSource.close();
         super.onPause();
+    }
+
+    public boolean checkLoadFinished() {
+        values = depositDataSource.getAllDeposits();
+
+        if (values.isEmpty())
+            return false;
+        else
+            return true;
     }
 }

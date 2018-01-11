@@ -40,7 +40,7 @@
         <item>100</item>
         <item>150</item>
         <item>200</item>
-        <item>350</item>
+        <item>250</item>
         <item>300</item>
     </string-array>
     <string-array name="timeOptions">
@@ -100,8 +100,9 @@
     <string name="title_register">Register your account</string>
 
 
-    <string name="guideDep1">Step 1: Choose Your Area </string>
-    <string name="guideDep2">Step 2: Select Cash amount (RM) </string>
+
+    <string name="guideDep2">Step 1: Select Cash amount (RM) </string>
+    <string name="guideDep1">Step 2: Choose Your Area </string>
     <string name="guideDep3">Step 3: Re-enter password</string>
     <string name="guideDep4">Step 4: Searching for user</string>
     <string name="guideDep5">Step 5: Scan QR Code to complete</string>

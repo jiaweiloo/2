@@ -1,7 +1,10 @@
 package my.edu.tarc.mobilecashservice.JiaWei;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
@@ -40,6 +43,7 @@ public class DepositWaitingPage extends HomePage {
     Button btnCancel;
     Deposit deposit = new Deposit();
     boolean isFound = false;
+    boolean choice = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,4 +204,6 @@ public class DepositWaitingPage extends HomePage {
         }
         return isFound;
     }
+
+
 }

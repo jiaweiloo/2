@@ -41,7 +41,7 @@
         <item>100</item>
         <item>150</item>
         <item>200</item>
-        <item>350</item>
+        <item>250</item>
         <item>300</item>
     </string-array>
     <string-array name="timeOptions">
@@ -56,7 +56,7 @@
     <string name="selectLocation">会议地点</string>
     <string name="waiting">请稍候</string>
     <string name="confirmCash">找到用户</string>
-    <string name="QRconfirm">QR code</string>
+    <string name="QRconfirm">QR 码</string>
 
     <!-- Strings related to ScanQRcode.java-->
     <string name="scan_barcode_button">Scan barcode</string>
@@ -95,8 +95,9 @@
     <string name="title_myaccount">我的帐户</string>
     <string name="title_register">注册您的帐户</string>
 
-    <string name="guideDep1">步骤 1: 选择您的区域 </string>
-    <string name="guideDep2">步骤 2: 选择您的金额 (RM) </string>
+
+    <string name="guideDep2">步骤 1: 选择您的金额 (RM) </string>
+    <string name="guideDep1">步骤 2: 选择您的区域 </string>
     <string name="guideDep3">步骤 3: 重新输入密码</string>
     <string name="guideDep4">步骤 4: 搜索用户...</string>
     <string name="guideDep5">步骤 5: 扫描QR码完成</string>
