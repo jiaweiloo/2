@@ -160,7 +160,6 @@ public class WithdrawMatching extends AppCompatActivity {
                     location_id,
                     formattedDate,
                     "pending");
-            Log.i("Hi", Integer.toString(wt.getWithdrawal_id()));
 
             withdrawalDataSource.insertWithdrawal(wt);
 

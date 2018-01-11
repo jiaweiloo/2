@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import my.edu.tarc.mobilecashservice.DatabaseHelper.LocationSQLHelper;
@@ -39,6 +40,7 @@ public class DepositSelectArea extends AppCompatActivity implements AdapterView.
     LocationSQLHelper locationDataSource;
     ListView listViewRecords;
     int locationID = 0;
+    List<Location> values = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +59,7 @@ public class DepositSelectArea extends AppCompatActivity implements AdapterView.
         user_id = sharedPref.getInt("user_id", 0);
         amount = Double.parseDouble(sharedPref.getString("amount", "0.0"));
 
-        Log.i("DepositSelectArea.java", "User ID: " + String.valueOf(user_id) +" " + String.valueOf(amount));
-
-        txtView.setText(String.valueOf(amount));
+        txtView.setText(String.format("%.2f", amount));
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationDataSource = new LocationSQLHelper(this);
@@ -74,14 +74,19 @@ public class DepositSelectArea extends AppCompatActivity implements AdapterView.
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mProgressDialog.show();
 
-        new CountDownTimer(2000, 1000) { // adjust the milli seconds here
+        new CountDownTimer(120000, 1000) { // adjust the milli seconds here
 
             public void onTick(long millisUntilFinished) {
                 //UpdateTextField();
+                if(checkLoadFinished()){
+                    this.onFinish();
+                }
             }
+
             public void onFinish() {
                 mProgressDialog.dismiss();
                 updateList();
+                this.cancel();;
             }
         }.start();
     }
@@ -98,7 +103,7 @@ public class DepositSelectArea extends AppCompatActivity implements AdapterView.
             if (location != null) {
                 x = Double.parseDouble(String.format("%.2f", location.getLatitude()));
                 y = Double.parseDouble(String.format("%.2f", location.getLongitude()));
-                Toast.makeText(this, "X : " +Double.toString(x) +" Y: "+Double.toString(y), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "X : " + Double.toString(x) + " Y: " + Double.toString(y), Toast.LENGTH_SHORT).show();
 
             } else {
                 Toast.makeText(this, "Unable to find correct location", Toast.LENGTH_SHORT).show();
@@ -110,19 +115,14 @@ public class DepositSelectArea extends AppCompatActivity implements AdapterView.
 
     private void updateList() {
 
-        List<Location> values = locationDataSource.getAllLocations();
-        Log.e("System", "Location id at 0 :" + values.get(0).getLocation_id());
-
-
         for (int i = values.size() - 1; i >= 0; i--) {
             //Log.i("System", i +" X coordinate : "+ Double.toString(x) + " "+ values.get(i).getLocation_x());
             if (values.get(i).getLocation_x() != x || values.get(i).getLocation_y() != y) {
                 //Log.i("System", "remove :" + i);
                 values.remove(i);
-                Log.e("System", "Values removed at location " + i );
+                Log.e("System", "Values removed at location " + i);
             }
         }
-        //Log.i("System", "Value size :" + values.size());
 
         LocationAdapter adapter = new LocationAdapter(this,
                 R.layout.location_record, values);
@@ -135,18 +135,10 @@ public class DepositSelectArea extends AppCompatActivity implements AdapterView.
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
-        Location loc = null;
-        //Retrieve records from SQLite
 
-        List<Location> values = locationDataSource.getAllLocations();
-        for (int i = values.size() - 1; i >= 0; i--) {
-            if (values.get(i).getLocation_x() != x || values.get(i).getLocation_y() != y) {
-                values.remove(i);
-            }
-        }
         //Log.i("System", "Value size :" + values.size());
         Toast.makeText(this, "Location Name :" + values.get(position).getLocation_name(), Toast.LENGTH_SHORT).show();
-        loc = values.get(position);
+        Location loc = values.get(position);
 
         Intent intent = new Intent(this, DepositSecurityCode.class);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -154,6 +146,7 @@ public class DepositSelectArea extends AppCompatActivity implements AdapterView.
         editor.putInt("location_id", loc.getLocation_id());
         editor.commit();
         startActivity(intent);
+        this.finish();
     }
 
     public void refresh(View v) {
@@ -165,4 +158,13 @@ public class DepositSelectArea extends AppCompatActivity implements AdapterView.
         locationDataSource.close();
         super.onPause();
     } */
+
+    public boolean checkLoadFinished() {
+        values = locationDataSource.getAllLocations();
+
+        if (values.isEmpty())
+            return false;
+        else
+            return true;
+    }
 }

@@ -55,6 +55,7 @@ public class HomePage extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 UpdateTextField();
+                checkLoadFinished();
                 Snackbar.make(view, "Refresh !", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
@@ -91,15 +92,19 @@ public class HomePage extends AppCompatActivity
             mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mProgressDialog.show();
 
-            new CountDownTimer(2000, 1000) { // adjust the milli seconds here
+            new CountDownTimer(120000, 1000) { // adjust the milli seconds here
 
                 public void onTick(long millisUntilFinished) {
                     //UpdateTextField();
+                    if (checkLoadFinished()) {
+                        this.onFinish();
+                    }
                 }
 
                 public void onFinish() {
                     mProgressDialog.dismiss();
                     UpdateTextField();
+                    this.cancel();
                 }
 
             }.start();
@@ -110,10 +115,7 @@ public class HomePage extends AppCompatActivity
         }
     }
 
-
     public void UpdateTextField() {
-
-        user = userSQLHelper.getUser(user_id);
 
         txtViewUserID.setText("User ID: " + String.valueOf(user_id));
         txtViewName.setText(user.getUser_name());
@@ -200,10 +202,10 @@ public class HomePage extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
 
-        }else if (id == R.id.nav_MyAccount) {
+        } else if (id == R.id.nav_MyAccount) {
             // Handle the deposit action
             Intent intentRegister = new Intent(this, MyAccount.class);
-            startActivityForResult(intentRegister,1);
+            startActivityForResult(intentRegister, 1);
 
         }
 
@@ -246,5 +248,14 @@ public class HomePage extends AppCompatActivity
         } else {
             goToLogin();
         }
+    }
+
+    public boolean checkLoadFinished() {
+        user = userSQLHelper.getUser(user_id);
+
+        if (user.getUser_id() == 0)
+            return false;
+        else
+            return true;
     }
 }

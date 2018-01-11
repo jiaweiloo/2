@@ -31,43 +31,26 @@ public class DepositWaitingPage extends AppCompatActivity {
     int location_id;
     int user_id;
     int withdrawal_id;
-    TextView tViewTimer;
-    TextView tViewStatus;
-    TextView tviewUser;
-    TextView tViewDetails;
+    TextView tViewTimer, tViewStatus, tviewUser, tViewDetails;
     ProgressBar progressBar2;
     DepositSQLHelper depositDataSource;
     WithdrawalSQLHelper withdrawalSQLHelper;
     List<Withdrawal> values = new ArrayList<>();
     Button btnCancel;
-    Button btnMatch;
     Deposit deposit = new Deposit();
+    boolean isFound = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deposit_waiting_page);
-
         setTitle("Waiting for a pair..");
+
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         user_id = sharedPref.getInt("user_id", 0);
         location_id = sharedPref.getInt("location_id", 0);
         amount = Double.parseDouble(sharedPref.getString("amount", "0.0"));
-
-        Log.i("[System]", "User :" + user_id);
-        Log.i("[System]", "Amount :" + amount);
-        Log.i("[System]", "location_id :" + location_id);
-
-
-        if (amount != 0.0 && location_id != 0 && user_id != 0) {
-            Log.i("[System]", "string not empty " + amount);
-        } else {
-            Log.i("[System]", "Error strings not match any if else");
-            amount = 0.0;
-            location_id = 400001;
-            user_id = 888888;
-        }
 
         depositDataSource = new DepositSQLHelper(this);
         withdrawalSQLHelper = new WithdrawalSQLHelper(this);
@@ -78,7 +61,6 @@ public class DepositWaitingPage extends AppCompatActivity {
         tviewUser = findViewById(R.id.tviewUser);
         tViewDetails = findViewById(R.id.tViewDetails);
         btnCancel = findViewById(R.id.btnCancel);
-        btnMatch = findViewById(R.id.btnMatch);
 
 
         //900000 ms for 15 minutes
@@ -107,7 +89,6 @@ public class DepositWaitingPage extends AppCompatActivity {
             public void onFinish() {
                 //deposit = depositDataSource.getDeposit(deposit.getDeposit_id());
                 progressBar2.setVisibility(View.GONE);
-                btnMatch.setEnabled(false);
                 if (deposit.getWithdrawal_id() == 0) {
                     tViewTimer.setText("Pairing fail!");
                     tViewStatus.setText("Please try again in a moment !");
@@ -143,7 +124,7 @@ public class DepositWaitingPage extends AppCompatActivity {
             startActivityForResult(intent, 2);
         } else {
             Intent intent = new Intent(this, DepositSelectCash.class);
-            startActivityForResult(intent, 2);
+            startActivity(intent);
         }
     }
 
@@ -169,15 +150,6 @@ public class DepositWaitingPage extends AppCompatActivity {
                 + "\n" + "Amount: " + deposit.getAmount()
                 + "\n" + "Location id: " + location_id
                 + "\n" + "Withdrawal id: " + withdrawal_id);
-    }
-
-    public void pair(View view) {
-
-        // Start activity to pair for a withdrawal
-        //Intent intent = new Intent(this, DepositPairWithdrawal.class);
-        //startActivityForResult(intent, 2);
-        //addRecord(300001,"paired");
-        Toast.makeText(this, "Function to be available in the future.", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -206,12 +178,11 @@ public class DepositWaitingPage extends AppCompatActivity {
     }
 
     public boolean findWithdrawal() {
-        boolean isFound = false;
         values = withdrawalSQLHelper.getAllWithdrawals();
         Log.i("Values ", "at findWithdrawal : Withdrawal ID onActivityResult: " + values.get(0).getLocation_id());
         for (int a = 0; a < values.size(); a++) {
             Withdrawal temp = values.get(a);
-            if (temp.getLocation_id() == location_id && !temp.getStatus().equals("complete")) {
+            if (temp.getLocation_id() == location_id && temp.getStatus().equals("pending")) {
                 withdrawal_id = temp.getWithdrawal_id();
                 Log.i("tag", "Withdrawal ID onActivityResult: " + withdrawal_id);
 

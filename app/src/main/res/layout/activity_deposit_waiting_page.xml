@@ -34,11 +34,19 @@
     <Button
         android:id="@+id/btnCancel"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="139dp"
-        android:layout_height="53dp"
         android:onClick="btnCancelAction"
         android:text="Cancel"
-        android:textSize="20sp"
+
+        android:textColor="#FFFFFF"
+        android:textSize="25sp"
+        android:layout_width="230dp"
+        android:layout_height="60dp"
+        android:background="@drawable/buttonorange"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -102,21 +110,5 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.791" />
-
-    <Button
-        android:id="@+id/btnMatch"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="80dp"
-        android:layout_height="53dp"
-        android:backgroundTint="@color/colorPrimary"
-        android:onClick="pair"
-        android:text="Pair"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.048"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.97" />
 
 </android.support.constraint.ConstraintLayout>

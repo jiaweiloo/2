@@ -109,6 +109,7 @@ public class DepositSelectCash extends AppCompatActivity {
             editor.putString("amount", String.valueOf(amount));
             editor.commit();
             startActivity(intent);
+            this.finish();
         } else {
             showDialog();
         }
@@ -134,11 +135,6 @@ public class DepositSelectCash extends AppCompatActivity {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // continue with delete
-                    }
-                })
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
                     }
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
