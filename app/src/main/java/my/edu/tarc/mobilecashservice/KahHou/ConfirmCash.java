@@ -18,10 +18,11 @@ import my.edu.tarc.mobilecashservice.DatabaseHelper.WithdrawalSQLHelper;
 import my.edu.tarc.mobilecashservice.Entity.Deposit;
 import my.edu.tarc.mobilecashservice.Entity.UserRecord;
 import my.edu.tarc.mobilecashservice.Entity.Withdrawal;
+import my.edu.tarc.mobilecashservice.HomePage;
 import my.edu.tarc.mobilecashservice.R;
 
-public class ConfirmCash extends AppCompatActivity {
-    String[] texts = new String[]{"Name : James\nAge: 20\nGender: Male", "Name : Aisha\nAge: 22\nGender: Female", "Name : Emma\nAge: 30\nGender: Female"};
+public class ConfirmCash extends HomePage {
+
     WithdrawalSQLHelper withdrawalDataSource;
     DepositSQLHelper depositDataSource;
     UserSQLHelper userDataSource;
@@ -34,7 +35,8 @@ public class ConfirmCash extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_confirm_cash);
+        //setContentView(R.layout.activity_confirm_cash);
+        super.replaceContentLayout(R.layout.activity_confirm_cash);
         setTitle("Please proceed...");
 
         withdrawalDataSource = new WithdrawalSQLHelper(this);

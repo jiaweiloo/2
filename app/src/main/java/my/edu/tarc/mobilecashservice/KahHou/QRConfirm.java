@@ -34,7 +34,7 @@ import my.edu.tarc.mobilecashservice.Entity.Withdrawal;
 import my.edu.tarc.mobilecashservice.HomePage;
 import my.edu.tarc.mobilecashservice.R;
 
-public class QRConfirm extends AppCompatActivity {
+public class QRConfirm extends HomePage {
     WithdrawalSQLHelper withdrawalDataSource;
     UserSQLHelper userDataSource;
     private ImageView QR;
@@ -47,7 +47,9 @@ public class QRConfirm extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_qrconfirm);
+        //setContentView(R.layout.activity_qrconfirm);
+        super.replaceContentLayout(R.layout.activity_qrconfirm);
+
 
         QR = findViewById(R.id.imageView);
         textView4 = findViewById(R.id.textView4);

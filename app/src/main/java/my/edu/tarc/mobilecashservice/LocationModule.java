@@ -32,7 +32,7 @@ import my.edu.tarc.mobilecashservice.DatabaseHelper.LocationSQLHelper;
 import my.edu.tarc.mobilecashservice.Entity.Location;
 import my.edu.tarc.mobilecashservice.JiaWei.LocationAdapter;
 
-public class LocationModule extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class LocationModule extends HomePage implements AdapterView.OnItemClickListener {
 
     LocationSQLHelper locationDataSource;
     double x;
@@ -58,7 +58,8 @@ public class LocationModule extends AppCompatActivity implements AdapterView.OnI
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_location_module);
+        //setContentView(R.layout.activity_location_module);
+        super.replaceContentLayout(R.layout.activity_location_module);
         setTitle("Location Module");
         //listViewRecordsLoc = findViewById(R.id.listViewRecordsLoc);
         //listViewRecordsLoc.setOnItemClickListener(this);

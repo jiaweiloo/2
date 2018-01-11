@@ -12,9 +12,10 @@ import android.widget.Toast;
 
 import my.edu.tarc.mobilecashservice.DatabaseHelper.UserSQLHelper;
 import my.edu.tarc.mobilecashservice.Entity.UserRecord;
+import my.edu.tarc.mobilecashservice.HomePage;
 import my.edu.tarc.mobilecashservice.R;
 
-public class DepositSecurityCode extends AppCompatActivity {
+public class DepositSecurityCode extends HomePage {
 
     String amount;
     String areaCode;
@@ -26,7 +27,8 @@ public class DepositSecurityCode extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_deposit_security_code);
+        //setContentView(R.layout.activity_deposit_security_code);
+        super.replaceContentLayout(R.layout.activity_deposit_security_code);
         setTitle("Enter Password");
 
         txtPassword = findViewById(R.id.txtPassword);

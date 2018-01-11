@@ -21,7 +21,7 @@ import my.edu.tarc.mobilecashservice.HomePage;
 import my.edu.tarc.mobilecashservice.R;
 
 
-public class CheckRequest extends AppCompatActivity {
+public class CheckRequest extends HomePage {
     ListView listViewRecords;
     WithdrawalSQLHelper WSH;
     int userID;
@@ -29,7 +29,8 @@ public class CheckRequest extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_check_request);
+        //setContentView(R.layout.activity_check_request);
+        super.replaceContentLayout(R.layout.activity_check_request);
         setTitle("CheckRequest");
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);

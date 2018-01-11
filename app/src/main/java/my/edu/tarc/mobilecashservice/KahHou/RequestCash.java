@@ -10,15 +10,18 @@ import android.view.View;
 import android.widget.Spinner;
 
 import my.edu.tarc.mobilecashservice.Entity.Withdrawal;
+import my.edu.tarc.mobilecashservice.HomePage;
 import my.edu.tarc.mobilecashservice.R;
 
-public class RequestCash extends AppCompatActivity {
+public class RequestCash extends HomePage {
     Withdrawal withdraw;
     int user_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_request_cash);
+        //setContentView(R.layout.activity_request_cash);
+        super.replaceContentLayout(R.layout.activity_request_cash);
+
         withdraw = new Withdrawal();
         withdraw.setWithdrawal_id(300001);
         //Log.i("System",Integer.toString(getIntent().getExtras().getInt("userID")));

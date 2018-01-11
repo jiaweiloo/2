@@ -24,9 +24,10 @@ import my.edu.tarc.mobilecashservice.DatabaseHelper.DepositSQLHelper;
 import my.edu.tarc.mobilecashservice.DatabaseHelper.WithdrawalSQLHelper;
 import my.edu.tarc.mobilecashservice.Entity.Deposit;
 import my.edu.tarc.mobilecashservice.Entity.Withdrawal;
+import my.edu.tarc.mobilecashservice.HomePage;
 import my.edu.tarc.mobilecashservice.R;
 
-public class DepositWaitingPage extends AppCompatActivity {
+public class DepositWaitingPage extends HomePage {
     Double amount;
     int location_id;
     int user_id;
@@ -43,7 +44,8 @@ public class DepositWaitingPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_deposit_waiting_page);
+        //setContentView(R.layout.activity_deposit_waiting_page);
+        super.replaceContentLayout(R.layout.activity_deposit_waiting_page);
         setTitle("Waiting for a pair..");
 
 

@@ -14,15 +14,17 @@ import java.util.List;
 
 import my.edu.tarc.mobilecashservice.DatabaseHelper.DepositSQLHelper;
 import my.edu.tarc.mobilecashservice.Entity.Deposit;
+import my.edu.tarc.mobilecashservice.HomePage;
 import my.edu.tarc.mobilecashservice.R;
 
-public class AllDepositRecords extends AppCompatActivity implements AdapterView.OnItemClickListener{
+public class AllDepositRecords extends HomePage implements AdapterView.OnItemClickListener{
     ListView listViewRecords;
     DepositSQLHelper depositDataSource;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_all_deposit_records);
+        //setContentView(R.layout.activity_all_deposit_records);
+        super.replaceContentLayout(R.layout.activity_all_deposit_records);
         setTitle("All Deposit Records");
 
         listViewRecords = findViewById(R.id.listViewRecords);

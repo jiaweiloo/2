@@ -15,9 +15,10 @@ import android.widget.Toast;
 
 import my.edu.tarc.mobilecashservice.DatabaseHelper.UserSQLHelper;
 import my.edu.tarc.mobilecashservice.Entity.UserRecord;
+import my.edu.tarc.mobilecashservice.HomePage;
 import my.edu.tarc.mobilecashservice.R;
 
-public class MyAccount extends AppCompatActivity {
+public class MyAccount extends HomePage {
     int user_id = 0;
     UserRecord userrecord = new UserRecord();
     CheckBox chkNewPass, chkConfirmPass;
@@ -26,7 +27,9 @@ public class MyAccount extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_account);
+        //setContentView(R.layout.activity_my_account);
+        super.replaceContentLayout(R.layout.activity_my_account);
+
         editTextUserID = findViewById(R.id.tfAccUserID);
         editTextUserName = findViewById(R.id.tfAccUsername);
         editTextIC = findViewById(R.id.tfAccIC);

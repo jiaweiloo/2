@@ -31,7 +31,7 @@ import my.edu.tarc.mobilecashservice.HomePage;
 import my.edu.tarc.mobilecashservice.R;
 import my.edu.tarc.mobilecashservice.barcode.BarcodeCaptureActivity;
 
-public class DepositScanQRcode extends AppCompatActivity {
+public class DepositScanQRcode extends HomePage {
     private static final int BARCODE_READER_REQUEST_CODE = 1;
 
     private TextView mResultTextView;
@@ -50,7 +50,8 @@ public class DepositScanQRcode extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_deposit_scan_qrcode);
+        //setContentView(R.layout.activity_deposit_scan_qrcode);
+        super.replaceContentLayout(R.layout.activity_deposit_scan_qrcode);
         setTitle("Scan QR Code");
 
         depositDataSource = new DepositSQLHelper(this);

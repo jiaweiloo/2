@@ -24,9 +24,10 @@ import java.util.concurrent.TimeUnit;
 
 import my.edu.tarc.mobilecashservice.DatabaseHelper.WithdrawalSQLHelper;
 import my.edu.tarc.mobilecashservice.Entity.Withdrawal;
+import my.edu.tarc.mobilecashservice.HomePage;
 import my.edu.tarc.mobilecashservice.R;
 
-public class WithdrawMatching extends AppCompatActivity {
+public class WithdrawMatching extends HomePage {
     TextView tViewcountTime;
     Handler handler;
     WithdrawalSQLHelper withdrawalDataSource;
@@ -39,7 +40,8 @@ public class WithdrawMatching extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_withdraw_matching);
+        //setContentView(R.layout.activity_withdraw_matching);
+        super.replaceContentLayout(R.layout.activity_withdraw_matching);
         setTitle("Matching...");
 
         tViewcountTime = findViewById(R.id.countTime);
@@ -101,7 +103,7 @@ public class WithdrawMatching extends AppCompatActivity {
     }
 
     public void btnStop(View view) {
-        handler.removeCallbacksAndMessages(null);
+        //handler.removeCallbacksAndMessages(null);
         Intent intent = new Intent(this, RequestCash.class);
         startActivity(intent);
     }

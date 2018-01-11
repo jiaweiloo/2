@@ -32,11 +32,12 @@ import java.util.List;
 
 import my.edu.tarc.mobilecashservice.DatabaseHelper.LocationSQLHelper;
 import my.edu.tarc.mobilecashservice.Entity.Withdrawal;
+import my.edu.tarc.mobilecashservice.HomePage;
 import my.edu.tarc.mobilecashservice.JiaWei.DepositSecurityCode;
 import my.edu.tarc.mobilecashservice.JiaWei.LocationAdapter;
 import my.edu.tarc.mobilecashservice.R;
 
-public class SelectTimeLocation extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class SelectTimeLocation extends HomePage implements AdapterView.OnItemClickListener {
     static final int REQUEST_LOCATION = 1;
     LocationManager locationManager;
     double x;
@@ -49,7 +50,9 @@ public class SelectTimeLocation extends AppCompatActivity implements AdapterView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select_time_location);
+        //setContentView(R.layout.activity_select_time_location);
+        super.replaceContentLayout(R.layout.activity_select_time_location);
+
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         getLocation();
 
