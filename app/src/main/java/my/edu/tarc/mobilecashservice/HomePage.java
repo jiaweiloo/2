@@ -86,6 +86,12 @@ public class HomePage extends AppCompatActivity
         user_id = sharedPref.getInt("user_id", 0);
         userSQLHelper = new UserSQLHelper(this);
 
+        if(user_id != 100003){
+            Menu menu = navigationView.getMenu();
+            menu.findItem(R.id.nav_mgmt_menu).setVisible(false);
+            //R.id.nav_mgmt_menu
+        }
+
         if (user_id != 0) {
             user = userSQLHelper.getUser(user_id);
 
