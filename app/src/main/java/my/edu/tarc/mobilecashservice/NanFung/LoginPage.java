@@ -24,7 +24,7 @@ public class LoginPage extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        setTheme(R.style.AppThemeActionBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_page);
         setTitle(getResources().getString(R.string.title_loginpage));

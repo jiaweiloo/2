@@ -22,6 +22,7 @@ public class ForgetPassword extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppThemeActionBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
         setTitle(getResources().getString(R.string.title_forgetpassword));

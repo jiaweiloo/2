@@ -29,6 +29,7 @@ public class RegisterPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.AppThemeActionBar);
         setContentView(R.layout.activity_register_page);
         setTitle(getResources().getString(R.string.title_register));
         databaseSource = new UserSQLHelper(this);

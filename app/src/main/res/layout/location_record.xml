@@ -15,6 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
+            android:textStyle="bold"
             android:text="New Text" />
 
         <TextView
@@ -22,13 +23,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="30dp"
-            android:text="New Text" />
+            android:text="New Text"
+            android:textColor="@android:color/holo_purple"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textViewLocate_x"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="50dp"
+            android:textStyle="bold"
             android:text="New Text" />
 
         <TextView
@@ -36,14 +40,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="70dp"
+            android:textStyle="bold"
             android:text="New Text" />
 
-        <TextView
+        <!--TextView
             android:id="@+id/textViewStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="90dp"
-            android:text="New Text" />
+            android:text="New Text" / -->
 
 
     </android.support.v7.widget.CardView>

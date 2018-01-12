@@ -40,13 +40,13 @@ public class LocationAdapter extends ArrayAdapter<Location> {
         textViewLocate_Name = (TextView)convertView.findViewById(R.id.textViewLocate_Name);
         textViewLocate_x = (TextView)convertView.findViewById(R.id.textViewLocate_x);
         textViewLocate_y = (TextView)convertView.findViewById(R.id.textViewLocate_y);
-        textViewStatus = (TextView)convertView.findViewById(R.id.textViewStatus);
+        //textViewStatus = (TextView)convertView.findViewById(R.id.textViewStatus);
 
         textViewLocate_id.setText("Location id:"+locationRecord.getLocation_id());
         textViewLocate_Name.setText("Location Name:"+locationRecord.getLocation_name());
         textViewLocate_x.setText("Coordinate X:" + locationRecord.getLocation_x());
         textViewLocate_y.setText("Coordinate Y:"+locationRecord.getLocation_y());
-        textViewStatus.setText("Status:" + locationRecord.getStatus());
+        //textViewStatus.setText("Status:" + locationRecord.getStatus());
 
         return convertView;
     }

@@ -31,8 +31,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NanFung.LoginPage" />
-        <activity android:name=".NanFung.RegisterPage" />
+        <activity android:name=".NanFung.LoginPage"
+            android:theme="@style/AppThemeActionBar"/>
+        <activity android:name=".NanFung.RegisterPage"
+            android:theme="@style/AppTheme.AppBarOverlay"/>
         <activity android:name=".JiaWei.DepositSelectCash" />
         <activity android:name=".JiaWei.DepositSelectArea" />
         <activity android:name=".JiaWei.DepositSecurityCode" />
@@ -53,7 +55,8 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".NanFung.ForgetPassword" />
+        <activity android:name=".NanFung.ForgetPassword"
+            android:theme="@style/AppThemeActionBar"/>
         <activity android:name=".NanFung.MyAccount" />
         <activity android:name=".ManagementMenu"></activity>
     </application>
